@@ -1,3 +1,7 @@
 # Blackbeard
 
-<img src="asset/blackbeard.jpeg" width="75%" align="centre">
+A Stablecoin that's stable.
+
+<div align="center">
+ <img src="asset/blackbeard.webp" width="50%" align="centre">
+</div>
