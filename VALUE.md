@@ -15,6 +15,8 @@
 * Implementation ideas
    * S&P 500 equivalent where we provide a basket of StableCoins to FinBros and they can purchase through us
       1. Look @ Treehouse math/formulas within the [Whitepaper](https://www.treehouse.finance/tAsset_Whitepaper.pdf) and replicate it
+          1. Backtesting our modified algorithm based on historical StableCoin data
+          2. Tweak the algorithm as necessary to render net value 
       2. Considerations
           1. Current StableCoin lending rates fluctuate and might affect our strategy (need to be factored into the updated formuala)
           2. Current AltCoin strategies that TreeHouse applies to its CryptoCurrency leverage staking approach works because AltCoins have lower borrowing rates than StableCoins
@@ -34,3 +36,14 @@
       3. Things to consider
           1. Should FinBro withdrawal payouts be tagged to @-purchase-rates or current-exchange-rates
           2. Must consider fluctuating yield prices to guarantee the fixed return to FinBros if we adopt the monetary-backed guarantees
+
+## Timeline 
+
+1. **Week 0**: Breaking Bad (Implied volatility visualisation, make UI look nice)
+2. **Week 1**: Research TreeHouse whitepaper approach, See other mathematical models that might be relevant, Find Data scraping sources for backtesting
+3. **Week 2**: Sync up mathematical approach + algorithm baseline, Scrape data, Tweak algorithm 
+4. **Week 3**: Backtesting the algorithm, Tweak algorithm
+5. **Week 4**: Technical architecture design, Finalise algorithm
+6. **Week 5**: Backend API, API authentication, Frontend unlinked to Backend
+7. **Week 6**: Link Frontend to Backend, Backend testing
+8. **Week 7**: Summer 2025 in Review (Do we want to make this something), Smart Contract expansion (?)
