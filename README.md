@@ -1,6 +1,6 @@
 # Blackbeard
 
-Make Stablecoins stable again.
+Making Stablecoins stable again.
 
 <div align="center">
  <img src="asset/blackbeard.webp" width="50%" align="centre">
