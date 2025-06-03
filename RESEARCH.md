@@ -17,6 +17,7 @@ flowchart LR
 ```
 
 * **Basic Staking:** Lock up your cryptocurrency (its no longer liquid) to secure the network and earn rewards based on fixed interest rates
+  * Generally DeFi platforms will allow users to withdraw anytime (with lower interest rates) or *lock up* their cryptocurrency (for higher interest rates)    
 * **Leveraged staking strategies**: Advanced DeFi methods to increase the amount of stakeable cryptocurrency for greater rewards at higher risk, occurs by using your staked assets as collateral to borrow more cryptocurrency, then staking that borrowed amount as well *(can be looped multiple times)*
 
 ```mermaid
