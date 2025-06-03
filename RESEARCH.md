@@ -50,8 +50,6 @@ The protocol seeks to outperform standard liquid staking tokens *(eg. stETH)* wh
 * **Interest Rate Safeguards**: Automatic position unwinding when borrowing costs exceed staking yields
 * **Protocol Backstops**: Insurance fund and collateral haircuts mitigate liquidation risks
 
----
-
 ## Technical Mechanisms
 
 ```mermaid
