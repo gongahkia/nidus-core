@@ -8,6 +8,7 @@ Making Stablecoins stable again.
 
 ## Reference
 
+* [Working Google Document](https://docs.google.com/document/d/1hfNjCbemImjuJAJr7ZKQEsK_YxWIF_zbSwzTP1Otw7Y/edit?usp=sharing)
 * [BlackBeard Value Proposition](VALUE.md)
 * [Summer 2025 Working Timeline](TIMELINE.md)
 
