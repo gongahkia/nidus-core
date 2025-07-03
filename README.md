@@ -1,4 +1,4 @@
-# Veritas Insurance
+# MVP for Veritas Insurance Core
 
 Making Stablecoins stable again.
 
