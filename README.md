@@ -1,4 +1,4 @@
-# Blackbeard
+# Veritas Insurance
 
 Making Stablecoins stable again.
 
