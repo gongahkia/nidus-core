@@ -2,10 +2,7 @@
 
 import * as React from "react"
 
-import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast"
+import type { ToastActionElement, ToastProps } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -84,9 +81,7 @@ export const reducer = (state: State, action: Action): State => {
     case "UPDATE_TOAST":
       return {
         ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
-        ),
+        toasts: state.toasts.map((t) => (t.id === action.toast.id ? { ...t, ...action.toast } : t)),
       }
 
     case "DISMISS_TOAST": {
@@ -110,7 +105,7 @@ export const reducer = (state: State, action: Action): State => {
                 ...t,
                 open: false,
               }
-            : t
+            : t,
         ),
       }
     }
@@ -202,14 +197,16 @@ export function useVeritasToast() {
         description: message,
         variant: "default",
         duration: 5000,
-        action: txHash ? (
-          <button 
-            onClick={() => window.open(`https://etherscan.io/tx/${txHash}`, '_blank')}
-            className="text-sm text-green-400 hover:text-green-300 underline"
-          >
-            View on Explorer
-          </button>
-        ) : undefined,
+        action: txHash
+          ? React.createElement(
+              "button",
+              {
+                onClick: () => window.open(`https://etherscan.io/tx/${txHash}`, "_blank"),
+                className: "text-sm text-green-400 hover:text-green-300 underline",
+              },
+              "View on Explorer",
+            )
+          : undefined,
       })
     },
 
