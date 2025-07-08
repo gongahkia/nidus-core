@@ -88,36 +88,41 @@ export function MainDashboard() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-apple-gray-50 via-white to-apple-gray-100 dark:from-apple-gray-950 dark:via-black dark:to-apple-gray-900">
       {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+      <header className="border-b border-apple-gray-200 dark:border-apple-gray-800 apple-glass">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">Veritas Insurance</h1>
-              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+              <h1 className="text-2xl font-bold text-apple-blue">Veritas Insurance</h1>
+              <Badge variant="secondary" className="bg-apple-blue/10 text-apple-blue border-apple-blue/20">
                 v2.0
               </Badge>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-white hover:text-purple-300 transition-colors">
+              <Link href="/" className="text-foreground hover:text-apple-blue transition-colors font-medium">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
+              <Link href="/lending" className="text-muted-foreground hover:text-apple-blue transition-colors">
                 Lending
               </Link>
-              <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
+              <Link href="/account" className="text-muted-foreground hover:text-apple-blue transition-colors">
                 Account
               </Link>
             </nav>
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
+                  <Wallet className="h-4 w-4 text-apple-blue" />
+                  <span className="text-sm font-medium">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={signIn} variant="outline" size="sm">
+                <Button
+                  onClick={signIn}
+                  variant="outline"
+                  size="sm"
+                  className="btn-apple border-apple-blue text-apple-blue hover:bg-apple-blue hover:text-white bg-transparent"
+                >
                   Connect Wallet
                 </Button>
               )}
@@ -132,36 +137,36 @@ export function MainDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Staked</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-400" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Staked</CardTitle>
+              <DollarSign className="h-4 w-4 text-apple-green" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${dashboardData.totalStaked.toLocaleString()}</div>
-              <p className="text-xs text-slate-400 mt-1">+12.5% from last month</p>
+              <div className="text-2xl font-bold">${dashboardData.totalStaked.toLocaleString()}</div>
+              <p className="text-xs text-apple-green mt-1">+12.5% from last month</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Current Yield</CardTitle>
-              <TrendingUp className="h-4 w-4 text-purple-400" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Current Yield</CardTitle>
+              <TrendingUp className="h-4 w-4 text-apple-blue" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{dashboardData.currentYield}%</div>
-              <p className="text-xs text-slate-400 mt-1">APY on staked assets</p>
+              <div className="text-2xl font-bold">{dashboardData.currentYield}%</div>
+              <p className="text-xs text-muted-foreground mt-1">APY on staked assets</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Value Locked</CardTitle>
-              <Users className="h-4 w-4 text-blue-400" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Value Locked</CardTitle>
+              <Users className="h-4 w-4 text-apple-indigo" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${(dashboardData.tvl / 1000000).toFixed(1)}M</div>
-              <p className="text-xs text-slate-400 mt-1">Across all pools</p>
+              <div className="text-2xl font-bold">${(dashboardData.tvl / 1000000).toFixed(1)}M</div>
+              <p className="text-xs text-muted-foreground mt-1">Across all pools</p>
             </CardContent>
           </Card>
         </div>
@@ -170,48 +175,48 @@ export function MainDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Staking Overview */}
           <div className="lg:col-span-2">
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
               <CardHeader>
-                <CardTitle className="text-white">Staking Overview</CardTitle>
+                <CardTitle className="text-apple-blue">Staking Overview</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-apple-gray-50 dark:bg-apple-gray-900/50 rounded-xl border border-apple-gray-200 dark:border-apple-gray-800">
                   <div>
-                    <h3 className="font-semibold text-white">XsGD Pool</h3>
-                    <p className="text-sm text-slate-400">Singapore Dollar Stablecoin</p>
+                    <h3 className="font-semibold">XsGD Pool</h3>
+                    <p className="text-sm text-muted-foreground">Singapore Dollar Stablecoin</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-green-400">8.5% APY</p>
-                    <p className="text-sm text-slate-400">$85,000 staked</p>
+                    <p className="font-semibold text-apple-green">8.5% APY</p>
+                    <p className="text-sm text-muted-foreground">$85,000 staked</p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-apple-gray-50 dark:bg-apple-gray-900/50 rounded-xl border border-apple-gray-200 dark:border-apple-gray-800">
                   <div>
-                    <h3 className="font-semibold text-white">Annuity Pool</h3>
-                    <p className="text-sm text-slate-400">Insurance-backed annuities</p>
+                    <h3 className="font-semibold">Annuity Pool</h3>
+                    <p className="text-sm text-muted-foreground">Insurance-backed annuities</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-purple-400">12.3% APY</p>
-                    <p className="text-sm text-slate-400">$40,000 staked</p>
+                    <p className="font-semibold text-apple-blue">12.3% APY</p>
+                    <p className="text-sm text-muted-foreground">$40,000 staked</p>
                   </div>
                 </div>
 
-                <Separator className="bg-slate-700" />
+                <Separator className="bg-apple-gray-200 dark:bg-apple-gray-800" />
 
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Total Portfolio Value</span>
-                  <span className="text-xl font-bold text-white">$125,000</span>
+                  <span className="text-muted-foreground">Total Portfolio Value</span>
+                  <span className="text-xl font-bold">$125,000</span>
                 </div>
 
                 <div className="flex space-x-4">
                   <Link href="/lending" className="flex-1">
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700">Start Lending</Button>
+                    <Button className="w-full bg-apple-blue hover:bg-apple-blue/90 btn-apple">Start Lending</Button>
                   </Link>
                   <Link href="/lending" className="flex-1">
                     <Button
                       variant="outline"
-                      className="w-full border-slate-600 text-white hover:bg-slate-700 bg-transparent"
+                      className="w-full border-apple-gray-300 dark:border-apple-gray-700 hover:bg-apple-gray-50 dark:hover:bg-apple-gray-900 bg-transparent"
                     >
                       Borrow Assets
                     </Button>
@@ -223,24 +228,38 @@ export function MainDashboard() {
 
           {/* Announcements */}
           <div>
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
               <CardHeader>
-                <CardTitle className="flex items-center text-white">
+                <CardTitle className="flex items-center text-apple-blue">
                   <Bell className="h-4 w-4 mr-2" />
                   Announcements
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {dashboardData.announcements.map((announcement) => (
-                  <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
+                  <div
+                    key={announcement.id}
+                    className="p-3 bg-apple-gray-50 dark:bg-apple-gray-900/50 rounded-xl border border-apple-gray-200 dark:border-apple-gray-800"
+                  >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
-                      <Badge variant={announcement.type === "success" ? "default" : "secondary"} className="text-xs">
+                      <h4 className="font-medium text-sm">{announcement.title}</h4>
+                      <Badge
+                        variant={announcement.type === "success" ? "default" : "secondary"}
+                        className={`text-xs ${
+                          announcement.type === "success"
+                            ? "bg-apple-green/10 text-apple-green border-apple-green/20"
+                            : announcement.type === "warning"
+                              ? "bg-apple-orange/10 text-apple-orange border-apple-orange/20"
+                              : "bg-apple-blue/10 text-apple-blue border-apple-blue/20"
+                        }`}
+                      >
                         {announcement.type}
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
-                    <p className="text-xs text-slate-500">{new Date(announcement.timestamp).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground mb-2">{announcement.content}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(announcement.timestamp).toLocaleDateString()}
+                    </p>
                   </div>
                 ))}
               </CardContent>
