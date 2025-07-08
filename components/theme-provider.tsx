@@ -1,1 +1,1 @@
-import ThemeProvider from "@/components/theme-provider";
+export default ThemeProvider;

@@ -1,4 +1,4 @@
-import { fontFamily } from "tailwindcss/defaultTheme"
+import defaultTheme from "tailwindcss/defaultTheme"
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -109,8 +109,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        mono: ["var(--font-mono)", ...fontFamily.mono],
+        sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
+        mono: ["var(--font-mono)", ...defaultTheme.fontFamily.mono],
       },
       keyframes: {
         "accordion-down": {
