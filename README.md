@@ -6,12 +6,9 @@ Making Stablecoins stable again.
  <img src="" width="50%" align="centre">
 </div>
 
-## Usage
+## Credentials
 
-```console
-...
-```
+### Gmail
 
-## Stack
-
-...
+* veritasinsurancesg@gmail.com
+* veritasinsurancesg2025
