@@ -1,0 +1,56 @@
+{
+  "dashboard": {
+    "totalStaked": 2500000,
+    "currentYield": 8.5,
+    "tvl": 2500000
+  },
+  "announcements": {
+    "ann1": {
+      "title": "New Lending Pool Available",
+      "content": "XsGD lending pool is now live with competitive rates",
+      "timestamp": 1703980800000,
+      "type": "success"
+    },
+    "ann2": {
+      "title": "Maintenance Window",
+      "content": "Scheduled maintenance on Sunday 2AM-4AM UTC",
+      "timestamp": 1703977200000,
+      "type": "warning"
+    },
+    "ann3": {
+      "title": "Platform Update",
+      "content": "New features and improved user interface now available",
+      "timestamp": 1703973600000,
+      "type": "info"
+    }
+  },
+  "markets": {
+    "XsGD": {
+      "symbol": "XsGD",
+      "supplyAPY": 8.5,
+      "borrowAPY": 12.3,
+      "totalSupply": 1250000,
+      "totalBorrow": 850000,
+      "liquidity": 400000,
+      "collateralFactor": 0.8
+    },
+    "Annuity": {
+      "symbol": "ANN",
+      "supplyAPY": 12.8,
+      "borrowAPY": 16.5,
+      "totalSupply": 850000,
+      "totalBorrow": 620000,
+      "liquidity": 230000,
+      "collateralFactor": 0.75
+    },
+    "Endowment": {
+      "symbol": "END",
+      "supplyAPY": 15.2,
+      "borrowAPY": 19.8,
+      "totalSupply": 650000,
+      "totalBorrow": 480000,
+      "liquidity": 170000,
+      "collateralFactor": 0.7
+    }
+  }
+}
