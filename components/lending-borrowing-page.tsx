@@ -176,39 +176,44 @@ export function LendingBorrowingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-apple-gray-50 via-white to-apple-gray-100 dark:from-apple-gray-950 dark:via-black dark:to-apple-gray-900">
       {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+      <header className="border-b border-apple-gray-200 dark:border-apple-gray-800 apple-glass">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link href="/">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="hover:bg-apple-gray-100 dark:hover:bg-apple-gray-900">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Dashboard
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-white">Lending & Borrowing</h1>
+              <h1 className="text-2xl font-bold text-apple-blue">Lending & Borrowing</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
+              <Link href="/" className="text-muted-foreground hover:text-apple-blue transition-colors">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-white hover:text-purple-300 transition-colors">
+              <Link href="/lending" className="text-foreground hover:text-apple-blue transition-colors font-medium">
                 Lending
               </Link>
-              <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
+              <Link href="/account" className="text-muted-foreground hover:text-apple-blue transition-colors">
                 Account
               </Link>
             </nav>
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
+                  <Wallet className="h-4 w-4 text-apple-blue" />
+                  <span className="text-sm font-medium">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={signIn} variant="outline" size="sm">
+                <Button
+                  onClick={signIn}
+                  variant="outline"
+                  size="sm"
+                  className="btn-apple border-apple-blue text-apple-blue hover:bg-apple-blue hover:text-white bg-transparent"
+                >
                   Connect Wallet
                 </Button>
               )}
@@ -219,11 +224,11 @@ export function LendingBorrowingPage() {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="markets" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
-            <TabsTrigger value="markets" className="data-[state=active]:bg-purple-600">
+          <TabsList className="grid w-full grid-cols-2 bg-apple-gray-100 dark:bg-apple-gray-900">
+            <TabsTrigger value="markets" className="data-[state=active]:bg-apple-blue data-[state=active]:text-white">
               Markets
             </TabsTrigger>
-            <TabsTrigger value="positions" className="data-[state=active]:bg-purple-600">
+            <TabsTrigger value="positions" className="data-[state=active]:bg-apple-blue data-[state=active]:text-white">
               Your Positions
             </TabsTrigger>
           </TabsList>
@@ -231,43 +236,46 @@ export function LendingBorrowingPage() {
           <TabsContent value="markets" className="space-y-6">
             <div className="grid gap-6">
               {markets.map((market) => (
-                <Card key={market.asset} className="bg-slate-800/50 border-slate-700">
+                <Card
+                  key={market.asset}
+                  className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800"
+                >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-4">
                         <div className="text-2xl">{market.icon}</div>
                         <div>
-                          <h3 className="text-xl font-bold text-white">{market.asset}</h3>
-                          <p className="text-slate-400">{market.symbol}</p>
+                          <h3 className="text-xl font-bold">{market.asset}</h3>
+                          <p className="text-muted-foreground">{market.symbol}</p>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                      <Badge variant="secondary" className="bg-apple-blue/10 text-apple-blue border-apple-blue/20">
                         {market.collateralFactor * 100}% LTV
                       </Badge>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div>
-                        <p className="text-sm text-slate-400">Supply APY</p>
-                        <p className="text-lg font-semibold text-green-400 flex items-center">
+                        <p className="text-sm text-muted-foreground">Supply APY</p>
+                        <p className="text-lg font-semibold text-apple-green flex items-center">
                           <TrendingUp className="h-4 w-4 mr-1" />
                           {market.supplyAPY}%
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Borrow APY</p>
-                        <p className="text-lg font-semibold text-red-400 flex items-center">
+                        <p className="text-sm text-muted-foreground">Borrow APY</p>
+                        <p className="text-lg font-semibold text-apple-red flex items-center">
                           <TrendingDown className="h-4 w-4 mr-1" />
                           {market.borrowAPY}%
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Total Supply</p>
-                        <p className="text-lg font-semibold text-white">${market.totalSupply.toLocaleString()}</p>
+                        <p className="text-sm text-muted-foreground">Total Supply</p>
+                        <p className="text-lg font-semibold">${market.totalSupply.toLocaleString()}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Available</p>
-                        <p className="text-lg font-semibold text-white">${market.liquidity.toLocaleString()}</p>
+                        <p className="text-sm text-muted-foreground">Available</p>
+                        <p className="text-lg font-semibold">${market.liquidity.toLocaleString()}</p>
                       </div>
                     </div>
 
@@ -275,7 +283,7 @@ export function LendingBorrowingPage() {
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            className="flex-1 bg-green-600 hover:bg-green-700"
+                            className="flex-1 bg-apple-green hover:bg-apple-green/90 btn-apple"
                             onClick={() =>
                               requiresAuth(() => {
                                 setSelectedAsset(market)
@@ -286,13 +294,13 @@ export function LendingBorrowingPage() {
                             Supply {market.symbol}
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
+                        <DialogContent className="apple-glass-card border-apple-gray-200 dark:border-apple-gray-800">
                           <DialogHeader>
-                            <DialogTitle className="text-white">Supply {selectedAsset?.symbol}</DialogTitle>
+                            <DialogTitle>Supply {selectedAsset?.symbol}</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <Label htmlFor="amount" className="text-slate-300">
+                              <Label htmlFor="amount" className="text-muted-foreground">
                                 Amount
                               </Label>
                               <Input
@@ -301,19 +309,22 @@ export function LendingBorrowingPage() {
                                 placeholder="0.00"
                                 value={actionAmount}
                                 onChange={(e) => setActionAmount(e.target.value)}
-                                className="bg-slate-700 border-slate-600 text-white"
+                                className="bg-apple-gray-50 dark:bg-apple-gray-900 border-apple-gray-200 dark:border-apple-gray-800"
                               />
                             </div>
                             {selectedAsset &&
                               (selectedAsset.asset === "Annuity" || selectedAsset.asset === "Endowment") && (
-                                <div className="p-3 bg-purple-600/20 rounded-lg">
-                                  <div className="flex items-center space-x-2 text-purple-300">
+                                <div className="p-3 bg-apple-blue/10 rounded-lg border border-apple-blue/20">
+                                  <div className="flex items-center space-x-2 text-apple-blue">
                                     <Shield className="h-4 w-4" />
                                     <span className="text-sm">NFT will be minted and credited to your wallet</span>
                                   </div>
                                 </div>
                               )}
-                            <Button onClick={handleTransaction} className="w-full bg-green-600 hover:bg-green-700">
+                            <Button
+                              onClick={handleTransaction}
+                              className="w-full bg-apple-green hover:bg-apple-green/90 btn-apple"
+                            >
                               Supply {selectedAsset?.symbol}
                             </Button>
                           </div>
@@ -324,7 +335,7 @@ export function LendingBorrowingPage() {
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
-                            className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
+                            className="flex-1 border-apple-gray-300 dark:border-apple-gray-700 hover:bg-apple-gray-50 dark:hover:bg-apple-gray-900 bg-transparent"
                             onClick={() =>
                               requiresAuth(() => {
                                 setSelectedAsset(market)
@@ -335,13 +346,13 @@ export function LendingBorrowingPage() {
                             Borrow {market.symbol}
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
+                        <DialogContent className="apple-glass-card border-apple-gray-200 dark:border-apple-gray-800">
                           <DialogHeader>
-                            <DialogTitle className="text-white">Borrow {selectedAsset?.symbol}</DialogTitle>
+                            <DialogTitle>Borrow {selectedAsset?.symbol}</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <Label htmlFor="borrow-amount" className="text-slate-300">
+                              <Label htmlFor="borrow-amount" className="text-muted-foreground">
                                 Amount
                               </Label>
                               <Input
@@ -350,15 +361,18 @@ export function LendingBorrowingPage() {
                                 placeholder="0.00"
                                 value={actionAmount}
                                 onChange={(e) => setActionAmount(e.target.value)}
-                                className="bg-slate-700 border-slate-600 text-white"
+                                className="bg-apple-gray-50 dark:bg-apple-gray-900 border-apple-gray-200 dark:border-apple-gray-800"
                               />
                             </div>
-                            <div className="p-3 bg-yellow-600/20 rounded-lg">
-                              <p className="text-sm text-yellow-300">
+                            <div className="p-3 bg-apple-orange/10 rounded-lg border border-apple-orange/20">
+                              <p className="text-sm text-apple-orange">
                                 Ensure you have sufficient collateral to maintain your health factor
                               </p>
                             </div>
-                            <Button onClick={handleTransaction} className="w-full bg-red-600 hover:bg-red-700">
+                            <Button
+                              onClick={handleTransaction}
+                              className="w-full bg-apple-red hover:bg-apple-red/90 btn-apple"
+                            >
                               Borrow {selectedAsset?.symbol}
                             </Button>
                           </div>
@@ -373,27 +387,27 @@ export function LendingBorrowingPage() {
 
           <TabsContent value="positions" className="space-y-6">
             {!user ? (
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
                 <CardContent className="p-8 text-center">
-                  <Wallet className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Connect Your Wallet</h3>
-                  <p className="text-slate-400 mb-4">
+                  <Wallet className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+                  <p className="text-muted-foreground mb-4">
                     Connect your wallet to view your lending and borrowing positions
                   </p>
-                  <Button onClick={signIn} className="bg-purple-600 hover:bg-purple-700">
+                  <Button onClick={signIn} className="bg-apple-blue hover:bg-apple-blue/90 btn-apple">
                     Connect Wallet
                   </Button>
                 </CardContent>
               </Card>
             ) : userPositions.length === 0 ? (
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800">
                 <CardContent className="p-8 text-center">
-                  <Coins className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                  <h3 className="text-xl font-semibold text-white mb-2">No Positions Yet</h3>
-                  <p className="text-slate-400 mb-4">Start by supplying assets to earn yield</p>
+                  <Coins className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-xl font-semibold mb-2">No Positions Yet</h3>
+                  <p className="text-muted-foreground mb-4">Start by supplying assets to earn yield</p>
                   <Button
                     onClick={() => document.querySelector('[value="markets"]')?.click()}
-                    className="bg-purple-600 hover:bg-purple-700"
+                    className="bg-apple-blue hover:bg-apple-blue/90 btn-apple"
                   >
                     Explore Markets
                   </Button>
@@ -406,47 +420,50 @@ export function LendingBorrowingPage() {
                   if (!market) return null
 
                   return (
-                    <Card key={position.asset} className="bg-slate-800/50 border-slate-700">
+                    <Card
+                      key={position.asset}
+                      className="apple-glass-card card-apple border-apple-gray-200 dark:border-apple-gray-800"
+                    >
                       <CardHeader>
-                        <CardTitle className="flex items-center text-white">
+                        <CardTitle className="flex items-center">
                           <span className="text-xl mr-2">{market.icon}</span>
                           {position.asset} Position
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="p-4 bg-green-600/20 rounded-lg">
-                            <p className="text-sm text-green-300">Supplied</p>
-                            <p className="text-xl font-bold text-white">${position.supplied.toLocaleString()}</p>
-                            <p className="text-sm text-green-300">Earning {market.supplyAPY}% APY</p>
+                          <div className="p-4 bg-apple-green/10 rounded-lg border border-apple-green/20">
+                            <p className="text-sm text-apple-green">Supplied</p>
+                            <p className="text-xl font-bold">${position.supplied.toLocaleString()}</p>
+                            <p className="text-sm text-apple-green">Earning {market.supplyAPY}% APY</p>
                           </div>
 
                           {position.borrowed > 0 && (
-                            <div className="p-4 bg-red-600/20 rounded-lg">
-                              <p className="text-sm text-red-300">Borrowed</p>
-                              <p className="text-xl font-bold text-white">${position.borrowed.toLocaleString()}</p>
-                              <p className="text-sm text-red-300">Paying {market.borrowAPY}% APY</p>
+                            <div className="p-4 bg-apple-red/10 rounded-lg border border-apple-red/20">
+                              <p className="text-sm text-apple-red">Borrowed</p>
+                              <p className="text-xl font-bold">${position.borrowed.toLocaleString()}</p>
+                              <p className="text-sm text-apple-red">Paying {market.borrowAPY}% APY</p>
                             </div>
                           )}
 
-                          <div className="p-4 bg-purple-600/20 rounded-lg">
-                            <p className="text-sm text-purple-300">Collateral</p>
-                            <p className="text-xl font-bold text-white">${position.collateral.toLocaleString()}</p>
-                            <p className="text-sm text-purple-300">{market.collateralFactor * 100}% LTV</p>
+                          <div className="p-4 bg-apple-blue/10 rounded-lg border border-apple-blue/20">
+                            <p className="text-sm text-apple-blue">Collateral</p>
+                            <p className="text-xl font-bold">${position.collateral.toLocaleString()}</p>
+                            <p className="text-sm text-apple-blue">{market.collateralFactor * 100}% LTV</p>
                           </div>
                         </div>
 
                         <div className="flex space-x-4">
                           <Button
                             variant="outline"
-                            className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
+                            className="flex-1 border-apple-gray-300 dark:border-apple-gray-700 hover:bg-apple-gray-50 dark:hover:bg-apple-gray-900 bg-transparent"
                           >
                             Withdraw
                           </Button>
                           {position.borrowed > 0 && (
                             <Button
                               variant="outline"
-                              className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
+                              className="flex-1 border-apple-gray-300 dark:border-apple-gray-700 hover:bg-apple-gray-50 dark:hover:bg-apple-gray-900 bg-transparent"
                             >
                               Repay
                             </Button>
