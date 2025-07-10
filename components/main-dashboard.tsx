@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,7 @@ interface DashboardData {
 }
 
 export function MainDashboard() {
+  const router = useRouter()
   const { user, signIn } = useAuth()
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     totalStaked: 0,
@@ -82,7 +84,7 @@ export function MainDashboard() {
                 Lending
               </Link>
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Account
+                Connect Wallet
               </Link>
             </nav>
             <div className="flex items-center space-x-4">
@@ -92,13 +94,9 @@ export function MainDashboard() {
                   <span className="text-sm text-white">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={signIn} variant="outline" size="sm">
-                  Connect Wallet
+                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
                 </Button>
               )}
-              <Button variant="ghost" size="sm">
-                <Menu className="h-4 w-4" />
-              </Button>
             </div>
           </div>
         </div>

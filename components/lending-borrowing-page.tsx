@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -42,6 +43,7 @@ export function LendingBorrowingPage() {
   const [selectedAsset, setSelectedAsset] = useState<MarketData | null>(null)
   const [actionAmount, setActionAmount] = useState("")
   const [actionType, setActionType] = useState<"supply" | "borrow" | "withdraw" | "repay">("supply")
+  const router = useRouter();
 
   useEffect(() => {
     const marketsRef = ref(database, 'markets')
@@ -134,12 +136,6 @@ export function LendingBorrowingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
               <h1 className="text-2xl font-bold text-white">Lending & Borrowing</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
@@ -150,7 +146,7 @@ export function LendingBorrowingPage() {
                 Lending
               </Link>
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Account
+                Connect Wallet
               </Link>
             </nav>
             <div className="flex items-center space-x-4">
@@ -161,7 +157,6 @@ export function LendingBorrowingPage() {
                 </div>
               ) : (
                 <Button onClick={signIn} variant="outline" size="sm">
-                  Connect Wallet
                 </Button>
               )}
             </div>
@@ -332,7 +327,7 @@ export function LendingBorrowingPage() {
                   <p className="text-slate-400 mb-4">
                     Connect your wallet to view your lending and borrowing positions
                   </p>
-                  <Button onClick={signIn} className="bg-purple-600 hover:bg-purple-700">
+                  <Button onClick={() => router.push("/account")} className="bg-purple-600 hover:bg-purple-700">
                     Connect Wallet
                   </Button>
                 </CardContent>
