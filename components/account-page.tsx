@@ -101,7 +101,6 @@ export function AccountPage() {
     const userRef = ref(database, `users/${user.uid}`)
     await set(userRef, {
       ...userProfile,
-      // Optionally, keep nfts and other sub-nodes intact if needed
     })
     setIsEditing(false)
   }

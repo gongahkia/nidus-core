@@ -52,5 +52,38 @@
       "liquidity": 170000,
       "collateralFactor": 0.7
     }
+  },
+  "users": {
+    "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
+      "displayName": "Alice",
+      "email": "alice@example.com",
+      "walletAddress": "0x123456789abcdef",
+      "joinDate": 1688947200000,
+      "preferences": {
+        "notifications": true,
+        "autoCompound": false
+      },
+      "portfolio": {
+        "annuity": 40000,
+        "endowment": 25000,
+        "xsgd": 60000
+      },
+      "nfts": {
+        "nft1": {
+          "tokenId": "VRT-123",
+          "asset": "Annuity",
+          "amount": 10000,
+          "mintDate": 1688950800000,
+          "status": "active"
+        },
+        "nft2": {
+          "tokenId": "VRT-124",
+          "asset": "Endowment",
+          "amount": 15000,
+          "mintDate": 1688954400000,
+          "status": "redeemed"
+        }
+      }
+    }
   }
 }

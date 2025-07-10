@@ -8,7 +8,12 @@ Making Stablecoins stable again.
 
 ## Credentials
 
-### Gmail
+### Veritas Login Test Account (or just make a new account)
+
+* balls@gmail.com
+* tweaking
+
+### Gmail, Firebase, Vercel deployment
 
 * veritasinsurancesg@gmail.com
 * veritasinsurancesg2025
