@@ -12,10 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, User, Settings, HelpCircle, Shield, Bell, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-
-// Firebase database functions (commented out)
-// import { ref, onValue, set } from 'firebase/database'
-// import { database } from './auth-provider'
+import { ref, onValue, set } from 'firebase/database'
+import { database } from './auth-provider'
 
 interface UserProfile {
   displayName: string
@@ -48,75 +46,38 @@ export function AccountPage() {
   useEffect(() => {
     if (!user) return
 
-    // Firebase real-time data fetching (commented out)
-    // const profileRef = ref(database, `users/${user.uid}`)
-    // const nftsRef = ref(database, `nfts/${user.uid}`)
+    const profileRef = ref(database, `users/${user.uid}`)
+    const nftsRef = ref(database, `nfts/${user.uid}`)
 
-    // const unsubscribeProfile = onValue(profileRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     setUserProfile(data)
-    //   }
-    // })
-
-    // const unsubscribeNFTs = onValue(nftsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const nftsArray = Object.keys(data).map(key => ({
-    //       id: key,
-    //       ...data[key]
-    //     }))
-    //     setNFTAssets(nftsArray)
-    //   }
-    // })
-
-    // return () => {
-    //   unsubscribeProfile()
-    //   unsubscribeNFTs()
-    // }
-
-    // Placeholder data
-    setUserProfile({
-      displayName: user.displayName || "John Doe",
-      email: user.email || "user@example.com",
-      walletAddress: "0x1234...5678",
-      joinDate: Date.now() - 30 * 24 * 60 * 60 * 1000, // 30 days ago
-      totalValue: 125000,
-      preferences: {
-        notifications: true,
-        darkMode: true,
-        autoCompound: false,
-      },
+    const unsubscribeProfile = onValue(profileRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        setUserProfile(data)
+      }
     })
 
-    setNFTAssets([
-      {
-        id: "1",
-        tokenId: "VRT-001",
-        asset: "Annuity",
-        amount: 15000,
-        mintDate: Date.now() - 7 * 24 * 60 * 60 * 1000,
-        status: "active",
-      },
-      {
-        id: "2",
-        tokenId: "VRT-002",
-        asset: "Endowment",
-        amount: 8000,
-        mintDate: Date.now() - 3 * 24 * 60 * 60 * 1000,
-        status: "active",
-      },
-    ])
+    const unsubscribeNFTs = onValue(nftsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const nftsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }))
+        setNFTAssets(nftsArray)
+      }
+    })
+
+    return () => {
+      unsubscribeProfile()
+      unsubscribeNFTs()
+    }
+
   }, [user])
 
   const handleSaveProfile = async () => {
     if (!user || !userProfile) return
-
-    // Firebase update (commented out)
-    // const profileRef = ref(database, `users/${user.uid}`)
-    // await set(profileRef, userProfile)
-
-    setIsEditing(false)
+    const profileRef = ref(database, `users/${user.uid}`)
+    await set(profileRef, userProfile)
   }
 
   const handlePreferenceChange = async (key: keyof UserProfile["preferences"], value: boolean) => {
@@ -130,12 +91,10 @@ export function AccountPage() {
       },
     }
     setUserProfile(updatedProfile)
-
-    // Firebase update (commented out)
-    // if (user) {
-    //   const profileRef = ref(database, `users/${user.uid}`)
-    //   await set(profileRef, updatedProfile)
-    // }
+    if (user) {
+      const profileRef = ref(database, `users/${user.uid}`)
+      await set(profileRef, updatedProfile)
+    }
   }
 
   if (!user) {

@@ -12,10 +12,8 @@ import { ArrowLeft, TrendingUp, TrendingDown, Wallet, Shield, Coins } from "luci
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { useToast } from "@/hooks/use-toast"
-
-// Firebase database functions (commented out)
-// import { ref, push, set, onValue } from 'firebase/database'
-// import { database } from './auth-provider'
+import { ref, push, set, onValue } from 'firebase/database'
+import { database } from './auth-provider'
 
 interface MarketData {
   asset: string
@@ -46,80 +44,36 @@ export function LendingBorrowingPage() {
   const [actionType, setActionType] = useState<"supply" | "borrow" | "withdraw" | "repay">("supply")
 
   useEffect(() => {
-    // Firebase real-time data fetching (commented out)
-    // const marketsRef = ref(database, 'markets')
-    // const userPositionsRef = ref(database, `userPositions/${user?.uid}`)
+    const marketsRef = ref(database, 'markets')
+    const userPositionsRef = ref(database, `userPositions/${user?.uid}`)
 
-    // const unsubscribeMarkets = onValue(marketsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const marketsArray = Object.keys(data).map(key => ({
-    //       ...data[key],
-    //       asset: key
-    //     }))
-    //     setMarkets(marketsArray)
-    //   }
-    // })
+    const unsubscribeMarkets = onValue(marketsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const marketsArray = Object.keys(data).map(key => ({
+          ...data[key],
+          asset: key
+        }))
+        setMarkets(marketsArray)
+      }
+    })
 
-    // const unsubscribePositions = onValue(userPositionsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const positionsArray = Object.keys(data).map(key => ({
-    //       asset: key,
-    //       ...data[key]
-    //     }))
-    //     setUserPositions(positionsArray)
-    //   }
-    // })
+    const unsubscribePositions = onValue(userPositionsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const positionsArray = Object.keys(data).map(key => ({
+          asset: key,
+          ...data[key]
+        }))
+        setUserPositions(positionsArray)
+      }
+    })
 
-    // return () => {
-    //   unsubscribeMarkets()
-    //   unsubscribePositions()
-    // }
-
-    // Placeholder data
-    setMarkets([
-      {
-        asset: "XsGD",
-        symbol: "XsGD",
-        supplyAPY: 8.5,
-        borrowAPY: 12.3,
-        totalSupply: 1250000,
-        totalBorrow: 850000,
-        liquidity: 400000,
-        collateralFactor: 0.8,
-        icon: "💰",
-      },
-      {
-        asset: "Annuity",
-        symbol: "ANN",
-        supplyAPY: 12.8,
-        borrowAPY: 16.5,
-        totalSupply: 850000,
-        totalBorrow: 620000,
-        liquidity: 230000,
-        collateralFactor: 0.75,
-        icon: "🛡️",
-      },
-      {
-        asset: "Endowment",
-        symbol: "END",
-        supplyAPY: 15.2,
-        borrowAPY: 19.8,
-        totalSupply: 650000,
-        totalBorrow: 480000,
-        liquidity: 170000,
-        collateralFactor: 0.7,
-        icon: "📈",
-      },
-    ])
-
-    if (user) {
-      setUserPositions([
-        { asset: "XsGD", supplied: 25000, borrowed: 0, collateral: 25000 },
-        { asset: "Annuity", supplied: 15000, borrowed: 8000, collateral: 15000 },
-      ])
+    return () => {
+      unsubscribeMarkets()
+      unsubscribePositions()
     }
+
   }, [user])
 
   const handleTransaction = async () => {
@@ -130,29 +84,27 @@ export function LendingBorrowingPage() {
 
     if (!selectedAsset || !actionAmount) return
 
-    // Firebase transaction (commented out)
-    // const transactionRef = ref(database, `transactions/${user.uid}`)
-    // const newTransactionRef = push(transactionRef)
-    // await set(newTransactionRef, {
-    //   asset: selectedAsset.asset,
-    //   action: actionType,
-    //   amount: parseFloat(actionAmount),
-    //   timestamp: Date.now(),
-    //   status: 'pending'
-    // })
+    const transactionRef = ref(database, `transactions/${user.uid}`)
+    const newTransactionRef = push(transactionRef)
+    await set(newTransactionRef, {
+      asset: selectedAsset.asset,
+      action: actionType,
+      amount: parseFloat(actionAmount),
+      timestamp: Date.now(),
+      status: 'pending'
+    })
 
-    // For collateralized assets, mint NFT (commented out)
-    // if ((actionType === 'supply') && (selectedAsset.asset === 'Annuity' || selectedAsset.asset === 'Endowment')) {
-    //   const nftRef = ref(database, `nfts/${user.uid}`)
-    //   const newNFTRef = push(nftRef)
-    //   await set(newNFTRef, {
-    //     asset: selectedAsset.asset,
-    //     amount: parseFloat(actionAmount),
-    //     tokenId: `VRT-${Date.now()}`,
-    //     timestamp: Date.now(),
-    //     status: 'minted'
-    //   })
-    // }
+    if ((actionType === 'supply') && (selectedAsset.asset === 'Annuity' || selectedAsset.asset === 'Endowment')) {
+      const nftRef = ref(database, `nfts/${user.uid}`)
+      const newNFTRef = push(nftRef)
+      await set(newNFTRef, {
+        asset: selectedAsset.asset,
+        amount: parseFloat(actionAmount),
+        tokenId: `VRT-${Date.now()}`,
+        timestamp: Date.now(),
+        status: 'minted'
+      })
+    }
 
     toast({
       title: "Transaction Submitted",

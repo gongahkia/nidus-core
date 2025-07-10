@@ -3,25 +3,25 @@
 import type React from "react"
 
 import { createContext, useContext, useEffect, useState } from "react"
+import { initializeApp } from 'firebase/app'
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
 
-// Firebase imports (commented out for now)
-// import { initializeApp } from 'firebase/app'
-// import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
-// import { getDatabase } from 'firebase/database'
+const firebaseConfig = {
+  apiKey: "AIzaSyAMAnrRV-zMLbxIJDYZxYRBMrnq8H1VBns",
+  authDomain: "veritas-insurance-core.firebaseapp.com",
+  databaseURL: "https://veritas-insurance-core-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "veritas-insurance-core",
+  storageBucket: "veritas-insurance-core.firebasestorage.app",
+  messagingSenderId: "252138312766",
+  appId: "1:252138312766:web:c746f527a4dad0d3f7ad6f",
+  measurementId: "G-CTSSYZ4D92"
 
-// const firebaseConfig = {
-//   apiKey: "your-api-key",
-//   authDomain: "veritas-insurance.firebaseapp.com",
-//   databaseURL: "https://veritas-insurance-default-rtdb.firebaseio.com/",
-//   projectId: "veritas-insurance",
-//   storageBucket: "veritas-insurance.appspot.com",
-//   messagingSenderId: "123456789",
-//   appId: "your-app-id"
-// }
+};
 
-// const app = initializeApp(firebaseConfig)
-// export const auth = getAuth(app)
-// export const database = getDatabase(app)
+const app = initializeApp(firebaseConfig)
+export const auth = getAuth(app)
+export const database = getDatabase(app)
 
 interface User {
   uid: string
@@ -44,47 +44,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Firebase auth state listener (commented out)
-    // const unsubscribe = onAuthStateChanged(auth, (user) => {
-    //   if (user) {
-    //     setUser({
-    //       uid: user.uid,
-    //       email: user.email,
-    //       displayName: user.displayName,
-    //       photoURL: user.photoURL
-    //     })
-    //   } else {
-    //     setUser(null)
-    //   }
-    //   setLoading(false)
-    // })
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        })
+      } else {
+        setUser(null)
+      }
+      setLoading(false)
+    })
 
-    // return () => unsubscribe()
+    return () => unsubscribe()
 
-    // Placeholder auth state
-    setLoading(false)
   }, [])
 
   const signIn = async () => {
-    // Firebase Google sign in (commented out)
-    // const provider = new GoogleAuthProvider()
-    // await signInWithPopup(auth, provider)
-
-    // Placeholder sign in
-    setUser({
-      uid: "placeholder-uid",
-      email: "user@example.com",
-      displayName: "John Doe",
-      photoURL: null,
-    })
+    const provider = new GoogleAuthProvider()
+    await signInWithPopup(auth, provider)
   }
 
   const handleSignOut = async () => {
-    // Firebase sign out (commented out)
-    // await signOut(auth)
-
-    // Placeholder sign out
-    setUser(null)
+    await signOut(auth)
   }
 
   return (

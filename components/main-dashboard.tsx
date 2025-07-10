@@ -8,10 +8,8 @@ import { Separator } from "@/components/ui/separator"
 import { TrendingUp, DollarSign, Users, Bell, Menu, Wallet } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-
-// Firebase database functions (commented out)
-// import { ref, onValue, off } from 'firebase/database'
-// import { database } from './auth-provider'
+import { ref, onValue, off } from 'firebase/database'
+import { database } from './auth-provider'
 
 interface DashboardData {
   totalStaked: number
@@ -36,55 +34,32 @@ export function MainDashboard() {
   })
 
   useEffect(() => {
-    // Firebase real-time data fetching (commented out)
-    // const dashboardRef = ref(database, 'dashboard')
-    // const announcementsRef = ref(database, 'announcements')
+    const dashboardRef = ref(database, 'dashboard')
+    const announcementsRef = ref(database, 'announcements')
 
-    // const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     setDashboardData(prev => ({ ...prev, ...data }))
-    //   }
-    // })
-
-    // const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const announcements = Object.keys(data).map(key => ({
-    //       id: key,
-    //       ...data[key]
-    //     }))
-    //     setDashboardData(prev => ({ ...prev, announcements }))
-    //   }
-    // })
-
-    // return () => {
-    //   off(dashboardRef)
-    //   off(announcementsRef)
-    // }
-
-    // Placeholder data
-    setDashboardData({
-      totalStaked: 125000,
-      currentYield: 8.5,
-      tvl: 2500000,
-      announcements: [
-        {
-          id: "1",
-          title: "New Lending Pool Available",
-          content: "XsGD lending pool is now live with competitive rates",
-          timestamp: Date.now() - 3600000,
-          type: "success",
-        },
-        {
-          id: "2",
-          title: "Maintenance Window",
-          content: "Scheduled maintenance on Sunday 2AM-4AM UTC",
-          timestamp: Date.now() - 7200000,
-          type: "warning",
-        },
-      ],
+    const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        setDashboardData(prev => ({ ...prev, ...data }))
+      }
     })
+
+    const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const announcements = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }))
+        setDashboardData(prev => ({ ...prev, announcements }))
+      }
+    })
+
+    return () => {
+      off(dashboardRef)
+      off(announcementsRef)
+    }
+
   }, [])
 
   return (
