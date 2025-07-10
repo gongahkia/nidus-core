@@ -79,10 +79,12 @@ export function LendingBorrowingPage() {
   }, [user])
 
   const handleTransaction = async () => {
+
     if (!user) {
-      signIn()
-      return
+      router.push("/account");
+      return;
     }
+
 
     if (!selectedAsset || !actionAmount) return
 
@@ -123,9 +125,10 @@ export function LendingBorrowingPage() {
 
   const requiresAuth = (action: () => void) => {
     if (!user) {
-      signIn()
-      return
+      router.push("/account");
+      return;
     }
+
     action()
   }
 
@@ -333,9 +336,9 @@ export function LendingBorrowingPage() {
                     Connect your wallet to view your lending and borrowing positions
                   </p>
                   <Button onClick={() => router.push("/account")} className="bg-purple-600 hover:bg-purple-700">
-                    Connect Wallet
-                  </Button>
-                </CardContent>
+                      Connect Wallet
+                    </Button>
+                  </CardContent>
               </Card>
             ) : userPositions.length === 0 ? (
               <Card className="bg-slate-800/50 border-slate-700">
