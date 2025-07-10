@@ -11,7 +11,7 @@ import {
   signOut,
   User as FirebaseUser
 } from 'firebase/auth'
-import { getDatabase } from 'firebase/database'
+import { getDatabase, ref, set } from 'firebase/database'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAMAnrRV-zMLbxIJDYZxYRBMrnq8H1VBns",
@@ -77,7 +77,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const newUser = userCredential.user
+
+      // Initialize user profile in the Realtime Database
+      await set(ref(database, `users/${newUser.uid}`), {
+        displayName: "",
+        email: newUser.email,
+        walletAddress: "",
+        joinDate: Date.now(),
+        preferences: {
+          notifications: false,
+          autoCompound: false
+        },
+        portfolio: {
+          annuity: 0,
+          endowment: 0,
+          xsgd: 0
+        },
+        nfts: {}
+      })
     } catch (error) {
       alert("Sign-up failed: " + (error as Error).message)
     }
