@@ -36,7 +36,7 @@ interface UserPosition {
 }
 
 export function LendingBorrowingPage() {
-  const { user, signIn } = useAuth()
+  const { user } = useAuth()
   const { toast } = useToast()
   const [markets, setMarkets] = useState<MarketData[]>([])
   const [userPositions, setUserPositions] = useState<UserPosition[]>([])
@@ -164,7 +164,7 @@ export function LendingBorrowingPage() {
                   <span className="text-sm text-white">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={signIn} variant="outline" size="sm">
+                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
                 </Button>
               )}
             </div>
