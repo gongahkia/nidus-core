@@ -73,7 +73,7 @@ export function MainDashboard() {
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-white">Veritas Insurance</h1>
               <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
-                v2.0
+                v1.0
               </Badge>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
@@ -83,6 +83,11 @@ export function MainDashboard() {
               <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Lending
               </Link>
+              {!user && (
+                <Link href="/about-veritas" className="text-slate-300 hover:text-purple-300 transition-colors">
+                  Mission
+                </Link>
+              )}
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Account
               </Link>

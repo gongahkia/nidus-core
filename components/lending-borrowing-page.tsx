@@ -145,6 +145,11 @@ export function LendingBorrowingPage() {
               <Link href="/lending" className="text-white hover:text-purple-300 transition-colors">
                 Lending
               </Link>
+              {!user && (
+                <Link href="/about-veritas" className="text-slate-300 hover:text-purple-300 transition-colors">
+                  Mission
+                </Link>
+              )}
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Account
               </Link>

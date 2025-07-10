@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield } from "lucide-react";
+import Image from "next/image";
 
 export default function AboutVeritasPage() {
   return (
@@ -24,6 +25,47 @@ export default function AboutVeritasPage() {
             <p className="text-slate-400">
               Empower users to manage and protect their digital wealth with confidence and ease.
             </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Meet the Team Section */}
+      <Card className="max-w-2xl mx-auto bg-slate-800/50 border-slate-700 mt-10">
+        <CardHeader>
+          <CardTitle className="text-white text-xl">Meet the Team</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Richard Lei */}
+            <div className="flex flex-col items-center text-center flex-1">
+              <Image
+                src="https://media.licdn.com/dms/image/v2/D5603AQGo_xyOewTB7g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1695662262332?e=1757548800&v=beta&t=5p4MBBme3K6j8Gn74XZ6J94D9qPa_PZBYLVAtQEl0jA"
+                alt="Richard Lei"
+                width={96}
+                height={96}
+                className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
+              />
+              <div className="text-white font-semibold text-lg">Richard Lei</div>
+              <div className="text-slate-400 text-sm mb-2">Founder, Business</div>
+              <p className="text-slate-400 text-xs">
+                Richard leads Veritas with a vision for transparent, secure, and innovative insurance solutions in the decentralized finance space.
+              </p>
+            </div>
+            {/* Gabriel Ong */}
+            <div className="flex flex-col items-center text-center flex-1">
+              <Image
+                src="https://media.licdn.com/dms/image/v2/D5603AQFwwQ70upxVLQ/profile-displayphoto-shrink_400_400/B56ZN9ThfrGwAg-/0/1732974090931?e=1757548800&v=beta&t=DlPQfVhmtwpxN2GBPX57teX77GTOtzyW7d-4nkUPbTk"
+                alt="Gabriel Ong"
+                width={96}
+                height={96}
+                className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
+              />
+              <div className="text-white font-semibold text-lg">Gabriel Ong</div>
+              <div className="text-slate-400 text-sm mb-2">CTO, Tech Lead</div>
+              <p className="text-slate-400 text-xs">
+                Gabriel drives the technology and engineering at Veritas, ensuring robust, scalable, and user-centric DeFi infrastructure.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
