@@ -20,11 +20,14 @@ interface UserProfile {
   email: string
   walletAddress: string
   joinDate: number
-  totalValue: number
   preferences: {
     notifications: boolean
-    darkMode: boolean
     autoCompound: boolean
+  }
+  portfolio: {
+    annuity: number
+    endowment: number
+    xsgd: number
   }
 }
 
@@ -50,13 +53,27 @@ export function AccountPage() {
   useEffect(() => {
     if (!user) return
 
-    const profileRef = ref(database, `users/${user.uid}`)
-    const nftsRef = ref(database, `nfts/${user.uid}`)
+    const userRef = ref(database, `users/${user.uid}`)
+    const nftsRef = ref(database, `users/${user.uid}/nfts`)
 
-    const unsubscribeProfile = onValue(profileRef, (snapshot) => {
+    const unsubscribeUser = onValue(userRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
-        setUserProfile(data)
+        setUserProfile({
+          displayName: data.displayName || "",
+          email: data.email || "",
+          walletAddress: data.walletAddress || "",
+          joinDate: data.joinDate || 0,
+          preferences: {
+            notifications: data.preferences?.notifications ?? false,
+            autoCompound: data.preferences?.autoCompound ?? false,
+          },
+          portfolio: {
+            annuity: data.portfolio?.annuity ?? 0,
+            endowment: data.portfolio?.endowment ?? 0,
+            xsgd: data.portfolio?.xsgd ?? 0,
+          }
+        })
       }
     })
 
@@ -68,24 +85,29 @@ export function AccountPage() {
           ...data[key]
         }))
         setNFTAssets(nftsArray)
+      } else {
+        setNFTAssets([])
       }
     })
 
     return () => {
-      unsubscribeProfile()
+      unsubscribeUser()
       unsubscribeNFTs()
     }
   }, [user])
 
   const handleSaveProfile = async () => {
     if (!user || !userProfile) return
-    const profileRef = ref(database, `users/${user.uid}`)
-    await set(profileRef, userProfile)
+    const userRef = ref(database, `users/${user.uid}`)
+    await set(userRef, {
+      ...userProfile,
+      // Optionally, keep nfts and other sub-nodes intact if needed
+    })
+    setIsEditing(false)
   }
 
   const handlePreferenceChange = async (key: keyof UserProfile["preferences"], value: boolean) => {
-    if (!userProfile) return
-
+    if (!userProfile || !user) return
     const updatedProfile = {
       ...userProfile,
       preferences: {
@@ -94,10 +116,8 @@ export function AccountPage() {
       },
     }
     setUserProfile(updatedProfile)
-    if (user) {
-      const profileRef = ref(database, `users/${user.uid}`)
-      await set(profileRef, updatedProfile)
-    }
+    const userRef = ref(database, `users/${user.uid}`)
+    await set(userRef, updatedProfile)
   }
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -239,13 +259,32 @@ export function AccountPage() {
                 <div className="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <User className="h-10 w-10 text-white" />
                 </div>
-                <CardTitle className="text-white">{userProfile?.displayName}</CardTitle>
+                <CardTitle className="text-white">
+                  {isEditing ? (
+                    <Input
+                      value={userProfile?.displayName || ""}
+                      onChange={e =>
+                        userProfile && setUserProfile({ ...userProfile, displayName: e.target.value })
+                      }
+                      className="bg-slate-700 border-slate-600 text-white"
+                    />
+                  ) : (
+                    userProfile?.displayName
+                  )}
+                </CardTitle>
                 <p className="text-slate-400 text-sm">{userProfile?.email}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <p className="text-sm text-slate-400">Total Portfolio Value</p>
-                  <p className="text-2xl font-bold text-white">${userProfile?.totalValue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-white">
+                    $
+                    {(
+                      (userProfile?.portfolio.annuity || 0) +
+                      (userProfile?.portfolio.endowment || 0) +
+                      (userProfile?.portfolio.xsgd || 0)
+                    ).toLocaleString()}
+                  </p>
                 </div>
                 <Separator className="bg-slate-700" />
                 <div className="space-y-2">
@@ -259,6 +298,30 @@ export function AccountPage() {
                     <span className="text-slate-400">Wallet</span>
                     <span className="text-white font-mono">{userProfile?.walletAddress}</span>
                   </div>
+                </div>
+                <div className="flex space-x-4 mt-4">
+                  {isEditing ? (
+                    <>
+                      <Button onClick={handleSaveProfile} className="bg-green-600 hover:bg-green-700">
+                        Save
+                      </Button>
+                      <Button
+                        onClick={() => setIsEditing(false)}
+                        variant="outline"
+                        className="border-slate-600 text-white hover:bg-slate-700"
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      onClick={() => setIsEditing(true)}
+                      variant="outline"
+                      className="border-slate-600 text-white hover:bg-slate-700"
+                    >
+                      Edit Profile
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -306,66 +369,25 @@ export function AccountPage() {
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="p-4 bg-green-600/20 rounded-lg">
-                        <p className="text-sm text-green-300">Total Supplied</p>
-                        <p className="text-2xl font-bold text-white">$85,000</p>
-                        <p className="text-sm text-green-300">Earning 8.5% APY</p>
-                      </div>
-                      <div className="p-4 bg-red-600/20 rounded-lg">
-                        <p className="text-sm text-red-300">Total Borrowed</p>
-                        <p className="text-2xl font-bold text-white">$25,000</p>
-                        <p className="text-sm text-red-300">Paying 12.3% APY</p>
+                        <p className="text-sm text-green-300">XsGD</p>
+                        <p className="text-2xl font-bold text-white">
+                          ${userProfile?.portfolio.xsgd.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-green-300">+8.5% APY</p>
                       </div>
                       <div className="p-4 bg-purple-600/20 rounded-lg">
-                        <p className="text-sm text-purple-300">Net Worth</p>
-                        <p className="text-2xl font-bold text-white">$125,000</p>
-                        <p className="text-sm text-purple-300">+15.2% this month</p>
+                        <p className="text-sm text-purple-300">Annuity</p>
+                        <p className="text-2xl font-bold text-white">
+                          ${userProfile?.portfolio.annuity.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-purple-300">+12.8% APY</p>
                       </div>
-                    </div>
-
-                    <Separator className="bg-slate-700" />
-
-                    <div>
-                      <h3 className="text-lg font-semibold text-white mb-4">Asset Breakdown</h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="text-xl">💰</div>
-                            <div>
-                              <p className="font-medium text-white">XsGD</p>
-                              <p className="text-sm text-slate-400">Singapore Dollar</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-white">$60,000</p>
-                            <p className="text-sm text-green-400">+8.5% APY</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="text-xl">🛡️</div>
-                            <div>
-                              <p className="font-medium text-white">Annuity</p>
-                              <p className="text-sm text-slate-400">Insurance Annuity</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-white">$40,000</p>
-                            <p className="text-sm text-purple-400">+12.8% APY</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="text-xl">📈</div>
-                            <div>
-                              <p className="font-medium text-white">Endowment</p>
-                              <p className="text-sm text-slate-400">Insurance Endowment</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-white">$25,000</p>
-                            <p className="text-sm text-blue-400">+15.2% APY</p>
-                          </div>
-                        </div>
+                      <div className="p-4 bg-blue-600/20 rounded-lg">
+                        <p className="text-sm text-blue-300">Endowment</p>
+                        <p className="text-2xl font-bold text-white">
+                          ${userProfile?.portfolio.endowment.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-blue-300">+15.2% APY</p>
                       </div>
                     </div>
                   </CardContent>
@@ -458,31 +480,6 @@ export function AccountPage() {
                           className="bg-slate-700 border-slate-600 text-white opacity-50"
                         />
                       </div>
-                    </div>
-
-                    <div className="flex space-x-4">
-                      {isEditing ? (
-                        <>
-                          <Button onClick={handleSaveProfile} className="bg-green-600 hover:bg-green-700">
-                            Save Changes
-                          </Button>
-                          <Button
-                            onClick={() => setIsEditing(false)}
-                            variant="outline"
-                            className="border-slate-600 text-white hover:bg-slate-700"
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          onClick={() => setIsEditing(true)}
-                          variant="outline"
-                          className="border-slate-600 text-white hover:bg-slate-700"
-                        >
-                          Edit Profile
-                        </Button>
-                      )}
                     </div>
                   </CardContent>
                 </Card>
