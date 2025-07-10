@@ -146,7 +146,7 @@ export function LendingBorrowingPage() {
                 Lending
               </Link>
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Connect Wallet
+                Account
               </Link>
             </nav>
             <div className="flex items-center space-x-4">

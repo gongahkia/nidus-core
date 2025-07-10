@@ -223,12 +223,6 @@ export function AccountPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
               <h1 className="text-2xl font-bold text-white">Account</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
@@ -331,18 +325,27 @@ export function AccountPage() {
                 <CardTitle className="text-white text-lg">Quick Links</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white">
-                  <HelpCircle className="h-4 w-4 mr-2" />
-                  Help & Support
-                  <ExternalLink className="h-3 w-3 ml-auto" />
-                </Button>
-                <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white">
-                  <Shield className="h-4 w-4 mr-2" />
-                  About Veritas
-                  <ExternalLink className="h-3 w-3 ml-auto" />
-                </Button>
+                <Link href="/help-support" passHref>
+                  <Button asChild variant="ghost" className="w-full justify-start text-slate-300 hover:text-white">
+                    <span>
+                      <HelpCircle className="h-4 w-4 mr-2" />
+                      Help & Support
+                      <ExternalLink className="h-3 w-3 ml-auto" />
+                    </span>
+                  </Button>
+                </Link>
+                <Link href="/about-veritas" passHref>
+                  <Button asChild variant="ghost" className="w-full justify-start text-slate-300 hover:text-white">
+                    <span>
+                      <Shield className="h-4 w-4 mr-2" />
+                      About Veritas
+                      <ExternalLink className="h-3 w-3 ml-auto" />
+                    </span>
+                  </Button>
+                </Link>
               </CardContent>
-            </Card>
+            </Card> 
+
           </div>
 
           {/* Main Content */}
