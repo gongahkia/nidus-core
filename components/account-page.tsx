@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, User, Settings, HelpCircle, Shield, Bell, ExternalLink } from "lucide-react"
+import { User, Settings, HelpCircle, Shield, Bell, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, set } from 'firebase/database'
@@ -187,7 +187,7 @@ export function AccountPage() {
               <div className="text-slate-400 text-sm text-center mt-2">
                 {authMode === "signin" ? (
                   <>
-                    Don't have an account?{" "}
+                    Don&#39;t have an account?{" "}
                     <button
                       type="button"
                       className="text-purple-400 underline"

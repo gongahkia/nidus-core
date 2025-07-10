@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { TrendingUp, DollarSign, Users, Bell, Menu, Wallet } from "lucide-react"
+import { TrendingUp, DollarSign, Users, Bell, Wallet } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from 'firebase/database'
@@ -27,7 +27,7 @@ interface DashboardData {
 
 export function MainDashboard() {
   const router = useRouter()
-  const { user, signIn } = useAuth()
+  const { user } = useAuth()
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     totalStaked: 0,
     currentYield: 0,
@@ -39,23 +39,23 @@ export function MainDashboard() {
     const dashboardRef = ref(database, 'dashboard')
     const announcementsRef = ref(database, 'announcements')
 
-    const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        setDashboardData(prev => ({ ...prev, ...data }))
-      }
-    })
+    // const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
+    //   const data = snapshot.val()
+    //   if (data) {
+    //     setDashboardData(prev => ({ ...prev, ...data }))
+    //   }
+    // })
 
-    const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        const announcements = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }))
-        setDashboardData(prev => ({ ...prev, announcements }))
-      }
-    })
+    // const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
+    //   const data = snapshot.val()
+    //   if (data) {
+    //     const announcements = Object.keys(data).map(key => ({
+    //       id: key,
+    //       ...data[key]
+    //     }))
+    //     setDashboardData(prev => ({ ...prev, announcements }))
+    //   }
+    // })
 
     return () => {
       off(dashboardRef)
