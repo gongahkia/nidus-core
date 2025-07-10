@@ -110,14 +110,16 @@ export function LendingBorrowingPage() {
       })
     }
 
-    toast({
-      title: "Transaction Submitted",
-      description: `${actionType} ${actionAmount} ${selectedAsset.symbol} ${
-        (selectedAsset.asset === "Annuity" || selectedAsset.asset === "Endowment") && actionType === "supply"
-          ? "(NFT will be credited to your wallet)"
-          : ""
-      }`,
-    })
+    toast(
+      "Transaction Submitted",
+      {
+        description: `${actionType} ${actionAmount} ${selectedAsset.symbol} ${
+          (selectedAsset.asset === "Annuity" || selectedAsset.asset === "Endowment") && actionType === "supply"
+            ? "(NFT will be credited to your wallet)"
+            : ""
+        }`,
+      }
+    )
 
     setActionAmount("")
     setSelectedAsset(null)
