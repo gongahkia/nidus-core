@@ -38,10 +38,14 @@ interface NFTAsset {
 }
 
 export function AccountPage() {
-  const { user, signIn, signOut } = useAuth()
+  const { user, signIn, signUp, signOut } = useAuth()
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [nftAssets, setNFTAssets] = useState<NFTAsset[]>([])
   const [isEditing, setIsEditing] = useState(false)
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [authError, setAuthError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!user) return
@@ -71,7 +75,6 @@ export function AccountPage() {
       unsubscribeProfile()
       unsubscribeNFTs()
     }
-
   }, [user])
 
   const handleSaveProfile = async () => {
@@ -97,17 +100,97 @@ export function AccountPage() {
     }
   }
 
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setAuthError(null)
+    try {
+      if (authMode === "signin") {
+        await signIn(email, password)
+      } else {
+        await signUp(email, password)
+      }
+      setEmail("")
+      setPassword("")
+    } catch (err: any) {
+      setAuthError(err.message || "Authentication failed")
+    }
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <Card className="bg-slate-800/50 border-slate-700 w-full max-w-md">
-          <CardContent className="p-8 text-center">
+          <CardContent className="p-8">
             <User className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-            <h3 className="text-xl font-semibold text-white mb-2">Sign In Required</h3>
-            <p className="text-slate-400 mb-4">Please sign in to access your account</p>
-            <Button onClick={signIn} className="w-full bg-purple-600 hover:bg-purple-700">
-              Sign In
-            </Button>
+            <h3 className="text-xl font-semibold text-white mb-2">
+              {authMode === "signin" ? "Sign In" : "Sign Up"}
+            </h3>
+            <p className="text-slate-400 mb-4">
+              {authMode === "signin"
+                ? "Sign in to access your account"
+                : "Create an account to get started"}
+            </p>
+            <form onSubmit={handleAuth} className="space-y-4">
+              <div>
+                <Label htmlFor="email" className="text-slate-300">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="bg-slate-700 border-slate-600 text-white"
+                />
+              </div>
+              <div>
+                <Label htmlFor="password" className="text-slate-300">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete={authMode === "signin" ? "current-password" : "new-password"}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="bg-slate-700 border-slate-600 text-white"
+                />
+              </div>
+              {authError && (
+                <div className="text-red-500 text-sm">{authError}</div>
+              )}
+              <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                {authMode === "signin" ? "Sign In" : "Sign Up"}
+              </Button>
+              <div className="text-slate-400 text-sm text-center mt-2">
+                {authMode === "signin" ? (
+                  <>
+                    Don't have an account?{" "}
+                    <button
+                      type="button"
+                      className="text-purple-400 underline"
+                      onClick={() => setAuthMode("signup")}
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{" "}
+                    <button
+                      type="button"
+                      className="text-purple-400 underline"
+                      onClick={() => setAuthMode("signin")}
+                    >
+                      Sign In
+                    </button>
+                  </>
+                )}
+              </div>
+            </form>
           </CardContent>
         </Card>
       </div>
