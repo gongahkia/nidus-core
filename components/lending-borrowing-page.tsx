@@ -347,7 +347,12 @@ export function LendingBorrowingPage() {
                   <h3 className="text-xl font-semibold text-white mb-2">No Positions Yet</h3>
                   <p className="text-slate-400 mb-4">Start by supplying assets to earn yield</p>
                   <Button
-                    onClick={() => document.querySelector('[value="markets"]')?.click()}
+                    onClick={() => {
+                      const element = document.querySelector('[value="markets"]') as HTMLElement | null;
+                      if (element) {
+                        element.click();
+                      }
+                    }}
                     className="bg-purple-600 hover:bg-purple-700"
                   >
                     Explore Markets
