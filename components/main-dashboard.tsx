@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { TrendingUp, DollarSign, Users, Bell, Wallet } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-import { ref, onValue, off } from 'firebase/database'
+import { ref, off } from 'firebase/database'
 import { database } from './auth-provider'
 
 interface DashboardData {
@@ -28,7 +28,7 @@ interface DashboardData {
 export function MainDashboard() {
   const router = useRouter()
   const { user } = useAuth()
-  const [dashboardData, setDashboardData] = useState<DashboardData>({
+  const [dashboardData ] = useState<DashboardData>({
     totalStaked: 0,
     currentYield: 0,
     tvl: 0,

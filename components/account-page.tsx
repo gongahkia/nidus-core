@@ -130,9 +130,13 @@ export function AccountPage() {
       }
       setEmail("")
       setPassword("")
-    } catch (err: any) {
-      setAuthError(err.message || "Authentication failed")
-    }
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setAuthError(err.message)
+        } else {
+          setAuthError("Authentication failed")
+        }
+      }
   }
 
   if (!user) {
