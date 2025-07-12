@@ -2,23 +2,23 @@
 
 Making Stablecoins stable again.
 
-<div align="center">
- <img src="" width="50%" align="centre">
-</div>
+### Things to change 
 
-## Credentials
+1. 
 
-### Veritas Login Test Account (or just make a new account)
+### Credentials
+
+#### Veritas Login Test Account (or just make a new account)
 
 * balls@gmail.com
 * tweaking
 
-### Gmail, Firebase, Vercel deployment
+#### Gmail, Firebase, Vercel deployment
 
 * veritasinsurancesg@gmail.com
 * veritasinsurancesg2025
 
-### `.env.local`
+#### `.env.local`
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAMAnrRV-zMLbxIJDYZxYRBMrnq8H1VBns
