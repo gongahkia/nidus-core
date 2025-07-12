@@ -29,9 +29,10 @@ Logged in user
     * Change name on Navbar to "Veritas" only
 2. Deposit/Lending/Borrowing screen
     1. Users MUST always deposit assets first and will then be asked to exchange it for XSgd (DEPOSIT)
+        * **DON'T SHOW MULTI-ASSET DEPOSIT FOR NOW!!! INSTEAD LET USERS JUST DEPOSIT XSGD STRAIGHT!!!** 
         * Allowed assets: BTC, ETH, USDT, USDC
         * Add a next-to-go conversion screen that converts these assets to XsGD 
-    2. Users can exchange their XsGD value from their account for a proportional LP tokens (LEND)
+    2. Users can exchange their XsGD value from their account for a proportional amount of LP tokens, thereby contributing to the XsGD lending pool (LEND)
         * Add a simple backend calculation
         * Add a logically shown screen that explains why they are getting their LP token for that amount
     3. Users can then choose to also exchange their LP token at anytime to retrieve money based on % accruement + principal amount (BORROW)
@@ -40,7 +41,7 @@ Logged in user
     4. Users can then also choose to exchange their LP token to borrow more XSGD from us + we specify the interest rate for borrowing (BORROW)
         * Do a backend check for the DB to ensure they have enough LP tokens to do so
 3. Account screen
-    * Should reflect the user's assets
+    * Should reflect the user's assets **IGNORE THIS FOR NOW SINCE NO MULTI-ASSET DEPOSIT!!!**
     * Should reflect the user's LP 
     * Should reflect the user's XsGD
 
