@@ -156,7 +156,8 @@ export function MainDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Cards for all users */}
+
+        {/* Total Pool Value Card */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -170,8 +171,10 @@ export function MainDashboard() {
             </CardContent>
           </Card>
 
-          {user && userPortfolio && (
-            <>
+          <>
+
+            {/* Pool Ownership Card */}
+            <div className="relative">
               <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium text-slate-300">Your Pool Ownership</CardTitle>
@@ -179,13 +182,18 @@ export function MainDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">
-                    {userPortfolio.ownershipPercent.toFixed(2)}%
+                    {userPortfolio ? userPortfolio.ownershipPercent.toFixed(2) : "--"}%
                   </div>
                   <div className="text-sm text-slate-400 mt-1">
-                    Value: ${userPortfolio.xsgd.toLocaleString()}
+                    Value: ${userPortfolio ? userPortfolio.xsgd.toLocaleString() : "--"}
                   </div>
                 </CardContent>
               </Card>
+              {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+            </div>
+
+            {/* LP Card */}
+            <div className="relative">
               <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium text-slate-300">Your LP</CardTitle>
@@ -193,12 +201,13 @@ export function MainDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">
-                    {userPortfolio.lp.toLocaleString()}
+                    {userPortfolio ? userPortfolio.lp.toLocaleString() : "--"}
                   </div>
                 </CardContent>
               </Card>
-            </>
-          )}
+              {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+            </div>
+          </>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mb-8">
