@@ -10,6 +10,7 @@ import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
+import { Overlay } from "@/components/overlay"
 
 interface MarketData {
   asset: string
@@ -40,6 +41,7 @@ export function LendingBorrowingPage() {
 
   // Fetch XSGD market data from Firebase
   useEffect(() => {
+    if (!user) return
     const marketRef = ref(database, "markets/XSGD")
     const unsub = onValue(marketRef, (snapshot) => {
       const data = snapshot.val()
@@ -203,18 +205,140 @@ export function LendingBorrowingPage() {
             </Card>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center min-h-[60vh]">
-            <Card className="w-full max-w-lg bg-slate-800/50 border-slate-700 shadow-lg">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Card 1: Deposit XsGD */}
+            <Card className="bg-slate-800/50 border-slate-700 relative">
               <CardHeader>
-                <CardTitle className="text-white text-2xl">You're logged in</CardTitle>
+                <CardTitle className="text-white">Deposit XsGD</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-400 mt-2">
-                  Lending and borrowing features will be available here soon.
-                </p>
+                <p className="text-slate-400 mb-2">Enter the amount of XsGD to deposit:</p>
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  value={depositAmount}
+                  onChange={e => setDepositAmount(e.target.value)}
+                  className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                />
+                <Button className="w-full bg-green-600 hover:bg-green-700">
+                  Deposit
+                </Button>
               </CardContent>
             </Card>
+
+            {/* Card 2: Convert XsGD to LP (LEND) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Convert XsGD to LP (LEND)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Convert your XsGD to LP tokens and contribute to the lending pool.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={lendAmount}
+                    onChange={e => setLendAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.xsgd === 0}
+                  />
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700" disabled={portfolio.xsgd === 0}>
+                    Convert to LP
+                  </Button>
+                  <div className="mt-4 text-slate-400 text-sm">
+                    For every 1 XsGD you lend, you receive 1 LP token.
+                  </div>
+                  <div className="mt-4">
+                    <div className="bg-slate-700/30 rounded-lg p-4 text-slate-300">
+                      <div>Total Lending Pool: <span className="font-bold text-white">${tvl.toLocaleString()}</span></div>
+                      <div>Variable APY: <span className="font-bold text-yellow-400">{variableSupplyAPY}%</span></div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              {(portfolio.xsgd === 0 && portfolio.lp === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
+
+            {/* Card 3: Withdraw (LP → XsGD) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Withdraw (LP → XsGD)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Withdraw XsGD by redeeming your LP tokens. Withdrawal fee: {withdrawalFee}%.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={withdrawAmount}
+                    onChange={e => setWithdrawAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.lp === 0}
+                  />
+                  <Button
+                    className="w-full bg-red-600 hover:bg-red-700"
+                    disabled={portfolio.lp === 0 || Number(withdrawAmount) > portfolio.lp}
+                  >
+                    Withdraw
+                  </Button>
+                  {Number(withdrawAmount) > portfolio.lp && (
+                    <div className="text-red-400 text-sm mt-2">Insufficient LP tokens.</div>
+                  )}
+                </CardContent>
+              </Card>
+              {(portfolio.lp === 0 && portfolio.xsgd > 0) && (
+                <Overlay>You must convert to LP first</Overlay>
+              )}
+              {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
+
+            {/* Card 4: Borrow XsGD (using LP as collateral) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Borrow XsGD (using LP as collateral)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Borrow XsGD using your LP tokens as collateral. Interest rate: {borrowAPY}% APY.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={borrowAmount}
+                    onChange={e => setBorrowAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.lp === 0}
+                  />
+                  <Button
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    disabled={portfolio.lp === 0 || Number(borrowAmount) > portfolio.lp}
+                  >
+                    Borrow
+                  </Button>
+                  {Number(borrowAmount) > portfolio.lp && (
+                    <div className="text-red-400 text-sm mt-2">Insufficient LP tokens.</div>
+                  )}
+                </CardContent>
+              </Card>
+              {(portfolio.lp === 0 && portfolio.xsgd > 0) && (
+                <Overlay>You must convert to LP first</Overlay>
+              )}
+              {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
           </div>
+
         )}
       </main>
     </div>
