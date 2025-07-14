@@ -4,7 +4,7 @@ Making Stablecoins stable again.
 
 ### Credentials
 
-#### Veritas Login Test Account (or just make a new account)
+#### Veritas Login Test Account with values
 
 * balls@gmail.com
 * tweaking
