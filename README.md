@@ -7,20 +7,17 @@ Making Stablecoins stable again.
 General notes
 
 * Everything below must be synced to relevant schema in firebase and ensure values are updated live
+* Remove bug on both chart displays where clicking it brings users to another page, that isn't necessary anymore
 
 Anonymous user
 
-1. Dashboard screen
-    * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-2. Lending/Borrowing screen
+1. Lending/Borrowing screen
     * Should show a singular market dashboard for borrowing (under juicefinance's lending) where all functionality is gatekept under logging in
     * Similar to Aave also
 
 Logged in user
 
-1. Dashboard screen
-    * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-2. Deposit/Lending/Borrowing screen
+1. Deposit/Lending/Borrowing screen
     1. Users MUST always deposit assets first and will then be asked to exchange it for XSgd (DEPOSIT)
         * **DON'T SHOW MULTI-ASSET DEPOSIT FOR NOW!!! INSTEAD LET USERS JUST DEPOSIT XSGD STRAIGHT!!!** 
         * Allowed assets: BTC, ETH, USDT, USDC
