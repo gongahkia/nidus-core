@@ -236,14 +236,6 @@ export function MainDashboard() {
             }}
             onClick={handleChartClick}
           />
-          <ValueChart
-            data={{
-              poolValueHistory: [],
-              dailyNewUsers, 
-              chartType: "users",
-            }}
-            onClick={handleChartClick}
-          />
         </div>
 
         {/* Announcements */}
