@@ -27,7 +27,8 @@ interface UserProfile {
   portfolio: {
     annuity: number
     endowment: number
-    xsgd: number
+    xsgd: number,
+    lp: number
   }
 }
 
@@ -72,6 +73,7 @@ export function AccountPage() {
             annuity: data.portfolio?.annuity ?? 0,
             endowment: data.portfolio?.endowment ?? 0,
             xsgd: data.portfolio?.xsgd ?? 0,
+            lp: data.portfolio?.lp ?? 0
           }
         })
       }
@@ -359,9 +361,6 @@ export function AccountPage() {
                 <TabsTrigger value="portfolio" className="data-[state=active]:bg-purple-600">
                   Portfolio
                 </TabsTrigger>
-                <TabsTrigger value="nfts" className="data-[state=active]:bg-purple-600">
-                  NFT Assets
-                </TabsTrigger>
                 <TabsTrigger value="settings" className="data-[state=active]:bg-purple-600">
                   Settings
                 </TabsTrigger>
@@ -396,53 +395,6 @@ export function AccountPage() {
                         <p className="text-sm text-blue-300">+15.2% APY</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="nfts" className="space-y-6">
-                <Card className="bg-slate-800/50 border-slate-700">
-                  <CardHeader>
-                    <CardTitle className="text-white">Your NFT Assets</CardTitle>
-                    <p className="text-slate-400">Collateralized insurance assets as NFTs</p>
-                  </CardHeader>
-                  <CardContent>
-                    {nftAssets.length === 0 ? (
-                      <div className="text-center py-8">
-                        <Shield className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                        <p className="text-slate-400">No NFT assets yet</p>
-                        <p className="text-sm text-slate-500">Supply annuities or endowments to mint NFTs</p>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {nftAssets.map((nft) => (
-                          <div key={nft.id} className="p-4 bg-slate-700/30 rounded-lg border border-slate-600">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center space-x-2">
-                                <div className="text-xl">{nft.asset === "Annuity" ? "🛡️" : "📈"}</div>
-                                <div>
-                                  <p className="font-medium text-white">{nft.asset} NFT</p>
-                                  <p className="text-xs text-slate-400">#{nft.tokenId}</p>
-                                </div>
-                              </div>
-                              <Badge variant={nft.status === "active" ? "default" : "secondary"} className="text-xs">
-                                {nft.status}
-                              </Badge>
-                            </div>
-                            <div className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-slate-400">Value</span>
-                                <span className="text-white font-medium">${nft.amount.toLocaleString()}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-slate-400">Minted</span>
-                                <span className="text-white">{new Date(nft.mintDate).toLocaleDateString()}</span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
