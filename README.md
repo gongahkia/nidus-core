@@ -2,12 +2,6 @@
 
 Making Stablecoins stable again.
 
-### Things to change (Deadline by 26 July 2025)
-
-General notes
-
-* Remove bug on both chart displays where clicking it brings users to another page, that isn't necessary anymore
-
 ### Credentials
 
 #### Veritas Login Test Account (or just make a new account)
