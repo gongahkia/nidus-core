@@ -1,68 +1,100 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { TrendingUp, DollarSign, Users, Bell, Wallet } from "lucide-react"
+import { DollarSign, Users, Wallet } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-import { ref, off } from 'firebase/database'
-import { database } from './auth-provider'
+import { ref, onValue, off } from "firebase/database"
+import { database } from "./auth-provider"
+import { ValueChart } from "@/components/value-chart"
+import { Overlay } from "@/components/overlay"
+
+interface Announcement {
+  id: string
+  title: string
+  content: string
+  timestamp: number
+  type: "info" | "warning" | "success"
+}
 
 interface DashboardData {
-  totalStaked: number
-  currentYield: number
   tvl: number
-  announcements: Array<{
-    id: string
-    title: string
-    content: string
-    timestamp: number
-    type: "info" | "warning" | "success"
-  }>
+  announcements: Announcement[]
+}
+
+interface UserPortfolio {
+  lp: number
+  ownershipPercent: number
+  xsgd: number
 }
 
 export function MainDashboard() {
   const router = useRouter()
   const { user } = useAuth()
-  const [dashboardData ] = useState<DashboardData>({
-    totalStaked: 0,
-    currentYield: 0,
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
     tvl: 0,
     announcements: [],
   })
+  const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
 
   useEffect(() => {
-    const dashboardRef = ref(database, 'dashboard')
-    const announcementsRef = ref(database, 'announcements')
 
-    // const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     setDashboardData(prev => ({ ...prev, ...data }))
-    //   }
-    // })
+    const dashboardRef = ref(database, "dashboard")
+    const announcementsRef = ref(database, "announcements")
 
-    // const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const announcements = Object.keys(data).map(key => ({
-    //       id: key,
-    //       ...data[key]
-    //     }))
-    //     setDashboardData(prev => ({ ...prev, announcements }))
-    //   }
-    // })
+    const unsubDashboard = onValue(dashboardRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) setDashboardData((prev) => ({ ...prev, tvl: data.tvl || 0 }))
+    })
+
+    const unsubAnnouncements = onValue(announcementsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const announcements = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }))
+        setDashboardData((prev) => ({ ...prev, announcements }))
+      }
+    })
 
     return () => {
       off(dashboardRef)
       off(announcementsRef)
+      unsubDashboard()
+      unsubAnnouncements()
     }
-
   }, [])
+
+  useEffect(() => {
+    if (!user) {
+      setUserPortfolio(null)
+      return
+    }
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    const unsubUserPortfolio = onValue(userPortfolioRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        setUserPortfolio({
+          lp: data.lp || 0,
+          ownershipPercent: data.ownershipPercent || 0,
+          xsgd: data.xsgd || 0,
+        })
+      }
+    })
+    return () => {
+      off(userPortfolioRef)
+      unsubUserPortfolio()
+    }
+  }, [user])
+
+  const handleChartClick = () => {
+    router.push("/analytics/pool-value")
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -99,8 +131,7 @@ export function MainDashboard() {
                   <span className="text-sm text-white">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
-                </Button>
+                <Button onClick={() => router.push("/account")} variant="outline" size="sm" />
               )}
             </div>
           </div>
@@ -108,122 +139,145 @@ export function MainDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Stats Cards */}
+
+        {/* Total Pool Value Card */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Staked</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">Total Pool Value (XsGD)</CardTitle>
               <DollarSign className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${dashboardData.totalStaked.toLocaleString()}</div>
-              <p className="text-xs text-slate-400 mt-1">+12.5% from last month</p>
+              <div className="text-2xl font-bold text-white">
+                {dashboardData.tvl ? `\$${dashboardData.tvl.toLocaleString()}` : "-"}
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Current Yield</CardTitle>
-              <TrendingUp className="h-4 w-4 text-purple-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">{dashboardData.currentYield}%</div>
-              <p className="text-xs text-slate-400 mt-1">APY on staked assets</p>
-            </CardContent>
-          </Card>
+          <>
 
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Value Locked</CardTitle>
-              <Users className="h-4 w-4 text-blue-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">${(dashboardData.tvl / 1000000).toFixed(1)}M</div>
-              <p className="text-xs text-slate-400 mt-1">Across all pools</p>
-            </CardContent>
-          </Card>
+            {/* Pool Ownership Card */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-slate-300">Your Pool Ownership</CardTitle>
+                  <Users className="h-4 w-4 text-blue-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">
+                    {userPortfolio ? userPortfolio.ownershipPercent.toFixed(2) : "--"}%
+                  </div>
+                  <div className="text-sm text-slate-400 mt-1">
+                    Value: ${userPortfolio ? userPortfolio.xsgd.toLocaleString() : "--"}
+                  </div>
+                </CardContent>
+              </Card>
+              {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+            </div>
+
+            {/* LP Card */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-slate-300">Your LP</CardTitle>
+                  <Wallet className="h-4 w-4 text-purple-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">
+                    {userPortfolio ? userPortfolio.lp.toLocaleString() : "--"}
+                  </div>
+                </CardContent>
+              </Card>
+              {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+            </div>
+          </>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Staking Overview */}
-          <div className="lg:col-span-2">
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">Staking Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
-                  <div>
-                    <h3 className="font-semibold text-white">XsGD Pool</h3>
-                    <p className="text-sm text-slate-400">Singapore Dollar Stablecoin</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-green-400">8.5% APY</p>
-                    <p className="text-sm text-slate-400">$85,000 staked</p>
-                  </div>
-                </div>
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
 
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
-                  <div>
-                    <h3 className="font-semibold text-white">Annuity Pool</h3>
-                    <p className="text-sm text-slate-400">Insurance-backed annuities</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-purple-400">12.3% APY</p>
-                    <p className="text-sm text-slate-400">$40,000 staked</p>
-                  </div>
-                </div>
+          {/* Placeholder values for now, to be called from Firebase in the future */}
+          <ValueChart
+            data={{
+              poolValueHistory:[
+                { timestamp: 1736400000000, value: 996000 },
+                { timestamp: 1736486000000, value: 996000.65 },
+                { timestamp: 1736912000000, value: 996481.65 },
+                { timestamp: 1736998000000, value: 1009766.66 },
+                { timestamp: 1737084000000, value: 1006754.08 },
+                { timestamp: 1737171000000, value: 1021563.59 },
+                { timestamp: 1737257000000, value: 1026086.54 },
+                { timestamp: 1737344000000, value: 1023077.22 },
+                { timestamp: 1737430000000, value: 1033756.39 },
+                { timestamp: 1737516000000, value: 1034541.53 },
+                { timestamp: 1737603000000, value: 1048083.14 },
+                { timestamp: 1737689000000, value: 1048925.12 },
+                { timestamp: 1737776000000, value: 1051496.54 },
+                { timestamp: 1737862000000, value: 1064945.08 },
+                { timestamp: 1737948000000, value: 1068061.36 },
+                { timestamp: 1738035000000, value: 1071330.55 },
+                { timestamp: 1738121000000, value: 1078493.35 },
+                { timestamp: 1738208000000, value: 1083291.91 },
+                { timestamp: 1738294000000, value: 1090206.09 },
+                { timestamp: 1738380000000, value: 1091504.86 },
+                { timestamp: 1738467000000, value: 1103150.14 },
+                { timestamp: 1738553000000, value: 1101971.22 },
+              ], 
+              dailyNewUsers: [],
+              chartType: "pool",
+            }}
+            onClick={handleChartClick}
+          />
 
-                <Separator className="bg-slate-700" />
+          {/* Placeholder values for now, to be called from Firebase in the future */}
+          <div className="relative flex-1">
+            <ValueChart
+              data={{
+                poolValueHistory: [],
+                dailyNewUsers: [],
+                chartType: "assetComposition",
+                assetComposition: [
+                  ["XsGD", 70],
+                  ["LP", 30],
+                ],
+              }}
+              onClick={handleChartClick}
+            />
+            {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+          </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Total Portfolio Value</span>
-                  <span className="text-xl font-bold text-white">$125,000</span>
-                </div>
+        </div>
 
-                <div className="flex space-x-4">
-                  <Link href="/lending" className="flex-1">
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700">Start Lending</Button>
-                  </Link>
-                  <Link href="/lending" className="flex-1">
-                    <Button
-                      variant="outline"
-                      className="w-full border-slate-600 text-white hover:bg-slate-700 bg-transparent"
+        {/* Announcements */}
+        <div className="mt-8">
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="flex items-center text-white">
+                Announcements
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {dashboardData.announcements.length === 0 && (
+                <div className="text-slate-400 text-center">No announcements</div>
+              )}
+              {dashboardData.announcements.map((announcement) => (
+                <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
+                    <Badge
+                      variant={announcement.type === "success" ? "default" : "secondary"}
+                      className="text-xs"
                     >
-                      Borrow Assets
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Announcements */}
-          <div>
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="flex items-center text-white">
-                  <Bell className="h-4 w-4 mr-2" />
-                  Announcements
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {dashboardData.announcements.map((announcement) => (
-                  <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
-                      <Badge variant={announcement.type === "success" ? "default" : "secondary"} className="text-xs">
-                        {announcement.type}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
-                    <p className="text-xs text-slate-500">{new Date(announcement.timestamp).toLocaleDateString()}</p>
+                      {announcement.type}
+                    </Badge>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+                  <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
+                  <p className="text-xs text-slate-500">
+                    {new Date(announcement.timestamp).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
