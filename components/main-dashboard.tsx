@@ -124,16 +124,6 @@ export function MainDashboard() {
                 Account
               </Link>
             </nav>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
-                </div>
-              ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm" />
-              )}
-            </div>
           </div>
         </div>
       </header>
