@@ -1,89 +1,151 @@
 {
-  "dashboard": {
-    "totalStaked": 2500000,
-    "currentYield": 8.5,
-    "tvl": 2500000
-  },
   "announcements": {
     "ann1": {
-      "title": "New Lending Pool Available",
       "content": "XsGD lending pool is now live with competitive rates",
       "timestamp": 1703980800000,
+      "title": "New Lending Pool Available",
       "type": "success"
     },
     "ann2": {
-      "title": "Maintenance Window",
       "content": "Scheduled maintenance on Sunday 2AM-4AM UTC",
       "timestamp": 1703977200000,
+      "title": "Maintenance Window",
       "type": "warning"
     },
     "ann3": {
-      "title": "Platform Update",
       "content": "New features and improved user interface now available",
       "timestamp": 1703973600000,
+      "title": "Platform Update",
       "type": "info"
     }
   },
+  "dashboard": {
+    "currentYield": 8.5,
+    "totalStaked": 2500000,
+    "tvl": 2500000,
+    "variableSupplyAPY": 8.7,
+    "borrowAPY": 12.3
+  },
   "markets": {
-    "XsGD": {
-      "symbol": "XsGD",
-      "supplyAPY": 8.5,
-      "borrowAPY": 12.3,
-      "totalSupply": 1250000,
-      "totalBorrow": 850000,
-      "liquidity": 400000,
-      "collateralFactor": 0.8
-    },
     "Annuity": {
-      "symbol": "ANN",
-      "supplyAPY": 12.8,
       "borrowAPY": 16.5,
-      "totalSupply": 850000,
-      "totalBorrow": 620000,
+      "collateralFactor": 0.75,
       "liquidity": 230000,
-      "collateralFactor": 0.75
+      "supplyAPY": 12.8,
+      "symbol": "ANN",
+      "totalBorrow": 620000,
+      "totalSupply": 850000,
+      "icon": "🛡️"
     },
     "Endowment": {
-      "symbol": "END",
-      "supplyAPY": 15.2,
       "borrowAPY": 19.8,
-      "totalSupply": 650000,
-      "totalBorrow": 480000,
+      "collateralFactor": 0.7,
       "liquidity": 170000,
-      "collateralFactor": 0.7
+      "supplyAPY": 15.2,
+      "symbol": "END",
+      "totalBorrow": 480000,
+      "totalSupply": 650000,
+      "icon": "🏦"
+    },
+    "XsGD": {
+      "borrowAPY": 12.3,
+      "collateralFactor": 0.8,
+      "liquidity": 400000,
+      "supplyAPY": 8.5,
+      "variableSupplyAPY": 8.7,
+      "symbol": "XsGD",
+      "totalBorrow": 850000,
+      "totalSupply": 1250000,
+      "icon": "🇸🇬"
     }
   },
+  "withdrawalFeePercent": 0.5,
   "users": {
     "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
       "displayName": "Alice",
       "email": "alice@example.com",
-      "walletAddress": "0x123456789abcdef",
       "joinDate": 1688947200000,
-      "preferences": {
-        "notifications": true,
-        "autoCompound": false
-      },
+      "walletAddress": "0x123456789abcdef",
       "portfolio": {
         "annuity": 40000,
         "endowment": 25000,
+        "lp": 0,
         "xsgd": 60000
       },
-      "nfts": {
-        "nft1": {
-          "tokenId": "VRT-123",
-          "asset": "Annuity",
-          "amount": 10000,
-          "mintDate": 1688950800000,
-          "status": "active"
-        },
-        "nft2": {
-          "tokenId": "VRT-124",
-          "asset": "Endowment",
-          "amount": 15000,
-          "mintDate": 1688954400000,
-          "status": "redeemed"
-        }
+      "preferences": {
+        "autoCompound": false,
+        "notifications": true
+      }
+    },
+    "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
+      "displayName": "",
+      "email": "leirichard58@gmail.com",
+      "joinDate": 1752157758189,
+      "walletAddress": "",
+      "portfolio": {
+        "annuity": 0,
+        "endowment": 0,
+        "lp": 0,
+        "xsgd": 0
+      },
+      "preferences": {
+        "autoCompound": false,
+        "notifications": false
       }
     }
+  },
+  "userPositions": {
+    "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
+      "XsGD": {
+        "supplied": 60000,
+        "borrowed": 0,
+        "collateral": 0
+      },
+      "Annuity": {
+        "supplied": 40000,
+        "borrowed": 0,
+        "collateral": 0
+      },
+      "Endowment": {
+        "supplied": 25000,
+        "borrowed": 0,
+        "collateral": 0
+      }
+    }
+  },
+  "transactions": {
+    "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
+      "-OUojeO6emDoSK0iJlio": {
+        "action": "borrow",
+        "amount": 10,
+        "asset": "Annuity",
+        "status": "pending",
+        "timestamp": 1752157823834
+      }
+    }
+  },
+  "poolValueHistory": {
+    "1736400000000": 996000,
+    "1736486000000": 996000.65,
+    "1736912000000": 996481.65,
+    "1736998000000": 1009766.66,
+    "1737084000000": 1006754.08,
+    "1737171000000": 1021563.59,
+    "1737257000000": 1026086.54,
+    "1737344000000": 1023077.22,
+    "1737430000000": 1033756.39,
+    "1737516000000": 1034541.53,
+    "1737603000000": 1048083.14,
+    "1737689000000": 1048925.12,
+    "1737776000000": 1051496.54,
+    "1737862000000": 1064945.08,
+    "1737948000000": 1068061.36,
+    "1738035000000": 1071330.55,
+    "1738121000000": 1078493.35,
+    "1738208000000": 1083291.91,
+    "1738294000000": 1090206.09,
+    "1738380000000": 1091504.86,
+    "1738467000000": 1103150.14,
+    "1738553000000": 1101971.22
   }
 }
