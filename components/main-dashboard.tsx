@@ -39,14 +39,12 @@ export function MainDashboard() {
     tvl: 0,
     announcements: [],
   })
-  const [poolValueHistory, setPoolValueHistory] = useState<any[]>([])
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
 
   useEffect(() => {
 
     const dashboardRef = ref(database, "dashboard")
     const announcementsRef = ref(database, "announcements")
-    const poolValueHistoryRef = ref(database, "poolValueHistory")
 
     const unsubDashboard = onValue(dashboardRef, (snapshot) => {
       const data = snapshot.val()
@@ -64,26 +62,11 @@ export function MainDashboard() {
       }
     })
 
-    const unsubHistory = onValue(poolValueHistoryRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        const history = Object.keys(data)
-          .map((key) => ({
-            timestamp: Number(key),
-            value: data[key],
-          }))
-          .sort((a, b) => a.timestamp - b.timestamp)
-        setPoolValueHistory(history)
-      }
-    })
-
     return () => {
       off(dashboardRef)
       off(announcementsRef)
-      off(poolValueHistoryRef)
       unsubDashboard()
       unsubAnnouncements()
-      unsubHistory()
     }
   }, [])
 

@@ -14,6 +14,7 @@ import {
   ArcElement,
 } from "chart.js"
 import "chartjs-adapter-date-fns"
+import { TooltipItem } from "chart.js"
 
 Chart.register(LineElement, PointElement, LinearScale, TimeScale, Tooltip, Legend, CategoryScale, ArcElement)
 
@@ -69,11 +70,11 @@ export function ValueChart({ data, onClick }: ValueChartProps) {
         },
         tooltip: {
           callbacks: {
-            label: function (context: any) {
+            label: function (context: TooltipItem<"pie">) {
               const label = context.label || ""
               const value = context.parsed || 0
               return `${label}: ${value}%`
-            },
+            }
           },
         },
       },
