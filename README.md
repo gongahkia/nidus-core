@@ -13,12 +13,9 @@ Anonymous user
 1. Dashboard screen
     * Users are able to see the total pool value
     * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-    * Change name on Navbar to "Veritas" only
 2. Lending/Borrowing screen
     * Should show a singular market dashboard for borrowing (under juicefinance's lending) where all functionality is gatekept under logging in
     * Similar to Aave also
-3. Account screen
-    * Replace with the words "log in" or "connect to wallet" in the navbar 
 
 Logged in user
 
@@ -26,7 +23,6 @@ Logged in user
     * Users are able to see their percentage ownership of the pool and the corresponding value
     * Users are able to see the total pool value
         * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-    * Change name on Navbar to "Veritas" only
 2. Deposit/Lending/Borrowing screen
     1. Users MUST always deposit assets first and will then be asked to exchange it for XSgd (DEPOSIT)
         * **DON'T SHOW MULTI-ASSET DEPOSIT FOR NOW!!! INSTEAD LET USERS JUST DEPOSIT XSGD STRAIGHT!!!** 
