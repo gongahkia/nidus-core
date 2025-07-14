@@ -28,6 +28,15 @@ export function LendingBorrowingPage() {
   const { user } = useAuth()
   const router = useRouter()
   const [xsgdMarket, setXsgdMarket] = useState<MarketData | null>(null)
+  const [portfolio, setPortfolio] = useState<{ xsgd: number; lp: number }>({ xsgd: 0, lp: 0 })
+  const [withdrawalFee, setWithdrawalFee] = useState<number>(0.5) 
+  const [tvl, setTvl] = useState<number>(0)
+  const [variableSupplyAPY, setVariableSupplyAPY] = useState<number>(0)
+  const [borrowAPY, setBorrowAPY] = useState<number>(0)
+  const [depositAmount, setDepositAmount] = useState("")
+  const [lendAmount, setLendAmount] = useState("")
+  const [withdrawAmount, setWithdrawAmount] = useState("")
+  const [borrowAmount, setBorrowAmount] = useState("")
 
   // Fetch XSGD market data from Firebase
   useEffect(() => {
@@ -49,16 +58,41 @@ export function LendingBorrowingPage() {
         })
       }
     })
-    return () => off(marketRef)
-  }, [])
+    const portfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    const unsubPortfolio = onValue(portfolioRef, (snapshot) => {
+      const data = snapshot.val()
+      setPortfolio({
+        xsgd: data?.xsgd || 0,
+        lp: data?.lp || 0,
+      })
+    })
+    const feeRef = ref(database, "withdrawalFeePercent")
+    const unsubFee = onValue(feeRef, (snapshot) => {
+      setWithdrawalFee(snapshot.val() || 0.5)
+    })
+    const dashboardRef = ref(database, "dashboard")
+    const unsubDashboard = onValue(dashboardRef, (snapshot) => {
+      const data = snapshot.val()
+      setTvl(data?.tvl || 0)
+      setVariableSupplyAPY(data?.variableSupplyAPY || 0)
+      setBorrowAPY(data?.borrowAPY || 0)
+    })
+    return () => {
+      off(portfolioRef)
+      off(feeRef)
+      off(dashboardRef)
+      unsubPortfolio()
+      unsubFee()
+      unsubDashboard()
+      off(marketRef)
+    }
+  }, [user])
 
-  // Gatekept handler for all actions
   const handleGatekept = (action: string) => {
     if (!user) {
       router.push("/account")
       return
     }
-    // Add actual logic for logged-in users here in the future
     alert(`Action: ${action} (functionality coming soon)`)
   }
 
@@ -85,18 +119,6 @@ export function LendingBorrowingPage() {
                 Account
               </Link>
             </nav>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
-                </div>
-              ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
-                  Connect
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       </header>
