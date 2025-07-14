@@ -31,30 +31,6 @@ interface UserPortfolio {
   xsgd: number
 }
 
-// hardcoded pool value history for now, in the future retrieve from firebase
-const poolValueHistory = [
-  { timestamp: 1736912000000, value: 996481.65 },
-  { timestamp: 1736998000000, value: 1009766.66 },
-  { timestamp: 1737084000000, value: 1006754.08 },
-  { timestamp: 1737171000000, value: 1021563.59 },
-  { timestamp: 1737257000000, value: 1026086.54 },
-  { timestamp: 1737344000000, value: 1023077.22 },
-  { timestamp: 1737430000000, value: 1033756.39 },
-  { timestamp: 1737516000000, value: 1034541.53 },
-  { timestamp: 1737603000000, value: 1048083.14 },
-  { timestamp: 1737689000000, value: 1048925.12 },
-  { timestamp: 1737776000000, value: 1051496.54 },
-  { timestamp: 1737862000000, value: 1064945.08 },
-  { timestamp: 1737948000000, value: 1068061.36 },
-  { timestamp: 1738035000000, value: 1071330.55 },
-  { timestamp: 1738121000000, value: 1078493.35 },
-  { timestamp: 1738208000000, value: 1083291.91 },
-  { timestamp: 1738294000000, value: 1090206.09 },
-  { timestamp: 1738380000000, value: 1091504.86 },
-  { timestamp: 1738467000000, value: 1103150.14 },
-  { timestamp: 1738553000000, value: 1101971.22 },
-]
-
 export function MainDashboard() {
   const router = useRouter()
   const { user } = useAuth()
@@ -99,8 +75,6 @@ export function MainDashboard() {
         setPoolValueHistory(history)
       }
     })
-
-    setPoolValueHistory(poolValueHistory)
 
     return () => {
       off(dashboardRef)
@@ -226,11 +200,34 @@ export function MainDashboard() {
           )}
         </div>
 
-        {/* Graph for all users */}
+        {/* Placeholder value for now, to be called from Firebase in the future */}
         <div className="flex flex-col md:flex-row gap-6 mb-8">
           <ValueChart
             data={{
-              poolValueHistory, 
+              poolValueHistory:[
+                { timestamp: 1736400000000, value: 996000 },
+                { timestamp: 1736486000000, value: 996000.65 },
+                { timestamp: 1736912000000, value: 996481.65 },
+                { timestamp: 1736998000000, value: 1009766.66 },
+                { timestamp: 1737084000000, value: 1006754.08 },
+                { timestamp: 1737171000000, value: 1021563.59 },
+                { timestamp: 1737257000000, value: 1026086.54 },
+                { timestamp: 1737344000000, value: 1023077.22 },
+                { timestamp: 1737430000000, value: 1033756.39 },
+                { timestamp: 1737516000000, value: 1034541.53 },
+                { timestamp: 1737603000000, value: 1048083.14 },
+                { timestamp: 1737689000000, value: 1048925.12 },
+                { timestamp: 1737776000000, value: 1051496.54 },
+                { timestamp: 1737862000000, value: 1064945.08 },
+                { timestamp: 1737948000000, value: 1068061.36 },
+                { timestamp: 1738035000000, value: 1071330.55 },
+                { timestamp: 1738121000000, value: 1078493.35 },
+                { timestamp: 1738208000000, value: 1083291.91 },
+                { timestamp: 1738294000000, value: 1090206.09 },
+                { timestamp: 1738380000000, value: 1091504.86 },
+                { timestamp: 1738467000000, value: 1103150.14 },
+                { timestamp: 1738553000000, value: 1101971.22 },
+              ], 
               dailyNewUsers: [],
               chartType: "pool",
             }}
