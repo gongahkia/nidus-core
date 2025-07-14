@@ -27,26 +27,6 @@
     "borrowAPY": 12.3
   },
   "markets": {
-    "Annuity": {
-      "borrowAPY": 16.5,
-      "collateralFactor": 0.75,
-      "liquidity": 230000,
-      "supplyAPY": 12.8,
-      "symbol": "ANN",
-      "totalBorrow": 620000,
-      "totalSupply": 850000,
-      "icon": "🛡️"
-    },
-    "Endowment": {
-      "borrowAPY": 19.8,
-      "collateralFactor": 0.7,
-      "liquidity": 170000,
-      "supplyAPY": 15.2,
-      "symbol": "END",
-      "totalBorrow": 480000,
-      "totalSupply": 650000,
-      "icon": "🏦"
-    },
     "XsGD": {
       "borrowAPY": 12.3,
       "collateralFactor": 0.8,
@@ -67,8 +47,6 @@
       "joinDate": 1688947200000,
       "walletAddress": "0x123456789abcdef",
       "portfolio": {
-        "annuity": 40000,
-        "endowment": 25000,
         "lp": 0,
         "xsgd": 60000
       },
@@ -83,8 +61,6 @@
       "joinDate": 1752157758189,
       "walletAddress": "",
       "portfolio": {
-        "annuity": 0,
-        "endowment": 0,
         "lp": 0,
         "xsgd": 0
       },
@@ -100,16 +76,6 @@
         "supplied": 60000,
         "borrowed": 0,
         "collateral": 0
-      },
-      "Annuity": {
-        "supplied": 40000,
-        "borrowed": 0,
-        "collateral": 0
-      },
-      "Endowment": {
-        "supplied": 25000,
-        "borrowed": 0,
-        "collateral": 0
       }
     }
   },
@@ -118,7 +84,7 @@
       "-OUojeO6emDoSK0iJlio": {
         "action": "borrow",
         "amount": 10,
-        "asset": "Annuity",
+        "asset": "XsGD",
         "status": "pending",
         "timestamp": 1752157823834
       }
