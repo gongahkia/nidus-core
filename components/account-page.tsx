@@ -32,19 +32,9 @@ interface UserProfile {
   }
 }
 
-interface NFTAsset {
-  id: string
-  tokenId: string
-  asset: string
-  amount: number
-  mintDate: number
-  status: "active" | "redeemed"
-}
-
 export function AccountPage() {
   const { user, signIn, signUp, signOut } = useAuth()
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [nftAssets, setNFTAssets] = useState<NFTAsset[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin")
   const [email, setEmail] = useState("")
@@ -55,7 +45,6 @@ export function AccountPage() {
     if (!user) return
 
     const userRef = ref(database, `users/${user.uid}`)
-    const nftsRef = ref(database, `users/${user.uid}/nfts`)
 
     const unsubscribeUser = onValue(userRef, (snapshot) => {
       const data = snapshot.val()
@@ -79,22 +68,8 @@ export function AccountPage() {
       }
     })
 
-    const unsubscribeNFTs = onValue(nftsRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        const nftsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }))
-        setNFTAssets(nftsArray)
-      } else {
-        setNFTAssets([])
-      }
-    })
-
     return () => {
       unsubscribeUser()
-      unsubscribeNFTs()
     }
   }, [user])
 
@@ -354,9 +329,9 @@ export function AccountPage() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <Tabs defaultValue="portfolio" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
                 <TabsTrigger value="portfolio" className="data-[state=active]:bg-purple-600">
                   Portfolio
                 </TabsTrigger>
