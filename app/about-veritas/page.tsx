@@ -3,10 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "../../components/auth-provider"; 
 
 export default function AboutVeritasPage() {
-  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
