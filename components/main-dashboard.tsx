@@ -252,39 +252,36 @@ export function MainDashboard() {
         </div>
 
         {/* Announcements */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2" />
-          <div>
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="flex items-center text-white">
-                  Announcements
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {dashboardData.announcements.length === 0 && (
-                  <div className="text-slate-400 text-center">No announcements</div>
-                )}
-                {dashboardData.announcements.map((announcement) => (
-                  <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
-                      <Badge
-                        variant={announcement.type === "success" ? "default" : "secondary"}
-                        className="text-xs"
-                      >
-                        {announcement.type}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
-                    <p className="text-xs text-slate-500">
-                      {new Date(announcement.timestamp).toLocaleDateString()}
-                    </p>
+        <div className="mt-8">
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="flex items-center text-white">
+                Announcements
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {dashboardData.announcements.length === 0 && (
+                <div className="text-slate-400 text-center">No announcements</div>
+              )}
+              {dashboardData.announcements.map((announcement) => (
+                <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
+                    <Badge
+                      variant={announcement.type === "success" ? "default" : "secondary"}
+                      className="text-xs"
+                    >
+                      {announcement.type}
+                    </Badge>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+                  <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
+                  <p className="text-xs text-slate-500">
+                    {new Date(announcement.timestamp).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
