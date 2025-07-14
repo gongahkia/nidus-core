@@ -2,6 +2,10 @@
 
 Making Stablecoins stable again.
 
+### To do
+
+* Add an additional card on the existing logged in Accounts page for users to **withdraw** XsGD, call the firebase accordingly
+
 ### Credentials
 
 #### Veritas Login Test Account with values
