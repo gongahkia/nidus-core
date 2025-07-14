@@ -279,8 +279,7 @@ export function AccountPage() {
                   <p className="text-2xl font-bold text-white">
                     $
                     {(
-                      (userProfile?.portfolio.annuity || 0) +
-                      (userProfile?.portfolio.endowment || 0) +
+                      (userProfile?.portfolio.lp || 0) +
                       (userProfile?.portfolio.xsgd || 0)
                     ).toLocaleString()}
                   </p>
