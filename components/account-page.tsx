@@ -372,29 +372,22 @@ export function AccountPage() {
                     <CardTitle className="text-white">Portfolio Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-yellow-600/20 rounded-lg">
+                        <p className="text-sm text-yellow-300">LP</p>
+                        <p className="text-2xl font-bold text-white">
+                          ${userProfile?.portfolio.lp.toLocaleString()}
+                        </p>
+                      </div>
                       <div className="p-4 bg-green-600/20 rounded-lg">
                         <p className="text-sm text-green-300">XsGD</p>
                         <p className="text-2xl font-bold text-white">
                           ${userProfile?.portfolio.xsgd.toLocaleString()}
                         </p>
-                        <p className="text-sm text-green-300">+8.5% APY</p>
-                      </div>
-                      <div className="p-4 bg-purple-600/20 rounded-lg">
-                        <p className="text-sm text-purple-300">Annuity</p>
-                        <p className="text-2xl font-bold text-white">
-                          ${userProfile?.portfolio.annuity.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-purple-300">+12.8% APY</p>
-                      </div>
-                      <div className="p-4 bg-blue-600/20 rounded-lg">
-                        <p className="text-sm text-blue-300">Endowment</p>
-                        <p className="text-2xl font-bold text-white">
-                          ${userProfile?.portfolio.endowment.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-blue-300">+15.2% APY</p>
                       </div>
                     </div>
+
                   </CardContent>
                 </Card>
               </TabsContent>
