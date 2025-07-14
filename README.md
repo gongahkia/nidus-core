@@ -2,41 +2,9 @@
 
 Making Stablecoins stable again.
 
-### Things to change (Deadline by 26 July 2025)
-
-General notes
-
-* Everything below must be synced to relevant schema in firebase and ensure values are updated live
-
-Anonymous user
-
-1. Dashboard screen
-    * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-2. Lending/Borrowing screen
-    * Should show a singular market dashboard for borrowing (under juicefinance's lending) where all functionality is gatekept under logging in
-    * Similar to Aave also
-
-Logged in user
-
-1. Dashboard screen
-    * Clicking the pool value should bring users to a more in-depth screen with graphs that shows growing pool value over time
-2. Deposit/Lending/Borrowing screen
-    1. Users MUST always deposit assets first and will then be asked to exchange it for XSgd (DEPOSIT)
-        * **DON'T SHOW MULTI-ASSET DEPOSIT FOR NOW!!! INSTEAD LET USERS JUST DEPOSIT XSGD STRAIGHT!!!** 
-        * Allowed assets: BTC, ETH, USDT, USDC
-        * Add a next-to-go conversion screen that converts these assets to XsGD 
-    2. Users can exchange their XsGD value from their account for a proportional amount of LP tokens, thereby contributing to the XsGD lending pool (LEND)
-        * Add a simple backend calculation
-        * Add a logically shown screen that explains why they are getting their LP token for that amount
-    3. Users can then choose to also exchange their LP token at anytime to retrieve money based on % accruement + principal amount (BORROW)
-        * Add notification screen that user will be charged a proportional withdrawal fee
-        * Do a backend check with the DB to ensure that they have enough LP tokens to do so 
-    4. Users can then also choose to exchange their LP token to borrow more XSGD from us + we specify the interest rate for borrowing (BORROW)
-        * Do a backend check for the DB to ensure they have enough LP tokens to do so
-
 ### Credentials
 
-#### Veritas Login Test Account (or just make a new account)
+#### Veritas Login Test Account with values
 
 * balls@gmail.com
 * tweaking

@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DollarSign, Users, Wallet } from "lucide-react"
 import Link from "next/link"
@@ -124,16 +123,6 @@ export function MainDashboard() {
                 Account
               </Link>
             </nav>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
-                </div>
-              ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm" />
-              )}
-            </div>
           </div>
         </div>
       </header>

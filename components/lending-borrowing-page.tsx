@@ -1,25 +1,22 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { TrendingUp, TrendingDown, Wallet, Shield, Coins } from "lucide-react"
+import { TrendingUp, TrendingDown } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-import { useToast } from "@/hooks/use-toast"
-import { ref, push, set, onValue } from 'firebase/database'
-import { database } from './auth-provider'
+import { ref, onValue, off, set, update, push } from "firebase/database"
+import { database } from "./auth-provider"
+import { Overlay } from "@/components/overlay"
 
 interface MarketData {
   asset: string
   symbol: string
   supplyAPY: number
+  variableSupplyAPY: number 
   borrowAPY: number
   totalSupply: number
   totalBorrow: number
@@ -28,110 +25,146 @@ interface MarketData {
   icon: string
 }
 
-interface UserPosition {
-  asset: string
-  supplied: number
-  borrowed: number
-  collateral: number
-}
-
 export function LendingBorrowingPage() {
   const { user } = useAuth()
-  const { toast } = useToast()
-  const [markets, setMarkets] = useState<MarketData[]>([])
-  const [userPositions, setUserPositions] = useState<UserPosition[]>([])
-  const [selectedAsset, setSelectedAsset] = useState<MarketData | null>(null)
-  const [actionAmount, setActionAmount] = useState("")
-  const [actionType, setActionType] = useState<"supply" | "borrow" | "withdraw" | "repay">("supply")
-  const router = useRouter();
+  const router = useRouter()
+  const [xsgdMarket, setXsgdMarket] = useState<MarketData | null>(null)
+  const [portfolio, setPortfolio] = useState<{ xsgd: number; lp: number }>({ xsgd: 0, lp: 0 })
+  const [withdrawalFee, setWithdrawalFee] = useState<number>(0.5) 
+  const [tvl, setTvl] = useState<number>(0)
+  const [variableSupplyAPY, setVariableSupplyAPY] = useState<number>(0)
+  const [borrowAPY, setBorrowAPY] = useState<number>(0)
+  const [depositAmount, setDepositAmount] = useState("")
+  const [lendAmount, setLendAmount] = useState("")
+  const [withdrawAmount, setWithdrawAmount] = useState("")
+  const [borrowAmount, setBorrowAmount] = useState("")
 
+  // Fetch XSGD market data from Firebase
   useEffect(() => {
-    const marketsRef = ref(database, 'markets')
-    const userPositionsRef = ref(database, `userPositions/${user?.uid}`)
-
-    const unsubscribeMarkets = onValue(marketsRef, (snapshot) => {
+    const marketRef = ref(database, "markets/XSGD")
+    const unsubMarket = onValue(marketRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
-        const marketsArray = Object.keys(data).map(key => ({
-          ...data[key],
-          asset: key
-        }))
-        setMarkets(marketsArray)
+        setXsgdMarket({
+          asset: "XSGD",
+          symbol: "XSGD",
+          supplyAPY: data.supplyAPY || 0,
+          variableSupplyAPY: data.variableSupplyAPY || 0,
+          borrowAPY: data.borrowAPY || 0,
+          totalSupply: data.totalSupply || 0,
+          totalBorrow: data.totalBorrow || 0,
+          liquidity: data.liquidity || 0,
+          collateralFactor: data.collateralFactor || 0.8,
+          icon: "🇸🇬",
+        })
       }
     })
 
-    const unsubscribePositions = onValue(userPositionsRef, (snapshot) => {
+    const dashboardRef = ref(database, "dashboard")
+    const unsubDashboard = onValue(dashboardRef, (snapshot) => {
       const data = snapshot.val()
-      if (data) {
-        const positionsArray = Object.keys(data).map(key => ({
-          asset: key,
-          ...data[key]
-        }))
-        setUserPositions(positionsArray)
-      }
+      setTvl(data?.tvl || 0)
+      setVariableSupplyAPY(data?.variableSupplyAPY || 0)
+      setBorrowAPY(data?.borrowAPY || 0)
     })
 
-    return () => {
-      unsubscribeMarkets()
-      unsubscribePositions()
-    }
-
-  }, [user])
-
-  const handleTransaction = async () => {
-
-    if (!user) {
-      router.push("/account");
-      return;
-    }
-
-
-    if (!selectedAsset || !actionAmount) return
-
-    const transactionRef = ref(database, `transactions/${user.uid}`)
-    const newTransactionRef = push(transactionRef)
-    await set(newTransactionRef, {
-      asset: selectedAsset.asset,
-      action: actionType,
-      amount: parseFloat(actionAmount),
-      timestamp: Date.now(),
-      status: 'pending'
-    })
-
-    if ((actionType === 'supply') && (selectedAsset.asset === 'Annuity' || selectedAsset.asset === 'Endowment')) {
-      const nftRef = ref(database, `nfts/${user.uid}`)
-      const newNFTRef = push(nftRef)
-      await set(newNFTRef, {
-        asset: selectedAsset.asset,
-        amount: parseFloat(actionAmount),
-        tokenId: `VRT-${Date.now()}`,
-        timestamp: Date.now(),
-        status: 'minted'
+    let unsubPortfolio = () => {}
+    let unsubFee = () => {}
+    if (user) {
+      const portfolioRef = ref(database, `users/${user.uid}/portfolio`)
+      unsubPortfolio = onValue(portfolioRef, (snapshot) => {
+        const data = snapshot.val()
+        setPortfolio({
+          xsgd: data?.xsgd || 0,
+          lp: data?.lp || 0,
+        })
+      })
+      const feeRef = ref(database, "withdrawalFeePercent")
+      unsubFee = onValue(feeRef, (snapshot) => {
+        setWithdrawalFee(snapshot.val() || 0.5)
       })
     }
 
-    toast(
-      "Transaction Submitted",
-      {
-        description: `${actionType} ${actionAmount} ${selectedAsset.symbol} ${
-          (selectedAsset.asset === "Annuity" || selectedAsset.asset === "Endowment") && actionType === "supply"
-            ? "(NFT will be credited to your wallet)"
-            : ""
-        }`,
+    return () => {
+      off(marketRef)
+      off(dashboardRef)
+      unsubMarket()
+      unsubDashboard()
+      if (user) {
+        off(ref(database, `users/${user.uid}/portfolio`))
+        off(ref(database, "withdrawalFeePercent"))
+        unsubPortfolio()
+        unsubFee()
       }
-    )
+    }
+  }, [user])
 
-    setActionAmount("")
-    setSelectedAsset(null)
+  const handleGatekept = (action: string) => {
+    if (!user) {
+      router.push("/account")
+      return
+    }
+    alert(`Action: ${action} (functionality coming soon)`)
   }
 
-  const requiresAuth = (action: () => void) => {
-    if (!user) {
-      router.push("/account");
-      return;
-    }
+  const logTransaction = async (action: string, amount: number, details: object = {}) => {
+    if (!user) return
+    const txRef = ref(database, `transactions/${user.uid}`)
+    const newTxRef = push(txRef)
+    await set(newTxRef, {
+      action,
+      amount,
+      timestamp: Date.now(),
+      ...details
+    })
+  }
 
-    action()
+  const handleDeposit = async () => {
+    if (!user || !depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) return
+    const newXsgd = portfolio.xsgd + Number(depositAmount)
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd })
+    await logTransaction("deposit", Number(depositAmount), { asset: "XsGD" })
+    setDepositAmount("")
+  }
+
+  const handleLend = async () => {
+    if (!user || !lendAmount || isNaN(Number(lendAmount)) || Number(lendAmount) <= 0) return
+    const amount = Number(lendAmount)
+    if (portfolio.xsgd < amount) return
+    const newXsgd = portfolio.xsgd - amount
+    const newLp = portfolio.lp + amount
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("lend", amount, { from: "XsGD", to: "LP" })
+    setLendAmount("")
+  }
+
+  const handleWithdraw = async () => {
+    if (!user || !withdrawAmount || isNaN(Number(withdrawAmount)) || Number(withdrawAmount) <= 0) return
+    const amount = Number(withdrawAmount)
+    if (portfolio.lp < amount) return
+    const fee = (withdrawalFee / 100) * amount
+    const received = amount - fee
+    const newLp = portfolio.lp - amount
+    const newXsgd = portfolio.xsgd + received
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("withdraw", amount, { asset: "LP", received, fee })
+    setWithdrawAmount("")
+  }
+
+  // for now this uses hardcoded conversion where 1 LP = 1 XsGD but tweak this in the future
+  const handleBorrow = async () => {
+    if (!user || !borrowAmount || isNaN(Number(borrowAmount)) || Number(borrowAmount) <= 0) return
+    const amount = Number(borrowAmount)
+    if (portfolio.lp < amount) return
+    const newXsgd = portfolio.xsgd + amount
+    const newLp = portfolio.lp - amount
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("borrow", amount, { collateral: "LP", interestRate: borrowAPY })
+    setBorrowAmount("")
   }
 
   return (
@@ -140,9 +173,7 @@ export function LendingBorrowingPage() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">Lending & Borrowing</h1>
-            </div>
+            <h1 className="text-2xl font-bold text-white">Lending & Borrowing</h1>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
@@ -159,269 +190,231 @@ export function LendingBorrowingPage() {
                 Account
               </Link>
             </nav>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
-                </div>
-              ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="markets" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
-            <TabsTrigger value="markets" className="data-[state=active]:bg-purple-600">
-              Markets
-            </TabsTrigger>
-            <TabsTrigger value="positions" className="data-[state=active]:bg-purple-600">
-              Your Positions
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="markets" className="space-y-6">
-            <div className="grid gap-6">
-              {markets.map((market) => (
-                <Card key={market.asset} className="bg-slate-800/50 border-slate-700">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="text-2xl">{market.icon}</div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white">{market.asset}</h3>
-                          <p className="text-slate-400">{market.symbol}</p>
-                        </div>
-                      </div>
-                      <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
-                        {market.collateralFactor * 100}% LTV
-                      </Badge>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                      <div>
-                        <p className="text-sm text-slate-400">Supply APY</p>
-                        <p className="text-lg font-semibold text-green-400 flex items-center">
-                          <TrendingUp className="h-4 w-4 mr-1" />
-                          {market.supplyAPY}%
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-slate-400">Borrow APY</p>
-                        <p className="text-lg font-semibold text-red-400 flex items-center">
-                          <TrendingDown className="h-4 w-4 mr-1" />
-                          {market.borrowAPY}%
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-slate-400">Total Supply</p>
-                        <p className="text-lg font-semibold text-white">${market.totalSupply.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-slate-400">Available</p>
-                        <p className="text-lg font-semibold text-white">${market.liquidity.toLocaleString()}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex space-x-4">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                            onClick={() =>
-                              requiresAuth(() => {
-                                setSelectedAsset(market)
-                                setActionType("supply")
-                              })
-                            }
-                          >
-                            Supply {market.symbol}
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
-                          <DialogHeader>
-                            <DialogTitle className="text-white">Supply {selectedAsset?.symbol}</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="amount" className="text-slate-300">
-                                Amount
-                              </Label>
-                              <Input
-                                id="amount"
-                                type="number"
-                                placeholder="0.00"
-                                value={actionAmount}
-                                onChange={(e) => setActionAmount(e.target.value)}
-                                className="bg-slate-700 border-slate-600 text-white"
-                              />
-                            </div>
-                            {selectedAsset &&
-                              (selectedAsset.asset === "Annuity" || selectedAsset.asset === "Endowment") && (
-                                <div className="p-3 bg-purple-600/20 rounded-lg">
-                                  <div className="flex items-center space-x-2 text-purple-300">
-                                    <Shield className="h-4 w-4" />
-                                    <span className="text-sm">NFT will be minted and credited to your wallet</span>
-                                  </div>
-                                </div>
-                              )}
-                            <Button onClick={handleTransaction} className="w-full bg-green-600 hover:bg-green-700">
-                              Supply {selectedAsset?.symbol}
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                            onClick={() =>
-                              requiresAuth(() => {
-                                setSelectedAsset(market)
-                                setActionType("borrow")
-                              })
-                            }
-                          >
-                            Borrow {market.symbol}
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
-                          <DialogHeader>
-                            <DialogTitle className="text-white">Borrow {selectedAsset?.symbol}</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="borrow-amount" className="text-slate-300">
-                                Amount
-                              </Label>
-                              <Input
-                                id="borrow-amount"
-                                type="number"
-                                placeholder="0.00"
-                                value={actionAmount}
-                                onChange={(e) => setActionAmount(e.target.value)}
-                                className="bg-slate-700 border-slate-600 text-white"
-                              />
-                            </div>
-                            <div className="p-3 bg-yellow-600/20 rounded-lg">
-                              <p className="text-sm text-yellow-300">
-                                Ensure you have sufficient collateral to maintain your health factor
-                              </p>
-                            </div>
-                            <Button onClick={handleTransaction} className="w-full bg-red-600 hover:bg-red-700">
-                              Borrow {selectedAsset?.symbol}
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="positions" className="space-y-6">
-            {!user ? (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardContent className="p-8 text-center">
-                  <Wallet className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Connect Your Wallet</h3>
-                  <p className="text-slate-400 mb-4">
-                    Connect your wallet to view your lending and borrowing positions
-                  </p>
-                  <Button onClick={() => router.push("/account")} className="bg-purple-600 hover:bg-purple-700">
-                      Connect Wallet
-                    </Button>
-                  </CardContent>
-              </Card>
-            ) : userPositions.length === 0 ? (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardContent className="p-8 text-center">
-                  <Coins className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                  <h3 className="text-xl font-semibold text-white mb-2">No Positions Yet</h3>
-                  <p className="text-slate-400 mb-4">Start by supplying assets to earn yield</p>
+        {!user ? (
+          <div className="flex flex-col items-center justify-center min-h-[60vh]">
+            <Card className="w-full max-w-lg bg-slate-800/50 border-slate-700 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center text-white text-2xl gap-3">
+                  <span className="text-3xl">{xsgdMarket?.icon || "🇸🇬"}</span>
+                  Lend XSGD
+                  <Badge variant="secondary" className="ml-2 bg-purple-600/20 text-purple-300">
+                    {xsgdMarket ? `${xsgdMarket.collateralFactor * 100}% LTV` : "--"}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-400">Supply APY</p>
+                    <p className="text-lg font-semibold text-green-400 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      {xsgdMarket ? `${xsgdMarket.supplyAPY}%` : "--"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">Supply APY (Variable)</p>
+                    <p className="text-lg font-semibold text-yellow-400 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      {xsgdMarket ? `${xsgdMarket.variableSupplyAPY}%` : "--"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">Borrow APY</p>
+                    <p className="text-lg font-semibold text-red-400 flex items-center">
+                      <TrendingDown className="h-4 w-4 mr-1" />
+                      {xsgdMarket ? `${xsgdMarket.borrowAPY}%` : "--"}
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-400">Total Supplied</p>
+                    <p className="text-lg font-semibold text-white">
+                      {xsgdMarket ? `$${xsgdMarket.totalSupply.toLocaleString()}` : "--"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">Available</p>
+                    <p className="text-lg font-semibold text-white">
+                      {xsgdMarket ? `$${xsgdMarket.liquidity.toLocaleString()}` : "--"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4 mt-4">
                   <Button
-                    onClick={() => {
-                      const element = document.querySelector('[value="markets"]') as HTMLElement | null;
-                      if (element) {
-                        element.click();
-                      }
-                    }}
-                    className="bg-purple-600 hover:bg-purple-700"
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={() => handleGatekept("Lend XSGD")}
                   >
-                    Explore Markets
+                    Lend XSGD
                   </Button>
+                  <Button
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    onClick={() => handleGatekept("Borrow XSGD")}
+                  >
+                    Borrow XSGD
+                  </Button>
+                  <Button
+                    className="w-full bg-slate-700 hover:bg-slate-800"
+                    onClick={() => handleGatekept("Withdraw XSGD")}
+                  >
+                    Withdraw XSGD
+                  </Button>
+                </div>
+                <div className="mt-4 text-center text-slate-400 text-sm">
+                  <span>
+                    Please <span className="text-purple-400 font-semibold">log in</span> to lend, borrow, or withdraw.
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+
+          <>
+          <div className="flex flex-col md:flex-row gap-4 mb-8 items-center">
+            <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
+              <span className="text-slate-400 text-sm">Your XsGD Balance</span>
+              <span className="text-2xl font-bold text-white">{portfolio.xsgd.toLocaleString()} XsGD</span>
+            </div>
+            <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
+              <span className="text-slate-400 text-sm">Your LP Balance</span>
+              <span className="text-2xl font-bold text-white">{portfolio.lp.toLocaleString()} LP</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Card 1: Deposit XsGD */}
+            <Card className="bg-slate-800/50 border-slate-700 relative">
+              <CardHeader>
+                <CardTitle className="text-white">Deposit XsGD</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-400 mb-2">Enter the amount of XsGD to deposit:</p>
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  value={depositAmount}
+                  onChange={e => setDepositAmount(e.target.value)}
+                  className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                />
+                <Button className="w-full bg-green-600 hover:bg-green-700" onClick={handleDeposit}>
+                  Deposit
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Card 2: Convert XsGD to LP (LEND) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Convert XsGD to LP (LEND)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Convert your XsGD to LP tokens and contribute to the lending pool.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={lendAmount}
+                    onChange={e => setLendAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.xsgd === 0}
+                  />
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700" disabled={portfolio.xsgd === 0} onClick={handleLend}>
+                    Convert to LP
+                  </Button>
+                  <div className="mt-4 text-slate-400 text-sm">
+                    For every 1 XsGD you lend, you receive 1 LP token.
+                  </div>
+                  <div className="mt-4">
+                    <div className="bg-slate-700/30 rounded-lg p-4 text-slate-300">
+                      <div>Total Lending Pool: <span className="font-bold text-white">${tvl.toLocaleString()}</span></div>
+                      <div>Variable APY: <span className="font-bold text-yellow-400">{variableSupplyAPY}%</span></div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            ) : (
-              <div className="grid gap-6">
-                {userPositions.map((position) => {
-                  const market = markets.find((m) => m.asset === position.asset)
-                  if (!market) return null
+              {(portfolio.xsgd === 0 && portfolio.lp === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
 
-                  return (
-                    <Card key={position.asset} className="bg-slate-800/50 border-slate-700">
-                      <CardHeader>
-                        <CardTitle className="flex items-center text-white">
-                          <span className="text-xl mr-2">{market.icon}</span>
-                          {position.asset} Position
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="p-4 bg-green-600/20 rounded-lg">
-                            <p className="text-sm text-green-300">Supplied</p>
-                            <p className="text-xl font-bold text-white">${position.supplied.toLocaleString()}</p>
-                            <p className="text-sm text-green-300">Earning {market.supplyAPY}% APY</p>
-                          </div>
+            {/* Card 3: Withdraw (LP → XsGD) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Withdraw (LP → XsGD)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Withdraw XsGD by redeeming your LP tokens. Withdrawal fee: {withdrawalFee}%.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={withdrawAmount}
+                    onChange={e => setWithdrawAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.lp === 0}
+                  />
+                  <Button className="w-full bg-red-600 hover:bg-red-700" disabled={portfolio.lp === 0 || Number(withdrawAmount) > portfolio.lp} onClick={handleWithdraw}>
+                    Withdraw
+                  </Button>
+                  {Number(withdrawAmount) > portfolio.lp && (
+                    <div className="text-red-400 text-sm mt-2">Insufficient LP tokens.</div>
+                  )}
+                </CardContent>
+              </Card>
+              {(portfolio.lp === 0 && portfolio.xsgd > 0) && (
+                <Overlay>You must convert to LP first</Overlay>
+              )}
+              {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
 
-                          {position.borrowed > 0 && (
-                            <div className="p-4 bg-red-600/20 rounded-lg">
-                              <p className="text-sm text-red-300">Borrowed</p>
-                              <p className="text-xl font-bold text-white">${position.borrowed.toLocaleString()}</p>
-                              <p className="text-sm text-red-300">Paying {market.borrowAPY}% APY</p>
-                            </div>
-                          )}
-
-                          <div className="p-4 bg-purple-600/20 rounded-lg">
-                            <p className="text-sm text-purple-300">Collateral</p>
-                            <p className="text-xl font-bold text-white">${position.collateral.toLocaleString()}</p>
-                            <p className="text-sm text-purple-300">{market.collateralFactor * 100}% LTV</p>
-                          </div>
-                        </div>
-
-                        <div className="flex space-x-4">
-                          <Button
-                            variant="outline"
-                            className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                          >
-                            Withdraw
-                          </Button>
-                          {position.borrowed > 0 && (
-                            <Button
-                              variant="outline"
-                              className="flex-1 border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                            >
-                              Repay
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+            {/* Card 4: Borrow XsGD (using LP as collateral) */}
+            <div className="relative">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Borrow XsGD (using LP as collateral)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 mb-2">
+                    Borrow XsGD using your LP tokens as collateral. Interest rate: {borrowAPY}% APY.
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={borrowAmount}
+                    onChange={e => setBorrowAmount(e.target.value)}
+                    className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
+                    disabled={portfolio.lp === 0}
+                  />
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700" disabled={portfolio.lp === 0 || Number(borrowAmount) > portfolio.lp} onClick={handleBorrow}>
+                    Borrow
+                  </Button>
+                  {Number(borrowAmount) > portfolio.lp && (
+                    <div className="text-red-400 text-sm mt-2">Insufficient LP tokens.</div>
+                  )}
+                </CardContent>
+              </Card>
+              {(portfolio.lp === 0 && portfolio.xsgd > 0) && (
+                <Overlay>You must convert to LP first</Overlay>
+              )}
+              {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
+                <Overlay>You must hold XsGD and LP first</Overlay>
+              )}
+            </div>
+          </div>
+        </>
+        )}
       </main>
     </div>
   )
