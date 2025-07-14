@@ -8,6 +8,7 @@ General notes
 
 * Everything below must be synced to relevant schema in firebase and ensure values are updated live
 * Remove bug on both chart displays where clicking it brings users to another page, that isn't necessary anymore
+* Make the "Mission" page its own unique page with its own topbar instead of just being a component
 
 Logged in user
 
