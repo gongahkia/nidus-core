@@ -36,10 +36,6 @@ Logged in user
         * Do a backend check with the DB to ensure that they have enough LP tokens to do so 
     4. Users can then also choose to exchange their LP token to borrow more XSGD from us + we specify the interest rate for borrowing (BORROW)
         * Do a backend check for the DB to ensure they have enough LP tokens to do so
-3. Account screen
-    * Should reflect the user's assets **IGNORE THIS FOR NOW SINCE NO MULTI-ASSET DEPOSIT!!!**
-    * Should reflect the user's LP 
-    * Should reflect the user's XsGD
 
 ### Credentials
 
