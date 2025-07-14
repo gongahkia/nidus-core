@@ -266,6 +266,18 @@ export function LendingBorrowingPage() {
           </div>
         ) : (
 
+          <>
+          <div className="flex flex-col md:flex-row gap-4 mb-8 items-center">
+            <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
+              <span className="text-slate-400 text-sm">Your XsGD Balance</span>
+              <span className="text-2xl font-bold text-white">{portfolio.xsgd.toLocaleString()} XsGD</span>
+            </div>
+            <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
+              <span className="text-slate-400 text-sm">Your LP Balance</span>
+              <span className="text-2xl font-bold text-white">{portfolio.lp.toLocaleString()} LP</span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Card 1: Deposit XsGD */}
             <Card className="bg-slate-800/50 border-slate-700 relative">
@@ -392,7 +404,7 @@ export function LendingBorrowingPage() {
               )}
             </div>
           </div>
-
+        </>
         )}
       </main>
     </div>
