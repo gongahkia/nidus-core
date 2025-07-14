@@ -71,7 +71,7 @@ export function MainDashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">Veritas Insurance</h1>
+              <h1 className="text-2xl font-bold text-white">Veritas</h1>
               <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
                 v1.0
               </Badge>

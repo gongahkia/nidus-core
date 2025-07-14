@@ -9,7 +9,7 @@ import { AuthProvider } from "@/components/auth-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Veritas Insurance - DeFi Insurance Protocol",
+  title: "Veritas",
   description: "Stake, lend, and borrow with insurance-backed assets",
 }
 
