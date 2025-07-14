@@ -237,7 +237,7 @@ export function AccountPage() {
                 Lending
               </Link>
               <Link href="/account" className="text-white hover:text-purple-300 transition-colors">
-                Account
+                Log in
               </Link>
             </nav>
             <Button onClick={signOut} variant="outline" size="sm">
