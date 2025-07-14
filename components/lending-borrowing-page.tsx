@@ -156,7 +156,7 @@ export function LendingBorrowingPage() {
                 </Link>
               )}
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Log in
+                Account
               </Link>
             </nav>
             <div className="flex items-center space-x-4">
