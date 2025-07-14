@@ -115,21 +115,20 @@ export function LendingBorrowingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-slate-400">Supply APY</p>
-                      <p className="text-lg font-semibold text-green-400 flex items-center">
-                        <TrendingUp className="h-4 w-4 mr-1" />
-                        {xsgdMarket ? `${xsgdMarket.supplyAPY}%` : "--"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-400">Supply APY (Variable)</p>
-                      <p className="text-lg font-semibold text-yellow-400 flex items-center">
-                        <TrendingUp className="h-4 w-4 mr-1" />
-                        {xsgdMarket ? `${xsgdMarket.variableSupplyAPY}%` : "--"}
-                      </p>
-                    </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-400">Supply APY</p>
+                    <p className="text-lg font-semibold text-green-400 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      {xsgdMarket ? `${xsgdMarket.supplyAPY}%` : "--"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">Supply APY (Variable)</p>
+                    <p className="text-lg font-semibold text-yellow-400 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      {xsgdMarket ? `${xsgdMarket.variableSupplyAPY}%` : "--"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-400">Borrow APY</p>
