@@ -11,6 +11,7 @@ import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
 import { ValueChart } from "@/components/value-chart"
+import { Overlay } from "@/components/overlay"
 
 interface Announcement {
   id: string
@@ -236,18 +237,21 @@ export function MainDashboard() {
           />
 
           {/* Placeholder values for now, to be called from Firebase in the future */}
-          <ValueChart
-            data={{
-              poolValueHistory: [],
-              dailyNewUsers: [],
-              chartType: "assetComposition",
-              assetComposition: [
-                ["XsGD", 70],
-                ["LP", 30],
-              ],
-            }}
-            onClick={handleChartClick}
-          />
+          <div className="relative flex-1">
+            <ValueChart
+              data={{
+                poolValueHistory: [],
+                dailyNewUsers: [],
+                chartType: "assetComposition",
+                assetComposition: [
+                  ["XsGD", 70],
+                  ["LP", 30],
+                ],
+              }}
+              onClick={handleChartClick}
+            />
+            {!user && <Overlay>Please log in to view your portfolio</Overlay>}
+          </div>
 
         </div>
 
