@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { User, Settings, HelpCircle, Shield, Bell, ExternalLink } from "lucide-react"
 import Link from "next/link"
@@ -27,23 +26,14 @@ interface UserProfile {
   portfolio: {
     annuity: number
     endowment: number
-    xsgd: number
+    xsgd: number,
+    lp: number
   }
-}
-
-interface NFTAsset {
-  id: string
-  tokenId: string
-  asset: string
-  amount: number
-  mintDate: number
-  status: "active" | "redeemed"
 }
 
 export function AccountPage() {
   const { user, signIn, signUp, signOut } = useAuth()
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [nftAssets, setNFTAssets] = useState<NFTAsset[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin")
   const [email, setEmail] = useState("")
@@ -54,7 +44,6 @@ export function AccountPage() {
     if (!user) return
 
     const userRef = ref(database, `users/${user.uid}`)
-    const nftsRef = ref(database, `users/${user.uid}/nfts`)
 
     const unsubscribeUser = onValue(userRef, (snapshot) => {
       const data = snapshot.val()
@@ -72,27 +61,14 @@ export function AccountPage() {
             annuity: data.portfolio?.annuity ?? 0,
             endowment: data.portfolio?.endowment ?? 0,
             xsgd: data.portfolio?.xsgd ?? 0,
+            lp: data.portfolio?.lp ?? 0
           }
         })
       }
     })
 
-    const unsubscribeNFTs = onValue(nftsRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        const nftsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }))
-        setNFTAssets(nftsArray)
-      } else {
-        setNFTAssets([])
-      }
-    })
-
     return () => {
       unsubscribeUser()
-      unsubscribeNFTs()
     }
   }, [user])
 
@@ -277,8 +253,7 @@ export function AccountPage() {
                   <p className="text-2xl font-bold text-white">
                     $
                     {(
-                      (userProfile?.portfolio.annuity || 0) +
-                      (userProfile?.portfolio.endowment || 0) +
+                      (userProfile?.portfolio.lp || 0) +
                       (userProfile?.portfolio.xsgd || 0)
                     ).toLocaleString()}
                   </p>
@@ -353,14 +328,11 @@ export function AccountPage() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <Tabs defaultValue="portfolio" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
                 <TabsTrigger value="portfolio" className="data-[state=active]:bg-purple-600">
                   Portfolio
-                </TabsTrigger>
-                <TabsTrigger value="nfts" className="data-[state=active]:bg-purple-600">
-                  NFT Assets
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="data-[state=active]:bg-purple-600">
                   Settings
@@ -373,76 +345,22 @@ export function AccountPage() {
                     <CardTitle className="text-white">Portfolio Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-yellow-600/20 rounded-lg">
+                        <p className="text-sm text-yellow-300">LP</p>
+                        <p className="text-2xl font-bold text-white">
+                          ${userProfile?.portfolio.lp.toLocaleString()}
+                        </p>
+                      </div>
                       <div className="p-4 bg-green-600/20 rounded-lg">
                         <p className="text-sm text-green-300">XsGD</p>
                         <p className="text-2xl font-bold text-white">
                           ${userProfile?.portfolio.xsgd.toLocaleString()}
                         </p>
-                        <p className="text-sm text-green-300">+8.5% APY</p>
-                      </div>
-                      <div className="p-4 bg-purple-600/20 rounded-lg">
-                        <p className="text-sm text-purple-300">Annuity</p>
-                        <p className="text-2xl font-bold text-white">
-                          ${userProfile?.portfolio.annuity.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-purple-300">+12.8% APY</p>
-                      </div>
-                      <div className="p-4 bg-blue-600/20 rounded-lg">
-                        <p className="text-sm text-blue-300">Endowment</p>
-                        <p className="text-2xl font-bold text-white">
-                          ${userProfile?.portfolio.endowment.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-blue-300">+15.2% APY</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
 
-              <TabsContent value="nfts" className="space-y-6">
-                <Card className="bg-slate-800/50 border-slate-700">
-                  <CardHeader>
-                    <CardTitle className="text-white">Your NFT Assets</CardTitle>
-                    <p className="text-slate-400">Collateralized insurance assets as NFTs</p>
-                  </CardHeader>
-                  <CardContent>
-                    {nftAssets.length === 0 ? (
-                      <div className="text-center py-8">
-                        <Shield className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                        <p className="text-slate-400">No NFT assets yet</p>
-                        <p className="text-sm text-slate-500">Supply annuities or endowments to mint NFTs</p>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {nftAssets.map((nft) => (
-                          <div key={nft.id} className="p-4 bg-slate-700/30 rounded-lg border border-slate-600">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center space-x-2">
-                                <div className="text-xl">{nft.asset === "Annuity" ? "🛡️" : "📈"}</div>
-                                <div>
-                                  <p className="font-medium text-white">{nft.asset} NFT</p>
-                                  <p className="text-xs text-slate-400">#{nft.tokenId}</p>
-                                </div>
-                              </div>
-                              <Badge variant={nft.status === "active" ? "default" : "secondary"} className="text-xs">
-                                {nft.status}
-                              </Badge>
-                            </div>
-                            <div className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-slate-400">Value</span>
-                                <span className="text-white font-medium">${nft.amount.toLocaleString()}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-slate-400">Minted</span>
-                                <span className="text-white">{new Date(nft.mintDate).toLocaleDateString()}</span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
