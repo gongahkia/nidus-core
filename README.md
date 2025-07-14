@@ -4,7 +4,8 @@ Making Stablecoins stable again.
 
 ### To do
 
-* Add an additional card on the existing logged in Accounts page for users to **withdraw** XsGD, call the firebase accordingly
+* Add an additional card on the existing logged in Accounts page for users to **withdraw** their XsGD, must call and CRUD to the firebase accordingly
+* Change any mention of xsgd to the semantically correct "XSGD"
 
 ### Credentials
 
