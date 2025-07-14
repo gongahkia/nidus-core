@@ -15,6 +15,7 @@ interface MarketData {
   asset: string
   symbol: string
   supplyAPY: number
+  variableSupplyAPY: number 
   borrowAPY: number
   totalSupply: number
   totalBorrow: number
@@ -38,12 +39,13 @@ export function LendingBorrowingPage() {
           asset: "XSGD",
           symbol: "XSGD",
           supplyAPY: data.supplyAPY || 0,
+          variableSupplyAPY: data.variableSupplyAPY || 0, 
           borrowAPY: data.borrowAPY || 0,
           totalSupply: data.totalSupply || 0,
           totalBorrow: data.totalBorrow || 0,
           liquidity: data.liquidity || 0,
           collateralFactor: data.collateralFactor || 0.8,
-          icon: "🇸🇬", // Or use an SVG/icon if you prefer
+          icon: "🇸🇬",
         })
       }
     })
@@ -113,13 +115,21 @@ export function LendingBorrowingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">Supply APY</p>
-                    <p className="text-lg font-semibold text-green-400 flex items-center">
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                      {xsgdMarket ? `${xsgdMarket.supplyAPY}%` : "--"}
-                    </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-slate-400">Supply APY</p>
+                      <p className="text-lg font-semibold text-green-400 flex items-center">
+                        <TrendingUp className="h-4 w-4 mr-1" />
+                        {xsgdMarket ? `${xsgdMarket.supplyAPY}%` : "--"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Supply APY (Variable)</p>
+                      <p className="text-lg font-semibold text-yellow-400 flex items-center">
+                        <TrendingUp className="h-4 w-4 mr-1" />
+                        {xsgdMarket ? `${xsgdMarket.variableSupplyAPY}%` : "--"}
+                      </p>
+                    </div>
                   </div>
                   <div>
                     <p className="text-sm text-slate-400">Borrow APY</p>
