@@ -249,6 +249,8 @@ export function AccountPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
+
+                  {/* Right now this is just a placeholder calcualtion for total portfolio value */}
                   <p className="text-sm text-slate-400">Total Portfolio Value</p>
                   <p className="text-2xl font-bold text-white">
                     $
@@ -257,6 +259,7 @@ export function AccountPage() {
                       (userProfile?.portfolio.xsgd || 0)
                     ).toLocaleString()}
                   </p>
+
                 </div>
                 <Separator className="bg-slate-700" />
                 <div className="space-y-2">
