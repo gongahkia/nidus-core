@@ -201,7 +201,7 @@ export function MainDashboard() {
 
         {/* Graph for all users */}
         <div className="flex flex-col md:flex-row gap-6 mb-8">
-          <PoolValueChart
+          <ValueChart
             data={{
               poolValueHistory, 
               dailyNewUsers: [],
@@ -209,7 +209,7 @@ export function MainDashboard() {
             }}
             onClick={handleChartClick}
           />
-          <PoolValueChart
+          <ValueChart
             data={{
               poolValueHistory: [],
               dailyNewUsers, 
@@ -218,7 +218,6 @@ export function MainDashboard() {
             onClick={handleChartClick}
           />
         </div>
-
 
         {/* Announcements */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
