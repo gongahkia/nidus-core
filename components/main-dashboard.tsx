@@ -1,68 +1,126 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { TrendingUp, DollarSign, Users, Bell, Wallet } from "lucide-react"
+import { DollarSign, Users, Wallet } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-import { ref, off } from 'firebase/database'
-import { database } from './auth-provider'
+import { ref, onValue, off } from "firebase/database"
+import { database } from "./auth-provider"
+
+function PoolValueChart({ data, onClick }: { data: any[]; onClick: () => void }) {
+  return (
+    <div
+      className="flex-1 min-h-[280px] bg-slate-800/50 border border-slate-700 rounded-lg flex items-center justify-center cursor-pointer"
+      onClick={onClick}
+    >
+      {/* Replace this with your actual chart implementation */}
+      <span className="text-slate-300">[Pool Value Chart Placeholder]</span>
+    </div>
+  )
+}
+
+interface Announcement {
+  id: string
+  title: string
+  content: string
+  timestamp: number
+  type: "info" | "warning" | "success"
+}
 
 interface DashboardData {
-  totalStaked: number
-  currentYield: number
   tvl: number
-  announcements: Array<{
-    id: string
-    title: string
-    content: string
-    timestamp: number
-    type: "info" | "warning" | "success"
-  }>
+  announcements: Announcement[]
+}
+
+interface UserPortfolio {
+  lp: number
+  ownershipPercent: number
+  xsgd: number
 }
 
 export function MainDashboard() {
   const router = useRouter()
   const { user } = useAuth()
-  const [dashboardData ] = useState<DashboardData>({
-    totalStaked: 0,
-    currentYield: 0,
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
     tvl: 0,
     announcements: [],
   })
+  const [poolValueHistory, setPoolValueHistory] = useState<any[]>([])
+  const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
 
   useEffect(() => {
-    const dashboardRef = ref(database, 'dashboard')
-    const announcementsRef = ref(database, 'announcements')
+    const dashboardRef = ref(database, "dashboard")
+    const announcementsRef = ref(database, "announcements")
+    const poolValueHistoryRef = ref(database, "poolValueHistory")
 
-    // const unsubscribeDashboard = onValue(dashboardRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     setDashboardData(prev => ({ ...prev, ...data }))
-    //   }
-    // })
+    const unsubDashboard = onValue(dashboardRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) setDashboardData((prev) => ({ ...prev, tvl: data.tvl || 0 }))
+    })
 
-    // const unsubscribeAnnouncements = onValue(announcementsRef, (snapshot) => {
-    //   const data = snapshot.val()
-    //   if (data) {
-    //     const announcements = Object.keys(data).map(key => ({
-    //       id: key,
-    //       ...data[key]
-    //     }))
-    //     setDashboardData(prev => ({ ...prev, announcements }))
-    //   }
-    // })
+    const unsubAnnouncements = onValue(announcementsRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const announcements = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }))
+        setDashboardData((prev) => ({ ...prev, announcements }))
+      }
+    })
+
+    const unsubHistory = onValue(poolValueHistoryRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const history = Object.keys(data)
+          .map((key) => ({
+            timestamp: Number(key),
+            value: data[key],
+          }))
+          .sort((a, b) => a.timestamp - b.timestamp)
+        setPoolValueHistory(history)
+      }
+    })
 
     return () => {
       off(dashboardRef)
       off(announcementsRef)
+      off(poolValueHistoryRef)
+      unsubDashboard()
+      unsubAnnouncements()
+      unsubHistory()
     }
-
   }, [])
+
+  useEffect(() => {
+    if (!user) {
+      setUserPortfolio(null)
+      return
+    }
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    const unsubUserPortfolio = onValue(userPortfolioRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        setUserPortfolio({
+          lp: data.lp || 0,
+          ownershipPercent: data.ownershipPercent || 0,
+          xsgd: data.xsgd || 0,
+        })
+      }
+    })
+    return () => {
+      off(userPortfolioRef)
+      unsubUserPortfolio()
+    }
+  }, [user])
+
+  const handleChartClick = () => {
+    router.push("/analytics/pool-value")
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -99,8 +157,7 @@ export function MainDashboard() {
                   <span className="text-sm text-white">{user.displayName}</span>
                 </div>
               ) : (
-                <Button onClick={() => router.push("/account")} variant="outline" size="sm">
-                </Button>
+                <Button onClick={() => router.push("/account")} variant="outline" size="sm" />
               )}
             </div>
           </div>
@@ -108,117 +165,86 @@ export function MainDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Stats Cards */}
+        {/* Cards for all users */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Staked</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">Total Pool Value (XsGD)</CardTitle>
               <DollarSign className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${dashboardData.totalStaked.toLocaleString()}</div>
-              <p className="text-xs text-slate-400 mt-1">+12.5% from last month</p>
+              <div className="text-2xl font-bold text-white">
+                {dashboardData.tvl ? `\$${dashboardData.tvl.toLocaleString()}` : "-"}
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Current Yield</CardTitle>
-              <TrendingUp className="h-4 w-4 text-purple-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">{dashboardData.currentYield}%</div>
-              <p className="text-xs text-slate-400 mt-1">APY on staked assets</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Value Locked</CardTitle>
-              <Users className="h-4 w-4 text-blue-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">${(dashboardData.tvl / 1000000).toFixed(1)}M</div>
-              <p className="text-xs text-slate-400 mt-1">Across all pools</p>
-            </CardContent>
-          </Card>
+          {user && userPortfolio && (
+            <>
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-slate-300">Your Pool Ownership</CardTitle>
+                  <Users className="h-4 w-4 text-blue-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">
+                    {userPortfolio.ownershipPercent.toFixed(2)}%
+                  </div>
+                  <div className="text-sm text-slate-400 mt-1">
+                    Value: ${userPortfolio.xsgd.toLocaleString()}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-slate-300">Your LP</CardTitle>
+                  <Wallet className="h-4 w-4 text-purple-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">
+                    {userPortfolio.lp.toLocaleString()}
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
 
-        {/* Main Content Grid */}
+        {/* Graph for all users */}
+        <div className={`flex ${user ? "md:flex-row" : "flex-col md:flex-row"} gap-6 mb-8`}>
+          <PoolValueChart data={poolValueHistory} onClick={handleChartClick} />
+          <PoolValueChart data={poolValueHistory} onClick={handleChartClick} />
+        </div>
+
+        {/* Announcements */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Staking Overview */}
-          <div className="lg:col-span-2">
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">Staking Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
-                  <div>
-                    <h3 className="font-semibold text-white">XsGD Pool</h3>
-                    <p className="text-sm text-slate-400">Singapore Dollar Stablecoin</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-green-400">8.5% APY</p>
-                    <p className="text-sm text-slate-400">$85,000 staked</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
-                  <div>
-                    <h3 className="font-semibold text-white">Annuity Pool</h3>
-                    <p className="text-sm text-slate-400">Insurance-backed annuities</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-purple-400">12.3% APY</p>
-                    <p className="text-sm text-slate-400">$40,000 staked</p>
-                  </div>
-                </div>
-
-                <Separator className="bg-slate-700" />
-
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Total Portfolio Value</span>
-                  <span className="text-xl font-bold text-white">$125,000</span>
-                </div>
-
-                <div className="flex space-x-4">
-                  <Link href="/lending" className="flex-1">
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700">Start Lending</Button>
-                  </Link>
-                  <Link href="/lending" className="flex-1">
-                    <Button
-                      variant="outline"
-                      className="w-full border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                    >
-                      Borrow Assets
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Announcements */}
+          <div className="lg:col-span-2" />
           <div>
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
-                  <Bell className="h-4 w-4 mr-2" />
                   Announcements
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {dashboardData.announcements.length === 0 && (
+                  <div className="text-slate-400 text-center">No announcements</div>
+                )}
                 {dashboardData.announcements.map((announcement) => (
                   <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
-                      <Badge variant={announcement.type === "success" ? "default" : "secondary"} className="text-xs">
+                      <Badge
+                        variant={announcement.type === "success" ? "default" : "secondary"}
+                        className="text-xs"
+                      >
                         {announcement.type}
                       </Badge>
                     </div>
                     <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
-                    <p className="text-xs text-slate-500">{new Date(announcement.timestamp).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-500">
+                      {new Date(announcement.timestamp).toLocaleDateString()}
+                    </p>
                   </div>
                 ))}
               </CardContent>
