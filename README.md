@@ -9,12 +9,6 @@ General notes
 * Everything below must be synced to relevant schema in firebase and ensure values are updated live
 * Remove bug on both chart displays where clicking it brings users to another page, that isn't necessary anymore
 
-Anonymous user
-
-1. Lending/Borrowing screen
-    * Should show a singular market dashboard for borrowing (under juicefinance's lending) where all functionality is gatekept under logging in
-    * Similar to Aave also
-
 Logged in user
 
 1. Deposit/Lending/Borrowing screen
