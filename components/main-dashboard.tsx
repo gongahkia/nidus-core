@@ -200,8 +200,9 @@ export function MainDashboard() {
           )}
         </div>
 
-        {/* Placeholder value for now, to be called from Firebase in the future */}
         <div className="flex flex-col md:flex-row gap-6 mb-8">
+
+          {/* Placeholder values for now, to be called from Firebase in the future */}
           <ValueChart
             data={{
               poolValueHistory:[
@@ -233,6 +234,21 @@ export function MainDashboard() {
             }}
             onClick={handleChartClick}
           />
+
+          {/* Placeholder values for now, to be called from Firebase in the future */}
+          <ValueChart
+            data={{
+              poolValueHistory: [],
+              dailyNewUsers: [],
+              chartType: "assetComposition",
+              assetComposition: [
+                ["XsGD", 70],
+                ["LP", 30],
+              ],
+            }}
+            onClick={handleChartClick}
+          />
+
         </div>
 
         {/* Announcements */}
