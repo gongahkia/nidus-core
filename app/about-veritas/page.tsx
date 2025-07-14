@@ -87,7 +87,7 @@ export default function AboutVeritasPage() {
                   className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
                 />
                 <div className="text-white font-semibold text-lg">Richard Lei</div>
-                <div className="text-slate-400 text-sm mb-2">Founder, Business</div>
+                <div className="text-slate-400 text-sm mb-2">Chief Executive Officer</div>
                 <p className="text-slate-400 text-xs">
                   Richard leads Veritas with a vision for transparent, secure, and innovative DeFi lending solutions.
                 </p>
@@ -102,9 +102,9 @@ export default function AboutVeritasPage() {
                   className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
                 />
                 <div className="text-white font-semibold text-lg">Gabriel Ong</div>
-                <div className="text-slate-400 text-sm mb-2">CTO, Tech Lead</div>
+                <div className="text-slate-400 text-sm mb-2">Chief Technology Officer</div>
                 <p className="text-slate-400 text-xs">
-                  Gabriel drives the technology and engineering at Veritas, ensuring robust, scalable, and user-centric DeFi infrastructure.
+                  Gabriel leads the technical development and engineering at Veritas, ensuring robust, scalable, and user-focused DeFi infrastructure.
                 </p>
               </div>
             </div>
