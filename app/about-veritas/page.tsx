@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Wallet } from "lucide-react";
+import { Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "../../components/auth-provider"; 
@@ -22,26 +22,12 @@ export default function AboutVeritasPage() {
                 Lending
               </Link>
               <Link href="/about-veritas" className="text-white hover:text-purple-300 transition-colors">
-                About
+                Mission
               </Link>
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Account
               </Link>
             </nav>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2">
-                  <Wallet className="h-4 w-4 text-purple-300" />
-                  <span className="text-sm text-white">{user.displayName}</span>
-                </div>
-              ) : (
-                <Link href="/account">
-                  <button className="bg-transparent border border-purple-600 text-white rounded px-3 py-1 hover:bg-purple-700">
-                    Connect
-                  </button>
-                </Link>
-              )}
-            </div>
           </div>
         </div>
       </header>
