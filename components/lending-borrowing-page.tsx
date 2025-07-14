@@ -5,10 +5,10 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, TrendingDown, Wallet } from "lucide-react"
+import { TrendingUp, TrendingDown } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
-import { ref, onValue, off } from "firebase/database"
+import { ref, onValue, off, set, update, push } from "firebase/database"
 import { database } from "./auth-provider"
 import { Overlay } from "@/components/overlay"
 
@@ -96,6 +96,66 @@ export function LendingBorrowingPage() {
       return
     }
     alert(`Action: ${action} (functionality coming soon)`)
+  }
+
+  const logTransaction = async (action: string, amount: number, details: object = {}) => {
+    if (!user) return
+    const txRef = ref(database, `transactions/${user.uid}`)
+    const newTxRef = push(txRef)
+    await set(newTxRef, {
+      action,
+      amount,
+      timestamp: Date.now(),
+      ...details
+    })
+  }
+
+  const handleDeposit = async () => {
+    if (!user || !depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) return
+    const newXsgd = portfolio.xsgd + Number(depositAmount)
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd })
+    await logTransaction("deposit", Number(depositAmount), { asset: "XsGD" })
+    setDepositAmount("")
+  }
+
+  const handleLend = async () => {
+    if (!user || !lendAmount || isNaN(Number(lendAmount)) || Number(lendAmount) <= 0) return
+    const amount = Number(lendAmount)
+    if (portfolio.xsgd < amount) return
+    const newXsgd = portfolio.xsgd - amount
+    const newLp = portfolio.lp + amount
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("lend", amount, { from: "XsGD", to: "LP" })
+    setLendAmount("")
+  }
+
+  const handleWithdraw = async () => {
+    if (!user || !withdrawAmount || isNaN(Number(withdrawAmount)) || Number(withdrawAmount) <= 0) return
+    const amount = Number(withdrawAmount)
+    if (portfolio.lp < amount) return
+    const fee = (withdrawalFee / 100) * amount
+    const received = amount - fee
+    const newLp = portfolio.lp - amount
+    const newXsgd = portfolio.xsgd + received
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("withdraw", amount, { asset: "LP", received, fee })
+    setWithdrawAmount("")
+  }
+
+  // for now this uses hardcoded conversion where 1 LP = 1 XsGD but tweak this in the future
+  const handleBorrow = async () => {
+    if (!user || !borrowAmount || isNaN(Number(borrowAmount)) || Number(borrowAmount) <= 0) return
+    const amount = Number(borrowAmount)
+    if (portfolio.lp < amount) return
+    const newXsgd = portfolio.xsgd + amount
+    const newLp = portfolio.lp - amount
+    const userPortfolioRef = ref(database, `users/${user.uid}/portfolio`)
+    await update(userPortfolioRef, { xsgd: newXsgd, lp: newLp })
+    await logTransaction("borrow", amount, { collateral: "LP", interestRate: borrowAPY })
+    setBorrowAmount("")
   }
 
   return (
@@ -221,7 +281,7 @@ export function LendingBorrowingPage() {
                   onChange={e => setDepositAmount(e.target.value)}
                   className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
                 />
-                <Button className="w-full bg-green-600 hover:bg-green-700">
+                <Button className="w-full bg-green-600 hover:bg-green-700" onClick={handleDeposit}>
                   Deposit
                 </Button>
               </CardContent>
@@ -245,7 +305,7 @@ export function LendingBorrowingPage() {
                     className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
                     disabled={portfolio.xsgd === 0}
                   />
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700" disabled={portfolio.xsgd === 0}>
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700" disabled={portfolio.xsgd === 0} onClick={handleLend}>
                     Convert to LP
                   </Button>
                   <div className="mt-4 text-slate-400 text-sm">
@@ -282,10 +342,7 @@ export function LendingBorrowingPage() {
                     className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
                     disabled={portfolio.lp === 0}
                   />
-                  <Button
-                    className="w-full bg-red-600 hover:bg-red-700"
-                    disabled={portfolio.lp === 0 || Number(withdrawAmount) > portfolio.lp}
-                  >
+                  <Button className="w-full bg-red-600 hover:bg-red-700" disabled={portfolio.lp === 0 || Number(withdrawAmount) > portfolio.lp} onClick={handleWithdraw}>
                     Withdraw
                   </Button>
                   {Number(withdrawAmount) > portfolio.lp && (
@@ -319,10 +376,7 @@ export function LendingBorrowingPage() {
                     className="mb-4 w-full rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
                     disabled={portfolio.lp === 0}
                   />
-                  <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                    disabled={portfolio.lp === 0 || Number(borrowAmount) > portfolio.lp}
-                  >
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700" disabled={portfolio.lp === 0 || Number(borrowAmount) > portfolio.lp} onClick={handleBorrow}>
                     Borrow
                   </Button>
                   {Number(borrowAmount) > portfolio.lp && (
