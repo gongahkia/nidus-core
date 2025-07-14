@@ -10,18 +10,7 @@ import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
-
-function PoolValueChart({ data, onClick }: { data: any[]; onClick: () => void }) {
-  return (
-    <div
-      className="flex-1 min-h-[280px] bg-slate-800/50 border border-slate-700 rounded-lg flex items-center justify-center cursor-pointer"
-      onClick={onClick}
-    >
-      {/* Replace this with your actual chart implementation */}
-      <span className="text-slate-300">[Pool Value Chart Placeholder]</span>
-    </div>
-  )
-}
+import { ValueChart } from "@/components/value-chart"
 
 interface Announcement {
   id: string
@@ -211,10 +200,25 @@ export function MainDashboard() {
         </div>
 
         {/* Graph for all users */}
-        <div className={`flex ${user ? "md:flex-row" : "flex-col md:flex-row"} gap-6 mb-8`}>
-          <PoolValueChart data={poolValueHistory} onClick={handleChartClick} />
-          <PoolValueChart data={poolValueHistory} onClick={handleChartClick} />
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
+          <PoolValueChart
+            data={{
+              poolValueHistory, 
+              dailyNewUsers: [],
+              chartType: "pool",
+            }}
+            onClick={handleChartClick}
+          />
+          <PoolValueChart
+            data={{
+              poolValueHistory: [],
+              dailyNewUsers, 
+              chartType: "users",
+            }}
+            onClick={handleChartClick}
+          />
         </div>
+
 
         {/* Announcements */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
