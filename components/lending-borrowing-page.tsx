@@ -41,16 +41,15 @@ export function LendingBorrowingPage() {
 
   // Fetch XSGD market data from Firebase
   useEffect(() => {
-    if (!user) return
     const marketRef = ref(database, "markets/XSGD")
-    const unsub = onValue(marketRef, (snapshot) => {
+    const unsubMarket = onValue(marketRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
         setXsgdMarket({
           asset: "XSGD",
           symbol: "XSGD",
           supplyAPY: data.supplyAPY || 0,
-          variableSupplyAPY: data.variableSupplyAPY || 0, 
+          variableSupplyAPY: data.variableSupplyAPY || 0,
           borrowAPY: data.borrowAPY || 0,
           totalSupply: data.totalSupply || 0,
           totalBorrow: data.totalBorrow || 0,
@@ -60,18 +59,7 @@ export function LendingBorrowingPage() {
         })
       }
     })
-    const portfolioRef = ref(database, `users/${user.uid}/portfolio`)
-    const unsubPortfolio = onValue(portfolioRef, (snapshot) => {
-      const data = snapshot.val()
-      setPortfolio({
-        xsgd: data?.xsgd || 0,
-        lp: data?.lp || 0,
-      })
-    })
-    const feeRef = ref(database, "withdrawalFeePercent")
-    const unsubFee = onValue(feeRef, (snapshot) => {
-      setWithdrawalFee(snapshot.val() || 0.5)
-    })
+
     const dashboardRef = ref(database, "dashboard")
     const unsubDashboard = onValue(dashboardRef, (snapshot) => {
       const data = snapshot.val()
@@ -79,14 +67,35 @@ export function LendingBorrowingPage() {
       setVariableSupplyAPY(data?.variableSupplyAPY || 0)
       setBorrowAPY(data?.borrowAPY || 0)
     })
+
+    let unsubPortfolio = () => {}
+    let unsubFee = () => {}
+    if (user) {
+      const portfolioRef = ref(database, `users/${user.uid}/portfolio`)
+      unsubPortfolio = onValue(portfolioRef, (snapshot) => {
+        const data = snapshot.val()
+        setPortfolio({
+          xsgd: data?.xsgd || 0,
+          lp: data?.lp || 0,
+        })
+      })
+      const feeRef = ref(database, "withdrawalFeePercent")
+      unsubFee = onValue(feeRef, (snapshot) => {
+        setWithdrawalFee(snapshot.val() || 0.5)
+      })
+    }
+
     return () => {
-      off(portfolioRef)
-      off(feeRef)
-      off(dashboardRef)
-      unsubPortfolio()
-      unsubFee()
-      unsubDashboard()
       off(marketRef)
+      off(dashboardRef)
+      unsubMarket()
+      unsubDashboard()
+      if (user) {
+        off(ref(database, `users/${user.uid}/portfolio`))
+        off(ref(database, "withdrawalFeePercent"))
+        unsubPortfolio()
+        unsubFee()
+      }
     }
   }, [user])
 
