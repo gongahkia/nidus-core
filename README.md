@@ -2,10 +2,19 @@
 
 Making Stablecoins stable again.
 
-### To do
+### To do (deadline ...)
+
+#### General
 
 * Add an additional card on the existing logged in Accounts page for users to **withdraw** their XsGD, must call and CRUD to the firebase accordingly
 * Change any mention of xsgd to the semantically correct "XSGD"
+* Add a bottom-card for Veritas similar to this with relevant linked sites
+
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/497dffa1-3464-4693-859b-cc662a878833" />
+
+#### Specific
+
+
 
 ### Credentials
 
