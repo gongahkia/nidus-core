@@ -21,7 +21,7 @@ Making Stablecoins stable again.
     * Include the "Portfolio" card and it calls the firebase DB for the user's account (gray it out with an overlay and redirect to log in)!!!
     * Include the "Vaults" card below (or somewhere else) 
     * Include a blackened-out overlay stating "coming soon" that shows "NIDUS" with a logo, APR, Points and Balance with - for placeholder value for now 
-2. Vault screen (EDIT THIS)
+2. Vault screen
     * Rewrite this page 
     * Replace the entire description of "Lending/Borrowing" with "Vault" in navbar and header 
     * Reference these 2 sites, specifically https://app.hyperliquid.xyz/ vault page AND https://infrared.finance/ but they have multiple strategies
@@ -50,7 +50,7 @@ Making Stablecoins stable again.
     * Include the "Portfolio" card and it calls the firebase DB for the user's account
     * Include the "Vaults" card below (or somewhere else) 
     * Include a blackened-out overlay stating "coming soon" that shows "NIDUS" with a logo, APR, Points and Balance with - for placeholder value for now 
-2. Vault screen (EDIT THIS)
+2. Vault screen
     * Rewrite this page 
     * Replace the entire description of "Lending/Borrowing" with "Vault" in navbar and header 
     * Reference these 2 sites, specifically https://app.hyperliquid.xyz/ vault page AND https://infrared.finance/ but they have multiple strategies
