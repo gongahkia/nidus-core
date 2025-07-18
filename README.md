@@ -8,7 +8,7 @@ Making Stablecoins stable again.
 
 * Change name from Veritas to NIDUS
 * Add a bottom footer for Veritas similar to this with relevant linked sites and pages
-* Once the entire UI is approved, make new project and deploy on vercel under new name
+* Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/497dffa1-3464-4693-859b-cc662a878833" />
 
