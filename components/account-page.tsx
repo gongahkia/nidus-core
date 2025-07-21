@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, set } from 'firebase/database'
 import { database } from './auth-provider'
+import { Footer } from "@/components/footer"
 
 interface UserProfile {
   displayName: string
@@ -117,81 +118,109 @@ export function AccountPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <Card className="bg-slate-800/50 border-slate-700 w-full max-w-md">
-          <CardContent className="p-8">
-            <User className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-            <h3 className="text-xl font-semibold text-white mb-2">
-              {authMode === "signin" ? "Sign In" : "Sign Up"}
-            </h3>
-            <p className="text-slate-400 mb-4">
-              {authMode === "signin"
-                ? "Sign in to access your account"
-                : "Create an account to get started"}
-            </p>
-            <form onSubmit={handleAuth} className="space-y-4">
-              <div>
-                <Label htmlFor="email" className="text-slate-300">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  className="bg-slate-700 border-slate-600 text-white"
-                />
-              </div>
-              <div>
-                <Label htmlFor="password" className="text-slate-300">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete={authMode === "signin" ? "current-password" : "new-password"}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  className="bg-slate-700 border-slate-600 text-white"
-                />
-              </div>
-              {authError && (
-                <div className="text-red-500 text-sm">{authError}</div>
-              )}
-              <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        {/* Header */}
+      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-white">Account</h1>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Dashboard
+              </Link>
+              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Lending
+              </Link>
+              <Link href="/about-nidus" className="text-white hover:text-purple-300 transition-colors">
+                Mission
+              </Link>
+              <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Account
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+        <main className="container mx-auto px-4 py-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+          <Card className="bg-slate-800/50 border-slate-700 w-full max-w-md">
+            <CardContent className="p-8">
+              <User className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+              <h3 className="text-xl font-semibold text-white mb-2">
                 {authMode === "signin" ? "Sign In" : "Sign Up"}
-              </Button>
-              <div className="text-slate-400 text-sm text-center mt-2">
-                {authMode === "signin" ? (
-                  <>
-                    Don&#39;t have an account?{" "}
-                    <button
-                      type="button"
-                      className="text-purple-400 underline"
-                      onClick={() => setAuthMode("signup")}
-                    >
-                      Sign Up
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    Already have an account?{" "}
-                    <button
-                      type="button"
-                      className="text-purple-400 underline"
-                      onClick={() => setAuthMode("signin")}
-                    >
-                      Sign In
-                    </button>
-                  </>
+              </h3>
+              <p className="text-slate-400 mb-4">
+                {authMode === "signin"
+                  ? "Sign in to access your account"
+                  : "Create an account to get started"}
+              </p>
+              <form onSubmit={handleAuth} className="space-y-4">
+                <div>
+                  <Label htmlFor="email" className="text-slate-300">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    className="bg-slate-700 border-slate-600 text-white"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="password" className="text-slate-300">
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    autoComplete={authMode === "signin" ? "current-password" : "new-password"}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    className="bg-slate-700 border-slate-600 text-white"
+                  />
+                </div>
+                {authError && (
+                  <div className="text-red-500 text-sm">{authError}</div>
                 )}
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                  {authMode === "signin" ? "Sign In" : "Sign Up"}
+                </Button>
+                <div className="text-slate-400 text-sm text-center mt-2">
+                  {authMode === "signin" ? (
+                    <>
+                      Don&#39;t have an account?{" "}
+                      <button
+                        type="button"
+                        className="text-purple-400 underline"
+                        onClick={() => setAuthMode("signup")}
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Already have an account?{" "}
+                      <button
+                        type="button"
+                        className="text-purple-400 underline"
+                        onClick={() => setAuthMode("signin")}
+                      >
+                        Sign In
+                      </button>
+                    </>
+                  )}
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+        </main>
+        <Footer />
       </div>
     )
   }
@@ -216,9 +245,6 @@ export function AccountPage() {
                 Account
               </Link>
             </nav>
-            <Button onClick={signOut} variant="outline" size="sm">
-              Sign Out
-            </Button>
           </div>
         </div>
       </header>
@@ -274,15 +300,28 @@ export function AccountPage() {
                     <span className="text-white font-mono">{userProfile?.walletAddress}</span>
                   </div>
                 </div>
-                <div className="flex space-x-4 mt-4">
+                <div className="flex space-x-4 mt-4 justify-center items-center">
+                  <Button 
+                    onClick={signOut} 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-slate-600 text-white hover:bg-slate-700"
+                  >
+                    Sign Out
+                  </Button>
                   {isEditing ? (
                     <>
-                      <Button onClick={handleSaveProfile} className="bg-green-600 hover:bg-green-700">
+                      <Button
+                        onClick={handleSaveProfile}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
                         Save
                       </Button>
                       <Button
                         onClick={() => setIsEditing(false)}
                         variant="outline"
+                        size="sm"
                         className="border-slate-600 text-white hover:bg-slate-700"
                       >
                         Cancel
@@ -292,6 +331,7 @@ export function AccountPage() {
                     <Button
                       onClick={() => setIsEditing(true)}
                       variant="outline"
+                      size="sm"
                       className="border-slate-600 text-white hover:bg-slate-700"
                     >
                       Edit Profile
@@ -447,6 +487,7 @@ export function AccountPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }
