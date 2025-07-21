@@ -11,6 +11,7 @@ import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
 import { ValueChart } from "@/components/value-chart"
 import { Overlay } from "@/components/overlay"
+import { Footer } from "@/components/footer"
 
 interface Announcement {
   id: string
@@ -269,6 +270,7 @@ export function MainDashboard() {
           </Card>
         </div>
       </main>
+      <Footer/>
     </div>
   )
 }
