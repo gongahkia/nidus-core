@@ -11,7 +11,7 @@ export default function HelpSupportPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-slate-300">
-            Welcome to Veritas Help & Support. Here you can find answers to frequently asked questions, and contact our support team for more assistance.
+            Welcome to NIDUS Help & Support. Here you can find answers to frequently asked questions, and contact our support team for more assistance.
           </p>
           <ul className="list-disc ml-5 text-slate-400">
             <li>How to use your dashboard and manage your portfolio</li>
@@ -21,7 +21,7 @@ export default function HelpSupportPage() {
           </ul>
           <div className="mt-6">
             <p className="text-slate-300 font-semibold">Need more help?</p>
-            <p className="text-slate-400">Email us at <a href="mailto:veritasinsurancesg@gmail.com" className="text-purple-400 underline">veritasinsurancesg@gmail.com</a> or use the in-app chat for real-time assistance.</p>
+            <p className="text-slate-400">Email us at <a href="mailto:nidussg@gmail.com" className="text-purple-400 underline">nidussg@gmail.com</a> or use the in-app chat for real-time assistance.</p>
           </div>
         </CardContent>
       </Card>

@@ -182,7 +182,7 @@ export function LendingBorrowingPage() {
                 Lending
               </Link>
               {!user && (
-                <Link href="/about-veritas" className="text-slate-300 hover:text-purple-300 transition-colors">
+                <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
                   Mission
                 </Link>
               )}
