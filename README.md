@@ -1,7 +1,5 @@
 # MVP for NIDUS Core
 
-Making Stablecoins stable again.
-
 ### To do (soft deadline 27 jul, hard deadline 31 jul)
 
 #### General
@@ -63,6 +61,24 @@ Making Stablecoins stable again.
     * Include the values from the "Portfolio" card 
     * It should call the firebase DB for the user's account
    
+## Contributors
+
+<table>
+	<tbody>
+        <tr>
+	    <td align="center">
+                <a href="https://github.com/gongahkia">
+                    <img src="https://avatars.githubusercontent.com/u/117062305?v=4" width="100;" alt="gongahkia"/>
+                    <br/>
+                    <sub><b>Gabriel Ong</b></sub>
+                    <br/>
+                </a>
+                <sub><i>Full Stack</i></sub>
+            </td>
+        </tr>
+	<tbody>
+</table>
+
 ### Credentials
 
 #### Nidus Login Test Account with values
@@ -87,8 +103,6 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=252138312766
 NEXT_PUBLIC_FIREBASE_APP_ID=1:252138312766:web:c746f527a4dad0d3f7ad6f
 ```
 
-### Value Proposition
-
-#### Links
+### Links
 
 * [Updated Canva Pitch Deck](https://www.canva.com/design/DAGsFpctDPc/3xg1_mWRvNI8-xKh4SyyeA/edit?utm_content=DAGsFpctDPc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
