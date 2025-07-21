@@ -102,7 +102,7 @@ export function MainDashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">Veritas</h1>
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
               <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
                 v1.0
               </Badge>
@@ -115,7 +115,7 @@ export function MainDashboard() {
                 Lending
               </Link>
               {!user && (
-                <Link href="/about-veritas" className="text-slate-300 hover:text-purple-300 transition-colors">
+                <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
                   Mission
                 </Link>
               )}

@@ -7,8 +7,8 @@ export function useToast() {
   return { toast: sonnerToast }
 }
 
-// DeFi-specific toast utilities for Veritas Insurance
-export function useVeritasToast() {
+// DeFi-specific toast utilities for Nidus core
+export function useNidusToast() {
   return {
     // Transaction success toast
     transactionSuccess: (message: string, txHash?: string) => {

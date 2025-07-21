@@ -316,11 +316,11 @@ export function AccountPage() {
                     </span>
                   </Button>
                 </Link>
-                <Link href="/about-veritas" passHref>
+                <Link href="/about-nidus" passHref>
                   <Button asChild variant="ghost" className="w-full justify-start text-slate-300 hover:text-white">
                     <span>
                       <Shield className="h-4 w-4 mr-2" />
-                      About Veritas
+                      About NIDUS
                       <ExternalLink className="h-3 w-3 ml-auto" />
                     </span>
                   </Button>

@@ -4,14 +4,14 @@ import { Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AboutVeritasPage() {
+export default function AboutNidusPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">About Veritas</h1>
+            <h1 className="text-2xl font-bold text-white">About NIDUS</h1>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
@@ -19,7 +19,7 @@ export default function AboutVeritasPage() {
               <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Lending
               </Link>
-              <Link href="/about-veritas" className="text-white hover:text-purple-300 transition-colors">
+              <Link href="/about-nidus" className="text-white hover:text-purple-300 transition-colors">
                 Mission
               </Link>
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
@@ -33,11 +33,11 @@ export default function AboutVeritasPage() {
         <Card className="max-w-2xl mx-auto bg-slate-800/50 border-slate-700">
           <CardHeader className="flex items-center space-x-3">
             <Shield className="h-6 w-6 text-purple-400" />
-            <CardTitle className="text-white">About Veritas</CardTitle>
+            <CardTitle className="text-white">About NIDUS</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-slate-300">
-              <strong>Veritas</strong> is a next-generation decentralized lending platform. We bring transparency, security, and flexibility to the world of digital asset protection and yield generation.
+              <strong>NIDUS</strong> is a next-generation decentralized lending platform. We bring transparency, security, and flexibility to the world of digital asset protection and yield generation.
             </p>
             <ul className="list-disc ml-5 text-slate-400">
               <li>Competitive lending and borrowing rates</li>
@@ -73,7 +73,7 @@ export default function AboutVeritasPage() {
                 <div className="text-white font-semibold text-lg">Richard Lei</div>
                 <div className="text-slate-400 text-sm mb-2">Chief Executive Officer</div>
                 <p className="text-slate-400 text-xs">
-                  Richard leads Veritas with a vision for transparent, secure, and innovative DeFi lending solutions.
+                  Richard leads NIDUS with a vision for transparent, secure, and innovative DeFi lending solutions.
                 </p>
               </div>
               {/* Gabriel Ong */}
@@ -88,7 +88,7 @@ export default function AboutVeritasPage() {
                 <div className="text-white font-semibold text-lg">Gabriel Ong</div>
                 <div className="text-slate-400 text-sm mb-2">Chief Technology Officer</div>
                 <p className="text-slate-400 text-xs">
-                  Gabriel leads the technical development and engineering at Veritas, ensuring robust, scalable, and user-focused DeFi infrastructure.
+                  Gabriel leads the technical development and engineering at NIDUS, ensuring robust, scalable, and user-focused DeFi infrastructure.
                 </p>
               </div>
             </div>
