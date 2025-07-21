@@ -50,7 +50,7 @@ export function Footer() {
         </div>
 
         <div className="text-xs text-slate-500 mt-8 mb-4">
-          NIDUS is an ...
+          NIDUS is a next-generation decentralized lending platform bringing transparency, security, and flexibility to digital asset protection and yield generation.
         </div>
 
         <div className="flex flex-col md:flex-row md:justify-between items-center gap-4 border-t border-slate-800 pt-4">
