@@ -11,6 +11,7 @@ import { useAuth } from "./auth-provider"
 import { ref, onValue, off, set, update, push } from "firebase/database"
 import { database } from "./auth-provider"
 import { Overlay } from "@/components/overlay"
+import { Footer } from "@/components/footer"
 
 interface MarketData {
   asset: string
@@ -416,6 +417,7 @@ export function LendingBorrowingPage() {
         </>
         )}
       </main>
+      <Footer/>
     </div>
   )
 }
