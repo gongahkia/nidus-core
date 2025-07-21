@@ -15,6 +15,7 @@ interface LeaderboardEntry {
   displayName?: string;
   walletAddress?: string;
   lastUpdated?: number;
+  rank?: number; 
 }
 
 export default function PointLeaderboard() {
