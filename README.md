@@ -1,7 +1,5 @@
 # MVP for NIDUS Core
 
-Making Stablecoins stable again.
-
 ### To do (soft deadline 27 jul, hard deadline 31 jul)
 
 #### General
