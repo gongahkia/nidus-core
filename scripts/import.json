@@ -113,5 +113,19 @@
     "1738380000000": 1091504.86,
     "1738467000000": 1103150.14,
     "1738553000000": 1101971.22
+  },
+  "leaderboard": {
+    "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
+      "score": 320000,
+      "displayName": "Richard",
+      "walletAddress": "0xabc123456789",
+      "lastUpdated": 1752157900000
+    },
+    "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
+      "score": 197500,
+      "displayName": "Alice",
+      "walletAddress": "0xdef987654321",
+      "lastUpdated": 1688957200000
+    }
   }
 }
