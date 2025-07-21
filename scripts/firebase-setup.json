@@ -35,6 +35,10 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
       }
+    },
+    "leaderboard": {
+      ".read": true,
+      ".write": false
     }
   }
 }

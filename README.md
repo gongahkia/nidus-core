@@ -33,10 +33,7 @@ Making Stablecoins stable again.
      * Users should NOT be able to access the withdraw/borrow card when not logged in (gray it out with an overlay and redirect to log in)!!!
      * Name our strategy XSGD-RWA 
     * Should call the Firebase schema 
-3. Points
-     * Make a new seperate tab that replicates https://infrared.finance/'s Points page and shows a leaderboard with all the same column names
-     * Can have some placeholder values 
-4. Account screen
+3. Account screen
     * Redirect immediately to the login page
 
 ##### Logged in
@@ -62,10 +59,7 @@ Making Stablecoins stable again.
      * Implement the actual Withdrawal/Deposit functionality that writes to the firebase DB 
      * Name our strategy XSGD-RWA 
     * Should call the Firebase schema 
-3. Points
-     * Make a new seperate tab that replicates https://infrared.finance/'s Points page and shows a leaderboard with all the same column names
-     * Can have some placeholder values 
-4. Account screen
+3. Account screen
     * Include the values from the "Portfolio" card 
     * It should call the firebase DB for the user's account
    
