@@ -115,17 +115,41 @@
     "1738553000000": 1101971.22
   },
   "leaderboard": {
-    "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
-      "score": 320000,
-      "displayName": "Richard",
-      "walletAddress": "0xabc123456789",
-      "lastUpdated": 1752157900000
+    "0xAK1208dK31wwsdFGH": {
+      "score": 155000,
+      "displayName": "Carlos",
+      "walletAddress": "0xaf7908ef6712",
+      "lastUpdated": 1752157912000
     },
-    "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
-      "score": 197500,
-      "displayName": "Alice",
-      "walletAddress": "0xdef987654321",
-      "lastUpdated": 1688957200000
+    "0xJE77kLsB95HdFF5R": {
+      "score": 148200,
+      "displayName": "Suzie",
+      "walletAddress": "0xbe4037e1ab98",
+      "lastUpdated": 1752157920450
+    },
+    "0xGH44009eiTTWQqKU": {
+      "score": 137800,
+      "displayName": "Priya",
+      "walletAddress": "0xbac342e974ab",
+      "lastUpdated": 1752157933011
+    },
+    "0xBERT4851kUoWQpFV": {
+      "score": 125600,
+      "displayName": "Bert",
+      "walletAddress": "0xfe874102ab91",
+      "lastUpdated": 1752157939990
+    },
+    "0xMEWL77DF13kkpwYE": {
+      "score": 119900,
+      "displayName": "Mew",
+      "walletAddress": "0xcad131054828",
+      "lastUpdated": 1752157942050
+    },
+    "0xMCF23djlKQtips09": {
+      "score": 112000,
+      "displayName": "Abu",
+      "walletAddress": "0xde1459ebc4f2",
+      "lastUpdated": 1752157947000
     }
   }
 }
