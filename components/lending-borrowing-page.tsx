@@ -182,6 +182,9 @@ export function LendingBorrowingPage() {
               <Link href="/lending" className="text-white hover:text-purple-300 transition-colors">
                 Lending
               </Link>
+              <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Points
+              </Link>
               {!user && (
                 <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
                   Mission
