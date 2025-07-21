@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { ref, query, orderByChild, limitToLast, onValue, off } from "firebase/database";
 import { database } from "./auth-provider";
+import { useAuth } from "./auth-provider"
 
 interface LeaderboardEntry {
   userId: string;
@@ -17,6 +18,7 @@ interface LeaderboardEntry {
 }
 
 export default function PointLeaderboard() {
+  const { user } = useAuth();
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   useEffect(() => {
@@ -68,9 +70,11 @@ export default function PointLeaderboard() {
               <Link href="/points" className="text-white hover:text-purple-300 transition-colors">
                 Points
               </Link>
-              <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Mission
-              </Link>
+              {!user && (
+                <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
+                  Mission
+                </Link>
+              )}
               <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Account
               </Link>
