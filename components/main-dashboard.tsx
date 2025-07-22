@@ -85,7 +85,9 @@ export function MainDashboard() {
     tvl: 0,
     announcements: [],
   })
-  const [poolValueHistory, setPoolValueHistory] = useState([]);
+  const [poolValueHistory, setPoolValueHistory] = useState<
+    { timestamp: number; value: number }[]
+  >([]);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
   const [vaults, setVaults] = useState<Vault[]>([])
   const [searchInput, setSearchInput] = useState("")
