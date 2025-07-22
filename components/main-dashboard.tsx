@@ -219,7 +219,7 @@ export function MainDashboard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-slate-300 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-300 mb-4">
           <div>
             <div className="text-xs text-slate-400 mb-1">Balance</div>
             <div className="font-semibold text-lg text-white">
