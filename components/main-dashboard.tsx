@@ -185,19 +185,19 @@ export function MainDashboard() {
     }
   }, [user])
 
-  useEffect(() => {
-    if (!user) {
-      console.log("user not logged in")
-      return
-    } else {
-      console.log("user logged in")
-      console.log("user", user);
-      console.log("vaults", vaults);
-      console.log("userPortfolio", userPortfolio);
-      console.log("dashboardData", dashboardData);
-      console.log("poolValueHistory", poolValueHistory);
-    }
-  })
+  // useEffect(() => {
+  //   if (!user) {
+  //     console.log("user not logged in")
+  //     return
+  //   } else {
+  //     console.log("user logged in")
+  //     console.log("user", user);
+  //     console.log("vaults", vaults);
+  //     console.log("userPortfolio", userPortfolio);
+  //     console.log("dashboardData", dashboardData);
+  //     console.log("poolValueHistory", poolValueHistory);
+  //   }
+  // })
 
   // Vault filters (static, similar to image)
   const vaultFilters = ["iBGT", "iBERA", "HONEY", "WBERA"]
