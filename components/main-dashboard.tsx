@@ -88,6 +88,7 @@ export function MainDashboard() {
     tvl: 0,
     announcements: [],
   })
+  const [poolValueHistory, setPoolValueHistory] = useState([]);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
   const [vaults, setVaults] = useState<Vault[]>([])
   const [searchInput, setSearchInput] = useState("")
@@ -96,6 +97,18 @@ export function MainDashboard() {
   useEffect(() => {
     const dashboardRef = ref(database, "dashboard")
     const announcementsRef = ref(database, "announcements")
+    const poolValueRef = ref(database, 'poolValueHistory');
+
+    const unsubPoolValueHistory = onValue(poolValueRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const arr = Object.entries(data).map(([timestamp, value]) => ({
+            timestamp: Number(timestamp),
+            value: value,
+          }));
+          setPoolValueHistory(arr);
+        }
+    })
 
     const unsubDashboard = onValue(dashboardRef, (snapshot) => {
       const data = snapshot.val()
@@ -116,8 +129,10 @@ export function MainDashboard() {
     return () => {
       off(dashboardRef)
       off(announcementsRef)
+      off(poolValueRef)
       unsubDashboard()
       unsubAnnouncements()
+      unsubPoolValueHistory()
     }
   }, [])
 
@@ -227,9 +242,19 @@ export function MainDashboard() {
         </div>
         {/* Portfolio chart placeholder (like in the image) */}
         <div className="relative bg-slate-900/40 rounded-lg p-2 h-36 flex flex-col items-center justify-center">
-          <div className="text-xs text-slate-400">Performance</div>
-          <div className="w-full h-24 mt-2 flex items-center justify-center">
-            <span className="text-slate-600 text-xs">Chart coming soon</span>
+          <div className="text-xs text-slate-400 mb-1 w-full text-left">
+            Performance
+          </div>
+          <div className="w-full h-28">
+            <ValueChart
+              data={{
+                poolValueHistory,
+                dailyNewUsers: [],
+                chartType: "pool",
+              }}
+              hideLegend
+              height={100}
+            />
           </div>
         </div>
       </CardContent>
@@ -440,7 +465,7 @@ export function MainDashboard() {
           <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
             <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
             <p className="text-sm text-slate-300">
-              NIDUS is optimised for full-screen viewing. Please maximise your browser window for the best experience.
+              NIDUS' Dashboard is optimised for full-screen viewing. Please maximise your browser window for the best experience.
             </p>
           </div>
         </div>
