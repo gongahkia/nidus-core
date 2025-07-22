@@ -31,6 +31,10 @@
 
 ##### Logged in
 
+1. Dashboard screen 
+    * Add a filter pop-up
+    * Make the filter functionality actually work for search
+    * Link the Vault cards here so when clicked it goes to the strategy page
 2. Vault screen
     * Rewrite this page 
     * Replace the entire description of "Lending/Borrowing" with "Vault" in navbar and header 
