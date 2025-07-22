@@ -203,7 +203,7 @@ export default function PointLeaderboard() {
           <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
             <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
             <p className="text-sm text-slate-300">
-              NIDUS' Points Leaderboard is optimised for full-screen viewing. Please maximise your browser window for the best experience.
+              NIDUS is optimised for full-screen viewing. Please maximise your browser window for the best experience.
             </p>
           </div>
         </div>
