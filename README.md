@@ -10,11 +10,6 @@
 
 ##### Un-logged in
 
-1. Dashboard screen
-    * Reference Infrared's https://infrared.finance/portfolio site
-    * Include the "Portfolio" card and it calls the firebase DB for the user's account (gray it out with an overlay and redirect to log in)!!!
-    * Include the "Vaults" card below (or somewhere else) 
-    * Include a blackened-out overlay stating "coming soon" that shows "NIDUS" with a logo, APR, Points and Balance with - for placeholder value for now 
 2. Vault screen
     * Rewrite this page 
     * Replace the entire description of "Lending/Borrowing" with "Vault" in navbar and header 
@@ -36,11 +31,6 @@
 
 ##### Logged in
 
-1. Dashboard screen
-    * Reference Infrared's https://infrared.finance/portfolio site
-    * Include the "Portfolio" card and it calls the firebase DB for the user's account
-    * Include the "Vaults" card below (or somewhere else) 
-    * Include a blackened-out overlay stating "coming soon" that shows "NIDUS" with a logo, APR, Points and Balance with - for placeholder value for now 
 2. Vault screen
     * Rewrite this page 
     * Replace the entire description of "Lending/Borrowing" with "Vault" in navbar and header 

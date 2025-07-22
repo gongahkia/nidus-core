@@ -1,10 +1,9 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { DollarSign, Users, Wallet, Search, Filter, ChevronDown } from "lucide-react"
+import { Search, Filter } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
@@ -12,7 +11,6 @@ import { database } from "./auth-provider"
 import { ValueChart } from "@/components/value-chart"
 import { Overlay } from "@/components/overlay"
 import { Footer } from "@/components/footer"
-import Image from "next/image"
 
 interface Announcement {
   id: string
@@ -82,7 +80,6 @@ export function MainDashboard() {
     }
   }, [isWindowTooSmall]);
 
-  const router = useRouter()
   const { user } = useAuth()
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     tvl: 0,
@@ -199,10 +196,6 @@ export function MainDashboard() {
   //   }
   // })
 
-  // Vault filters (static, similar to image)
-  const vaultFilters = ["iBGT", "iBERA", "HONEY", "WBERA"]
-
-  // Utility: filtered vault list
   const filteredVaults = vaults.filter(
     (v) =>
       !searchInput ||
@@ -467,7 +460,7 @@ export function MainDashboard() {
           <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
             <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
             <p className="text-sm text-slate-300">
-              NIDUS' Dashboard is optimised for full-screen viewing. Please maximise your browser window for the best experience.
+              NIDUS is optimised for full-screen viewing. Please maximise your browser window for the best experience.
             </p>
           </div>
         </div>
