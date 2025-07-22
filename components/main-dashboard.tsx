@@ -211,33 +211,25 @@ export function MainDashboard() {
 
   // Portfolio card content (dynamic)
   const PortfolioCard = (
-    // <Card className="bg-slate-800/50 border-slate-700 relative">
-      <Card className="bg-slate-800/50 border-slate-700 relative min-h-[400px] max-h-[400px] h-[400px]">
+    <Card className="bg-slate-800/50 border-slate-700 relative min-h-[505px] max-h-[505px] h-[505px]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-white mb-2">
           Portfolio
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-full flex flex-col">
+        {/* Metrics Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-300 mb-4">
           <div>
             <div className="text-xs text-slate-400 mb-1">Balance</div>
             <div className="font-semibold text-lg text-white">
-              {
-                userPortfolio
-                  ? `$${userPortfolio.xsgd.toLocaleString()}`
-                  : "$0"
-              }
+              {userPortfolio ? `$${userPortfolio.xsgd.toLocaleString()}` : "$0"}
             </div>
           </div>
           <div>
             <div className="text-xs text-slate-400 mb-1">Outstanding rewards</div>
             <div className="font-semibold text-lg text-white">
-              {
-                userPortfolio
-                  ? `$${userPortfolio.outstandingRewards.toLocaleString()}`
-                  : "$0"
-              }
+              {userPortfolio ? `$${userPortfolio.outstandingRewards.toLocaleString()}` : "$0"}
             </div>
           </div>
           <div>
@@ -253,12 +245,10 @@ export function MainDashboard() {
             </div>
           </div>
         </div>
-        {/* Portfolio chart placeholder (like in the image) */}
-        <div className="relative bg-slate-900/40 rounded-lg p-2 h-36 flex flex-col items-center justify-center">
-          <div className="text-xs text-slate-400 mb-1 w-full text-left">
-            Performance
-          </div>
-          <div className="w-full h-64">
+        {/* Chart Block - moved up, direct succession */}
+        <div className="relative bg-slate-900/40 rounded-lg p-3 pt-2 pb-4 flex flex-col" style={{height: "330px"}}>
+          <div className="text-xs text-slate-400 mb-2 w-full text-left">Performance</div>
+          <div className="w-full h-full min-h-[140px]">
             <ValueChart
               data={{
                 poolValueHistory,
@@ -282,7 +272,7 @@ export function MainDashboard() {
   // Vaults card content (dynamic)
   const VaultsCard = (
   // <Card className="bg-slate-800/50 border-slate-700 relative h-full flex flex-col">
-  <Card className="bg-slate-800/50 border-slate-700 relative min-h-[400px] max-h-[400px] h-[400px]">
+  <Card className="bg-slate-800/50 border-slate-700 relative min-h-[505px] max-h-[505px] h-[505px]">
     <CardHeader className="pb-3">
       <CardTitle className="flex items-center justify-between text-white mb-2">
         Vaults
@@ -322,7 +312,7 @@ export function MainDashboard() {
         ))}
       </div>
       {/* Vaults List - fixed height, scrollable */}
-      <div className="flex-1 min-h-[200px] max-h-[200px] overflow-y-auto"> 
+      <div className="flex-1 min-h-[305px] max-h-[305px] overflow-y-auto"> 
         {user
           ? filteredVaults.length > 0
             ? filteredVaults.map(v => (
