@@ -105,7 +105,7 @@ export function MainDashboard() {
       if (data) {
         const arr = Object.entries(data).map(([timestamp, value]) => ({
           timestamp: Number(timestamp),
-          value: value,
+          value: Number(value),
         })).sort((a, b) => a.timestamp - b.timestamp)  // ✅ Ensure correct chronological order
         setPoolValueHistory(arr);
       }
