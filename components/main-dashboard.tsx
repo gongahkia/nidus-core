@@ -46,6 +46,42 @@ interface Vault {
 }
 
 export function MainDashboard() {
+
+  const [isWindowTooSmall, setIsWindowTooSmall] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isTooSmall =
+        window.innerWidth < window.screen.width * 0.95 ||
+        window.innerHeight < window.screen.height * 0.9
+
+      setIsWindowTooSmall(isTooSmall)
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    if (isWindowTooSmall) {
+      document.body.style.overflow = "hidden";
+      const preventDefault = (e: Event) => { e.preventDefault(); };
+      window.addEventListener("keydown", preventDefault, { passive: false });
+      window.addEventListener("wheel", preventDefault, { passive: false });
+      window.addEventListener("touchmove", preventDefault, { passive: false });
+      window.addEventListener("mousedown", preventDefault, { passive: false });
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", preventDefault);
+        window.removeEventListener("wheel", preventDefault);
+        window.removeEventListener("touchmove", preventDefault);
+        window.removeEventListener("mousedown", preventDefault);
+      };
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isWindowTooSmall]);
+
   const router = useRouter()
   const { user } = useAuth()
   const [dashboardData, setDashboardData] = useState<DashboardData>({
@@ -147,7 +183,8 @@ export function MainDashboard() {
 
   // Portfolio card content (dynamic)
   const PortfolioCard = (
-    <Card className="bg-slate-800/50 border-slate-700 relative">
+    // <Card className="bg-slate-800/50 border-slate-700 relative">
+      <Card className="bg-slate-800/50 border-slate-700 relative min-h-[400px] max-h-[400px] h-[400px]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-white mb-2">
           Portfolio
@@ -199,75 +236,81 @@ export function MainDashboard() {
     </Card>
   )
 
+  const vaultProtocols = Array.from(
+    new Set(
+      (vaults || []).map((v) => v.name) 
+    )
+  );
+
   // Vaults card content (dynamic)
   const VaultsCard = (
-    <Card className="bg-slate-800/50 border-slate-700 relative">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between text-white mb-2">
-          Vaults
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Search + Filters as in image */}
-        <div className="flex flex-col gap-3">
-          <div className="flex gap-2 mb-3">
-            <div className="relative flex-1">
-              <input
-                type="text"
-                value={searchInput}
-                onChange={e => setSearchInput(e.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
-                placeholder="Search by token, address, or protocol"
-                disabled={!user}
-              />
-              <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
-            </div>
-            <button
-              className="flex items-center px-3 py-2 rounded-md bg-slate-900/70 border border-slate-700 text-slate-200"
-              disabled
-            >
-              <Filter className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Filter</span>
-            </button>
-          </div>
-          <div className="flex gap-2 mb-3">
-            {vaultFilters.map(f => (
-              <button
-                key={f}
-                className="bg-slate-700 px-3 py-1 rounded-full text-xs text-purple-200 cursor-not-allowed"
-                disabled
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-          {/* Vault "table" or list */}
-          <div className="flex flex-col gap-3">
-            {user
-              ? filteredVaults.length > 0
-                  ? filteredVaults.map(v => (
-                      <div
-                        key={v.id}
-                        className="flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3"
-                      >
-                        <div className="flex-1 text-slate-100">{v.name}</div>
-                        <div className="flex gap-6 items-center text-slate-300 text-xs">
-                          <span>APR: {v.apr ? `${v.apr}%` : "-"} </span>
-                          <span>Points: {v.points ?? "-"}</span>
-                          <span>Balance: {v.balance ? `$${v.balance}` : "-"}</span>
-                        </div>
-                      </div>
-                    ))
-                  : (
-                    <div className="text-center text-slate-500 py-4">No vaults found</div>
-                  )
-              : (
-                <div className="text-center text-slate-500 py-4">Connect your wallet to see your vaults.</div>
-              )
-            }
-          </div>
+  // <Card className="bg-slate-800/50 border-slate-700 relative h-full flex flex-col">
+  <Card className="bg-slate-800/50 border-slate-700 relative min-h-[400px] max-h-[400px] h-[400px]">
+    <CardHeader className="pb-3">
+      <CardTitle className="flex items-center justify-between text-white mb-2">
+        Vaults
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="flex flex-col flex-1">
+      {/* Search + Filter Row */}
+      <div className="flex gap-2 mb-3">
+        <div className="relative flex-1">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
+            placeholder="Search by token, address, or protocol"
+            disabled={!user}
+          />
+          <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
         </div>
-      </CardContent>
-    </Card>
+        <button
+          className="flex items-center px-3 py-2 rounded-md bg-slate-900/70 border border-slate-700 text-slate-200"
+          disabled
+        >
+          <Filter className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Filter</span>
+        </button>
+      </div>
+      {/* Dynamic Protocol Filter Bubbles */}
+      <div className="flex gap-2 mb-3 flex-wrap">
+        {vaultProtocols.map((protocol) => (
+          <button
+            key={protocol}
+            className="bg-slate-700 px-3 py-1 rounded-full text-xs text-purple-200 cursor-not-allowed"
+            disabled
+          >
+            {protocol}
+          </button>
+        ))}
+      </div>
+      {/* Vaults List - fixed height, scrollable */}
+      <div className="flex-1 min-h-[200px] max-h-[200px] overflow-y-auto"> 
+        {user
+          ? filteredVaults.length > 0
+            ? filteredVaults.map(v => (
+                <div
+                  key={v.id}
+                  className="flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3 mb-2"
+                >
+                  <div className="flex-1 text-slate-100">{v.name}</div>
+                  <div className="flex gap-6 items-center text-slate-300 text-xs">
+                    <span>APR: {v.apr ? `${v.apr}%` : "-"} </span>
+                    <span>Points: {v.points ?? "-"}</span>
+                    <span>Balance: {v.balance ? `$${v.balance}` : "-"}</span>
+                  </div>
+                </div>
+              ))
+            : (
+              <div className="text-center text-slate-500 py-4">No vaults found</div>
+            )
+          : (
+            <div className="text-center text-slate-500 py-4">Connect your wallet to see your vaults.</div>
+          )
+        }
+      </div>
+    </CardContent>
+  </Card>
   )
 
   // NIDUS Card as "coming soon"
@@ -338,7 +381,7 @@ export function MainDashboard() {
       <main className="container mx-auto px-4 py-8">
 
         {/* Portfolio + Vaults in same row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7 items-stretch">
           {/* Portfolio Card */}
           <div className="relative">
             {PortfolioCard}
@@ -395,6 +438,16 @@ export function MainDashboard() {
 
       </main>
       <Footer/>
+      {isWindowTooSmall && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center text-center p-4">
+          <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
+            <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
+            <p className="text-sm text-slate-300">
+              NIDUS is optimised for full-screen viewing. Please maximise your browser window for the best experience.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
