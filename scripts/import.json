@@ -17,8 +17,21 @@
       "timestamp": 1703973600000,
       "title": "Platform Update",
       "type": "info"
+    },
+    "ann4": {
+      "content": "Something else",
+      "timestamp": 1703970000000,
+      "title": "Something",
+      "type": "info"
+    },
+    "ann5": {
+      "content": "Something else as well",
+      "timestamp": 1703966400000,
+      "title": "Something something something ok",
+      "type": "warning"
     }
   },
+
   "dashboard": {
     "currentYield": 8.5,
     "totalStaked": 2500000,
@@ -26,6 +39,7 @@
     "variableSupplyAPY": 8.7,
     "borrowAPY": 12.3
   },
+
   "markets": {
     "XsGD": {
       "borrowAPY": 12.3,
@@ -39,22 +53,82 @@
       "icon": "🇸🇬"
     }
   },
+
   "withdrawalFeePercent": 0.5,
+
   "users": {
     "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
       "displayName": "Alice",
       "email": "alice@example.com",
       "joinDate": 1688947200000,
       "walletAddress": "0x123456789abcdef",
+
       "portfolio": {
-        "lp": 0,
-        "xsgd": 60000
+        "lp": 1200,
+        "xsgd": 60000,
+        "ownershipPercent": 2.4,
+        "apr": 8.2,
+        "outstandingRewards": 480,
+        "points": 2400
       },
+
+      "vaults": {
+        "v1": {
+          "id": "v1",
+          "name": "iBGT",
+          "apr": 8.5,
+          "type": "stablecoin",
+          "balance": 30000,
+          "points": 1200
+        },
+        "v2": {
+          "id": "v2",
+          "name": "iBERA",
+          "apr": 7.9,
+          "type": "real-world asset",
+          "balance": 20000,
+          "points": 800
+        },
+        "v3": {
+          "id": "v3",
+          "name": "NIDUS",
+          "apr": 7.9,
+          "type": "real-world asset",
+          "balance": 20000,
+          "points": 800
+        },
+        "v4": {
+          "id": "v4",
+          "name": "smalley",
+          "apr": 7.9,
+          "type": "real-world asset",
+          "balance": 20000,
+          "points": 800
+        },
+        "v5": {
+          "id": "v5",
+          "name": "ibara",
+          "apr": 7.9,
+          "type": "real-world asset",
+          "balance": 20000,
+          "points": 800
+        },
+        "v6": {
+          "id": "v6",
+          "name": "ballsera",
+          "apr": 7.9,
+          "type": "real-world asset",
+          "balance": 20000,
+          "points": 800
+        }
+      },
+
       "preferences": {
         "autoCompound": false,
         "notifications": true
       }
     },
+
     "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
       "displayName": "",
       "email": "leirichard58@gmail.com",
@@ -62,14 +136,20 @@
       "walletAddress": "",
       "portfolio": {
         "lp": 0,
-        "xsgd": 0
+        "xsgd": 0,
+        "ownershipPercent": 0,
+        "apr": 0,
+        "outstandingRewards": 0,
+        "points": 0
       },
+      "vaults": {},
       "preferences": {
         "autoCompound": false,
         "notifications": false
       }
     }
   },
+
   "userPositions": {
     "D9OJH1h00PR1vPoCvf7APFgGJvi2": {
       "XsGD": {
@@ -79,6 +159,7 @@
       }
     }
   },
+
   "transactions": {
     "GuOpbNBJ4uYUvJoigxVZ58NToW02": {
       "-OUojeO6emDoSK0iJlio": {
@@ -90,6 +171,7 @@
       }
     }
   },
+
   "poolValueHistory": {
     "1736400000000": 996000,
     "1736486000000": 996000.65,
@@ -114,6 +196,7 @@
     "1738467000000": 1103150.14,
     "1738553000000": 1101971.22
   },
+
   "leaderboard": {
     "0xAK1208dK31wwsdFGH": {
       "score": 155000,

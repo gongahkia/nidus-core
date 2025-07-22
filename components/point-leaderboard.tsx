@@ -19,6 +19,42 @@ interface LeaderboardEntry {
 }
 
 export default function PointLeaderboard() {
+
+  const [isWindowTooSmall, setIsWindowTooSmall] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isTooSmall =
+        window.innerWidth < window.screen.width * 0.95 ||
+        window.innerHeight < window.screen.height * 0.9
+
+      setIsWindowTooSmall(isTooSmall)
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    if (isWindowTooSmall) {
+      document.body.style.overflow = "hidden";
+      const preventDefault = (e: Event) => { e.preventDefault(); };
+      window.addEventListener("keydown", preventDefault, { passive: false });
+      window.addEventListener("wheel", preventDefault, { passive: false });
+      window.addEventListener("touchmove", preventDefault, { passive: false });
+      window.addEventListener("mousedown", preventDefault, { passive: false });
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", preventDefault);
+        window.removeEventListener("wheel", preventDefault);
+        window.removeEventListener("touchmove", preventDefault);
+        window.removeEventListener("mousedown", preventDefault);
+      };
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isWindowTooSmall]);
+
   const { user } = useAuth();
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
@@ -162,6 +198,16 @@ export default function PointLeaderboard() {
         </Card>
       </main>
       <Footer />
+      {isWindowTooSmall && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center text-center p-4">
+          <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
+            <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
+            <p className="text-sm text-slate-300">
+              NIDUS' Points Leaderboard is optimised for full-screen viewing. Please maximise your browser window for the best experience.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

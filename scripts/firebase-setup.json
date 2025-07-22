@@ -39,6 +39,10 @@
     "leaderboard": {
       ".read": true,
       ".write": false
+    },
+    "poolValueHistory": {
+      ".read": true,
+      ".write": false
     }
   }
 }
