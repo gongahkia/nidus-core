@@ -93,48 +93,47 @@ export function MainDashboard() {
   const [vaults, setVaults] = useState<Vault[]>([])
   const [searchInput, setSearchInput] = useState("")
 
-  // Dashboard and Announcements fetch
+  // Dashboard, Pool Value History and Announcements fetch
   useEffect(() => {
-    const dashboardRef = ref(database, "dashboard")
-    const announcementsRef = ref(database, "announcements")
-    const poolValueRef = ref(database, 'poolValueHistory');
+    const dashboardRef = ref(database, "dashboard");
+    const announcementsRef = ref(database, "announcements");
+    const poolValueRef = ref(database, "poolValueHistory");
 
-    const unsubPoolValueHistory = onValue(poolValueRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const arr = Object.entries(data).map(([timestamp, value]) => ({
-            timestamp: Number(timestamp),
-            value: value,
-          }));
-          setPoolValueHistory(arr);
-        }
-    })
+    // Set up listeners (no assignment needed)
+    onValue(poolValueRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const arr = Object.entries(data).map(([timestamp, value]) => ({
+          timestamp: Number(timestamp),
+          value: value,
+        })).sort((a, b) => a.timestamp - b.timestamp)  // ✅ Ensure correct chronological order
+        setPoolValueHistory(arr);
+      }
+    });
 
-    const unsubDashboard = onValue(dashboardRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) setDashboardData((prev) => ({ ...prev, tvl: data.tvl || 0 }))
-    })
+    onValue(dashboardRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) setDashboardData((prev) => ({ ...prev, tvl: data.tvl || 0 }));
+    });
 
-    const unsubAnnouncements = onValue(announcementsRef, (snapshot) => {
-      const data = snapshot.val()
+    onValue(announcementsRef, (snapshot) => {
+      const data = snapshot.val();
       if (data) {
         const announcements = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
-        }))
-        setDashboardData((prev) => ({ ...prev, announcements }))
+        }));
+        setDashboardData((prev) => ({ ...prev, announcements }));
       }
-    })
+    });
 
+    // Clean up with .off(ref) ONLY, do not try to call unsub functions
     return () => {
-      off(dashboardRef)
-      off(announcementsRef)
-      off(poolValueRef)
-      unsubDashboard()
-      unsubAnnouncements()
-      unsubPoolValueHistory()
-    }
-  }, [])
+      off(poolValueRef);
+      off(dashboardRef);
+      off(announcementsRef);
+    };
+  }, []);
 
   // Portfolio fetch
   useEffect(() => {
@@ -185,6 +184,20 @@ export function MainDashboard() {
       unsubVaults()
     }
   }, [user])
+
+  useEffect(() => {
+    if (!user) {
+      console.log("user not logged in")
+      return
+    } else {
+      console.log("user logged in")
+      console.log("user", user);
+      console.log("vaults", vaults);
+      console.log("userPortfolio", userPortfolio);
+      console.log("dashboardData", dashboardData);
+      console.log("poolValueHistory", poolValueHistory);
+    }
+  })
 
   // Vault filters (static, similar to image)
   const vaultFilters = ["iBGT", "iBERA", "HONEY", "WBERA"]
@@ -245,15 +258,14 @@ export function MainDashboard() {
           <div className="text-xs text-slate-400 mb-1 w-full text-left">
             Performance
           </div>
-          <div className="w-full h-28">
+          <div className="w-full h-64">
             <ValueChart
               data={{
                 poolValueHistory,
                 dailyNewUsers: [],
                 chartType: "pool",
               }}
-              hideLegend
-              height={100}
+              onClick={() => {}}
             />
           </div>
         </div>
