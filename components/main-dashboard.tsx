@@ -313,11 +313,9 @@ export function MainDashboard() {
   </Card>
   )
 
-  // NIDUS Card as "coming soon"
   const NidusCard = (
     <Card className="relative overflow-hidden bg-gradient-to-tr from-purple-700/60 to-slate-800/80 border-none min-w-[220px] max-w-xs mx-auto mb-6 flex-col items-start">
       <CardHeader className="pb-2 flex flex-row items-center gap-3">
-        {/* "N" in Circle Logo */}
         <div className="w-10 h-10 bg-slate-900 border-2 border-purple-600 rounded-full flex items-center justify-center">
           <span className="text-2xl font-bold text-purple-300">N</span>
         </div>
@@ -399,13 +397,13 @@ export function MainDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Announcements Card spans 2/3 */}
           <div className="md:col-span-2">
-            <Card className="bg-slate-800/50 border-slate-700 h-full">
+            <Card className="bg-slate-800/50 border-slate-700 h-[400px] flex flex-col">
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
-                  Announcements
+                  Announcements {dashboardData.announcements.length > 0 && `(${dashboardData.announcements.length})`}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="flex-1 overflow-y-auto space-y-4">
                 {dashboardData.announcements.length === 0 && (
                   <div className="text-slate-400 text-center">No announcements</div>
                 )}
@@ -430,7 +428,6 @@ export function MainDashboard() {
             </Card>
           </div>
 
-          {/* NIDUS Card 1/3 of row */}
           <div className="relative">
             {NidusCard}
           </div>
