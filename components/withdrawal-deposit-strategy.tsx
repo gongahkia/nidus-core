@@ -114,9 +114,9 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     : [];
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Fixed Header always on top */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-sm">
+      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
