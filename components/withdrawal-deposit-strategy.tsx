@@ -56,19 +56,25 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
 
   useEffect(() => {
     if (!vaultId) {
-      console.error("vaultId is required")
-      return
-    } 
-    const vaultRef = ref(database, `vaults/${vaultId}`)
-    setLoading(true)
+      console.error("vaultId is required");
+      return;
+    }
+    if (!user) {
+      console.warn("User not logged in. Cannot fetch vault data.");
+      setVault(null);
+      setLoading(false);
+      return;
+    }
+    const vaultRef = ref(database, `users/${user.uid}/vaults/${vaultId}`);
+    setLoading(true);
     const unsub = onValue(vaultRef, (snapshot) => {
-      const data = snapshot.val()
-      setVault(data || null)
-      setLoading(false)
+      const data = snapshot.val();
+      setVault(data || null);
+      setLoading(false);
       console.log(`Loaded vault data for ${vaultId}:`, data);
-    })
-    return unsub
-  }, [vaultId])
+    });
+    return () => unsub();
+  }, [vaultId, user]);  // include user in deps
 
   // UI skeleton while loading
   if (loading) {
