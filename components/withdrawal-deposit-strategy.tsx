@@ -5,8 +5,6 @@ import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
 import { Overlay } from "@/components/overlay"
-import { Footer } from "@/components/footer"
-import { Badge } from "@/components/ui/badge"
 
 // Modal placeholder - use your actual Modal component!
 function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
@@ -31,23 +29,25 @@ interface VaultDetails {
   balance: number;
   points: number;
   leader: string;
-  rewards: number;         
-  rewardsAvailable: number;
-  strategy: string;        
-  risk: string;            
-  ltv: number;             
-  minCollateral: number;   
-  liquidationPenalty: number;
-  borrowRate: number;      
+  rewards: number;         // Assume available
+  rewardsAvailable: number;// Assume available
+  strategy: string;        // Assume available
+  risk: string;            // Assume available
+  ltv: number;             // Assume available
+  minCollateral: number;   // Assume available
+  liquidationPenalty: number;// Assume available
+  borrowRate: number;      // Assume available
+  // Add more fields as needed
 }
 
+// Helper for formatting
 function fmt(val: number, decimals = 2) {
   return val !== undefined && val !== null
     ? val.toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})
     : "-"
 }
 
-export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
+export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const { user } = useAuth()
   const [vault, setVault] = useState<VaultDetails | null>(null)
   const [loading, setLoading] = useState(true)
@@ -55,86 +55,52 @@ export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
   const [withdrawOpen, setWithdrawOpen] = useState(false)
 
   useEffect(() => {
-    if (!vaultId) return
+    if (!vaultId) {
+      console.error("vaultId is required")
+      return
+    } 
     const vaultRef = ref(database, `vaults/${vaultId}`)
     setLoading(true)
     const unsub = onValue(vaultRef, (snapshot) => {
       const data = snapshot.val()
       setVault(data || null)
       setLoading(false)
+      console.log(`Loaded vault data for ${vaultId}:`, data);
     })
-    return () => { off(vaultRef); unsub() }
+    return unsub
   }, [vaultId])
-
-  useEffect(() => {
-    if (!vaultId) return;
-    const vaultRef = ref(database, `vaults/${vaultId}`);
-    setLoading(true);
-    const unsub = onValue(vaultRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log("Loaded vault data:", data); 
-      setVault(data || null);
-      setLoading(false);
-    });
-    return () => { off(vaultRef); unsub(); }
-  }, [vaultId]);
 
   // UI skeleton while loading
   if (loading) {
     return (
-      <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-slate-900 rounded-lg text-white flex flex-col gap-4 animate-pulse opacity-60">
-        <div className="h-6 w-2/3 bg-slate-800 rounded"></div>
-        <div className="grid grid-cols-2 gap-8">
-          <div className="h-7 bg-slate-800 rounded w-full"></div>
-          <div className="h-7 bg-slate-800 rounded w-full"></div>
+      <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 flex flex-col gap-6 animate-pulse text-white">
+        {/* Loading message */}
+        <div className="text-center text-lg font-semibold select-none">
+          Loading...
         </div>
-        <div className="h-10 bg-slate-800 rounded w-full my-2"></div>
-        <div className="grid grid-cols-2 gap-4 my-4">
-          <div className="h-6 bg-slate-800 rounded w-full"></div>
-          <div className="h-6 bg-slate-800 rounded w-full"></div>
+        <div className="flex flex-col gap-4">
+          <div className="h-6 w-2/3 bg-slate-800 rounded"></div>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="h-7 bg-slate-800 rounded w-full"></div>
+            <div className="h-7 bg-slate-800 rounded w-full"></div>
+          </div>
+          <div className="h-10 bg-slate-800 rounded w-full my-2"></div>
+          <div className="grid grid-cols-2 gap-4 my-4">
+            <div className="h-6 bg-slate-800 rounded w-full"></div>
+            <div className="h-6 bg-slate-800 rounded w-full"></div>
+          </div>
         </div>
       </div>
     )
   }
+
 
   // If not logged in, obfuscate values
   const showValues = !!user
   const getOrDash = (v: any, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
-              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
-                v1.0
-              </Badge>
-            </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/vaults" className="text-white hover:text-purple-300 transition-colors">
-                Vaults
-              </Link>
-              <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Points
-              </Link>
-              {!user && (
-                <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
-                  Mission
-                </Link>
-              )}
-              <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Account
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+    <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 relative">
       {/* Title and subtitle */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
@@ -297,7 +263,6 @@ export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
           </button>
         </div>
       </Modal>
-      <Footer />
     </div>
   )
 }

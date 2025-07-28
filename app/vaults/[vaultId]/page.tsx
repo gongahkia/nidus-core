@@ -1,10 +1,11 @@
-import { WithdrawalDepositComponent } from "@/components/withdrawal-deposit-strategy"
+import { WithdrawalDepositStrategy } from "@/components/withdrawal-deposit-strategy"
 
 interface Props {
-  params: Promise<{ vaultId: string }>  // or just `{ vaultId: string }` but with async function you await it
+  params: Promise<{ vaultId: string }>  
 }
 
 export default async function WithdrawalDepositPage({ params }: Props) {
-  const { vaultId } = await params;  // await params here as it is async now
-  return <WithdrawalDepositComponent vaultId={vaultId} />
+  const { vaultId } = await params;  
+  console.log("vaultId", vaultId)
+  return <WithdrawalDepositStrategy vaultId={vaultId} />
 }

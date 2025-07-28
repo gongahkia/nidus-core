@@ -23,7 +23,7 @@ export default function AboutNidusPage() {
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
               </Link>
-              <Link href="/Vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
+              <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Vaults
               </Link>
               <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">

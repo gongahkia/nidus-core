@@ -13,7 +13,6 @@ import { Footer } from "@/components/footer"
 import { Badge } from "@/components/ui/badge"
 import { Sparklines, SparklinesLine } from 'react-sparklines'
 
-
 interface Vault {
   id: string
   name: string
