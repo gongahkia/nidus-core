@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
-import { Overlay } from "@/components/overlay"
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Modal placeholder - use your actual Modal component!
 function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
@@ -101,9 +101,14 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   }
 
 
-  // If not logged in, obfuscate values
   const showValues = !!user
   const getOrDash = (v: any, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
+  const chartData = vault?.snapshot
+  ? vault.snapshot.map((value, index) => ({
+      name: `Day ${index + 1}`,
+      value,
+    }))
+  : [];
 
   return (
     <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 relative">
@@ -151,6 +156,21 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
           </div>
         </div>
       </div>
+
+      {vault?.snapshot && vault.snapshot.length > 0 && (
+        <div className="mb-6 h-48">
+          <h3 className="text-white mb-2 font-semibold">Performance Snapshot</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
+              <YAxis tick={{ fill: '#94a3b8' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderRadius: '6px' }} />
+              <Line type="monotone" dataKey="value" stroke="#a78bfa" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
 
       {/* Strategy + Risk */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
