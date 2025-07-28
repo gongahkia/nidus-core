@@ -203,7 +203,7 @@
       "leader": "0x78901...f123",
       "tvl": 90000,
       "age": 17,
-      "snapshot": [11, 12, 13, 14, 15, 16, 17, 18],
+      "snapshot": [11, 12, 10, 9, 19, 16, 21, 15],
       "rewards": 380,          
       "rewardsAvailable": 65, 
       "strategy": "Dynamic rate lending", 
