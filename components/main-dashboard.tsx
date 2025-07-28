@@ -457,7 +457,7 @@ export function MainDashboard() {
 
       </main>
       <Footer/>
-      {isWindowTooSmall && (
+      {/* {isWindowTooSmall && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center text-center p-4">
           <div className="bg-slate-900 border border-purple-600 p-6 rounded-lg max-w-md text-white space-y-2 shadow-lg">
             <h2 className="text-xl font-bold text-purple-300">Please Maximise Window</h2>
@@ -466,7 +466,7 @@ export function MainDashboard() {
             </p>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   )
 }
