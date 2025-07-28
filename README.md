@@ -6,6 +6,8 @@
 
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 * Refactor the code to make vault strategies viewable globally but depositing and transacting in vaults gatekept behind login
+* Clean up the `specific` issues from below for things that have been implemented already from yesterday
+* Resolve problems with vercel deployment
 
 #### Specific
 
