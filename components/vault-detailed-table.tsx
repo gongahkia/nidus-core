@@ -11,6 +11,8 @@ import { database } from "./auth-provider"
 import { Overlay } from "@/components/overlay"
 import { Footer } from "@/components/footer"
 import { Badge } from "@/components/ui/badge"
+import { Sparklines, SparklinesLine } from 'react-sparklines'
+
 
 interface Vault {
   id: string
@@ -111,20 +113,14 @@ export function Vaults() {
   }
 
   function MiniChart({ data }: { data?: number[] }) {
+    if (!data || data.length < 2) {
+      return <span className="text-slate-500 text-xs">-</span>
+    }
     return (
       <div className="w-20 h-5 flex items-center justify-end">
-        {/* Replace below with real sparkline if you have one */}
-        {data && data.length > 1 ? (
-          <svg width="60" height="20">
-            {/* Simple line (fake sparkline). For production use real chart: e.g. recharts, chart.js, or whatever your ValueChart/minichart is. */}
-            <polyline
-              fill="none"
-              stroke="#8b5cf6"
-              strokeWidth="2"
-              points={data.map((v, i) => `${i * 60/(data.length-1)},${20 - (v/Math.max(...data))*18}`).join(" ")}
-            />
-          </svg>
-        ) : <span className="text-slate-500 text-xs">-</span>}
+        <Sparklines data={data} width={60} height={20}>
+          <SparklinesLine color="#a78bfa" style={{ strokeWidth: 2, fill: "none" }} />
+        </Sparklines>
       </div>
     )
   }

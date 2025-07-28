@@ -72,56 +72,92 @@
         "points": 2400
       },
 
-      "vaults": {
-        "v1": {
-          "id": "v1",
-          "name": "iBGT",
-          "apr": 8.5,
-          "type": "stablecoin",
-          "balance": 30000,
-          "points": 1200
-        },
-        "v2": {
-          "id": "v2",
-          "name": "iBERA",
-          "apr": 7.9,
-          "type": "real-world asset",
-          "balance": 20000,
-          "points": 800
-        },
-        "v3": {
-          "id": "v3",
-          "name": "NIDUS",
-          "apr": 7.9,
-          "type": "real-world asset",
-          "balance": 20000,
-          "points": 800
-        },
-        "v4": {
-          "id": "v4",
-          "name": "smalley",
-          "apr": 7.9,
-          "type": "real-world asset",
-          "balance": 20000,
-          "points": 800
-        },
-        "v5": {
-          "id": "v5",
-          "name": "ibara",
-          "apr": 7.9,
-          "type": "real-world asset",
-          "balance": 20000,
-          "points": 800
-        },
-        "v6": {
-          "id": "v6",
-          "name": "ballsera",
-          "apr": 7.9,
-          "type": "real-world asset",
-          "balance": 20000,
-          "points": 800
-        }
-      },
+  "vaults": {
+    "v1": {
+      "id": "v1",
+      "name": "iBGT",
+      "apr": 8.5,
+      "type": "stablecoin",
+      "balance": 30000,
+      "points": 1200,
+      "leader": "0x12345...abcd",
+      "tvl": 100000,
+      "age": 37,
+      "snapshot": [9, 10, 11, 10, 12, 14, 13, 16]
+    },
+    "v2": {
+      "id": "v2",
+      "name": "iBERA",
+      "apr": 7.9,
+      "type": "real-world asset",
+      "balance": 20000,
+      "points": 800,
+      "leader": "0x23456...bcde",
+      "tvl": 95000,
+      "age": 41,
+      "snapshot": [7, 8, 12, 15, 14, 15, 14, 17]
+    },
+    "v3": {
+      "id": "v3",
+      "name": "NIDUS",
+      "apr": 7.9,
+      "type": "real-world asset",
+      "balance": 20000,
+      "points": 800,
+      "leader": "0x34567...cdef",
+      "tvl": 89000,
+      "age": 21,
+      "snapshot": [8, 10, 10, 13, 12, 13, 15, 16]
+    },
+    "v4": {
+      "id": "v4",
+      "name": "smalley",
+      "apr": 7.9,
+      "type": "real-world asset",
+      "balance": 20000,
+      "points": 800,
+      "leader": "0x45678...def0",
+      "tvl": 61000,
+      "age": 5,
+      "snapshot": [5, 7, 8, 9, 11, 12, 12, 13]
+    },
+    "v5": {
+      "id": "v5",
+      "name": "ibara",
+      "apr": 7.9,
+      "type": "stablecoin",
+      "balance": 30000,
+      "points": 200,
+      "leader": "0x21345...abcde",
+      "tvl": 92000,
+      "age": 21,
+      "snapshot": [3, 9, 10, 12, 11, 10, 14, 16]
+    },
+    "v6": {
+      "id": "v6",
+      "name": "ballsera",
+      "apr": 7.9,
+      "type": "real-world asset",
+      "balance": 20000,
+      "points": 800,
+      "leader": "0x67890...f012",
+      "tvl": 82000,
+      "age": 53,
+      "snapshot": [10, 8, 9, 12, 13, 14, 13, 14]
+    },
+    "v7" : {
+      "id": "v7",
+      "name": "XSGD-RWA",
+      "apr": 8.2,
+      "type": "real-world asset",
+      "balance": 20000,
+      "points": 800,
+      "leader": "0x78901...f123",
+      "tvl": 90000,
+      "age": 17,
+      "snapshot": [11, 12, 13, 14, 15, 16, 17, 18]
+    }
+  },
 
       "preferences": {
         "autoCompound": false,
