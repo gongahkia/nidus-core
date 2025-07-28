@@ -45,40 +45,40 @@ interface Vault {
 
 export function MainDashboard() {
 
-  const [isWindowTooSmall, setIsWindowTooSmall] = useState(false)
+  // const [isWindowTooSmall, setIsWindowTooSmall] = useState(false)
 
-  useEffect(() => {
-    const handleResize = () => {
-      const isTooSmall =
-        window.innerWidth < window.screen.width * 0.95 ||
-        window.innerHeight < window.screen.height * 0.9
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const isTooSmall =
+  //       window.innerWidth < window.screen.width * 0.95 ||
+  //       window.innerHeight < window.screen.height * 0.9
 
-      setIsWindowTooSmall(isTooSmall)
-    }
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+  //     setIsWindowTooSmall(isTooSmall)
+  //   }
+  //   handleResize()
+  //   window.addEventListener("resize", handleResize)
+  //   return () => window.removeEventListener("resize", handleResize)
+  // }, [])
 
-  useEffect(() => {
-    if (isWindowTooSmall) {
-      document.body.style.overflow = "hidden";
-      const preventDefault = (e: Event) => { e.preventDefault(); };
-      window.addEventListener("keydown", preventDefault, { passive: false });
-      window.addEventListener("wheel", preventDefault, { passive: false });
-      window.addEventListener("touchmove", preventDefault, { passive: false });
-      window.addEventListener("mousedown", preventDefault, { passive: false });
-      return () => {
-        document.body.style.overflow = "";
-        window.removeEventListener("keydown", preventDefault);
-        window.removeEventListener("wheel", preventDefault);
-        window.removeEventListener("touchmove", preventDefault);
-        window.removeEventListener("mousedown", preventDefault);
-      };
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [isWindowTooSmall]);
+  // useEffect(() => {
+  //   if (isWindowTooSmall) {
+  //     document.body.style.overflow = "hidden";
+  //     const preventDefault = (e: Event) => { e.preventDefault(); };
+  //     window.addEventListener("keydown", preventDefault, { passive: false });
+  //     window.addEventListener("wheel", preventDefault, { passive: false });
+  //     window.addEventListener("touchmove", preventDefault, { passive: false });
+  //     window.addEventListener("mousedown", preventDefault, { passive: false });
+  //     return () => {
+  //       document.body.style.overflow = "";
+  //       window.removeEventListener("keydown", preventDefault);
+  //       window.removeEventListener("wheel", preventDefault);
+  //       window.removeEventListener("touchmove", preventDefault);
+  //       window.removeEventListener("mousedown", preventDefault);
+  //     };
+  //   } else {
+  //     document.body.style.overflow = "";
+  //   }
+  // }, [isWindowTooSmall]);
 
   const { user } = useAuth()
   const [dashboardData, setDashboardData] = useState<DashboardData>({
