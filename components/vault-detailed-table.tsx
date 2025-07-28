@@ -69,11 +69,20 @@ export function Vaults() {
       case "name":
         compare = a.name.localeCompare(b.name)
         break
+      case "leader":
+        compare = a.leader?.localeCompare?.(b.leader) ?? 0
+        break
       case "apr":
         compare = (a.apr ?? 0) - (b.apr ?? 0)
         break
+      case "tvl":
+        compare = (a.tvl ?? 0) - (b.tvl ?? 0)
+        break
       case "balance":
         compare = (a.balance ?? 0) - (b.balance ?? 0)
+        break
+      case "age":
+        compare = (a.age ?? 0) - (b.age ?? 0)
         break
       case "points":
         compare = (a.points ?? 0) - (b.points ?? 0)
@@ -82,42 +91,65 @@ export function Vaults() {
     return sortDirection === "asc" ? compare : -compare
   })
 
+
   // UI: Clickable column headers for sorting
   const renderHeader = (
-    <div className="flex items-center w-full px-4 pb-2 pt-4 text-xs text-slate-400 font-semibold select-none">
-      <HeaderCell
-        label="Vault"
-        field="name"
-        active={sortField === "name"}
-        direction={sortDirection}
-        onClick={() => handleSort("name")}
-        className="flex-1"
-      />
-      <HeaderCell
-        label="APR"
-        field="apr"
-        active={sortField === "apr"}
-        direction={sortDirection}
-        onClick={() => handleSort("apr")}
-      />
-      <HeaderCell
-        label="Points"
-        field="points"
-        active={sortField === "points"}
-        direction={sortDirection}
-        onClick={() => handleSort("points")}
-      />
-      <HeaderCell
-        label="TVL"
-        field="balance"
-        active={sortField === "balance"}
-        direction={sortDirection}
-        onClick={() => handleSort("balance")}
-      />
-      {/* You can show/hide Deposit column as needed */}
-      <div className="w-28 text-right">Deposit</div>
+    <div className="flex items-center w-full px-4 pb-2 pt-4 text-xs text-slate-400 font-semibold select-none gap-1">
+      <HeaderCell label="Vault" field="name"   active={sortField === "name"}   direction={sortDirection} onClick={() => handleSort("name")}   className="flex-1 min-w-[110px]" />
+      <HeaderCell label="Leader" field="leader" active={sortField === "leader"} direction={sortDirection} onClick={() => handleSort("leader")} className="w-24"          />
+      <HeaderCell label="APR" field="apr"       active={sortField === "apr"}    direction={sortDirection} onClick={() => handleSort("apr")}    className="w-16 text-right"/>
+      <HeaderCell label="TVL" field="tvl"       active={sortField === "tvl"}    direction={sortDirection} onClick={() => handleSort("tvl")}    className="w-28 text-right"/>
+      <HeaderCell label="Your Deposit" field="balance" active={sortField === "balance"} direction={sortDirection} onClick={() => handleSort("balance")} className="w-28 text-right"/>
+      <HeaderCell label="Age (days)" field="age" active={sortField === "age"} direction={sortDirection} onClick={() => handleSort("age")} className="w-14 text-right"/>
+      <div className="w-24 text-right">Snapshot</div>
     </div>
   )
+
+  function maskAddress(addr?: string) {
+    if (!addr || addr.length < 8) return addr ?? "-"
+    return addr.slice(0, 5) + "..." + addr.slice(-4)
+  }
+
+  function MiniChart({ data }: { data?: number[] }) {
+    return (
+      <div className="w-20 h-5 flex items-center justify-end">
+        {/* Replace below with real sparkline if you have one */}
+        {data && data.length > 1 ? (
+          <svg width="60" height="20">
+            {/* Simple line (fake sparkline). For production use real chart: e.g. recharts, chart.js, or whatever your ValueChart/minichart is. */}
+            <polyline
+              fill="none"
+              stroke="#8b5cf6"
+              strokeWidth="2"
+              points={data.map((v, i) => `${i * 60/(data.length-1)},${20 - (v/Math.max(...data))*18}`).join(" ")}
+            />
+          </svg>
+        ) : <span className="text-slate-500 text-xs">-</span>}
+      </div>
+    )
+  }
+
+  function renderVaultRow(v: Vault) {
+    // Decide color for APR (red if negative, green if positive)
+    let aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200")
+    return (
+      <button
+        key={v.id}
+        onClick={() => router.push(`/vaults/${v.id}`)}
+        className="w-full flex items-center px-4 py-2 my-1 rounded-lg bg-slate-900/80 hover:bg-purple-800/70 transition group gap-1"
+        type="button"
+        aria-label={`Open vault ${v.name}`}
+      >
+        <div className="flex-1 min-w-[110px] text-left truncate text-slate-100">{v.name}</div>
+        <div className="w-24 text-slate-300 text-xs text-center font-mono">{maskAddress(v.leader)}</div>
+        <div className={`w-16 text-right text-xs font-mono ${aprColor}`}>{v.apr != null ? `${v.apr > 0 ? "+" : ""}${v.apr.toFixed(2)}%` : "-"}</div>
+        <div className="w-28 text-right text-xs font-mono">{v.tvl != null ? `$${v.tvl.toLocaleString()}` : "-"}</div>
+        <div className="w-28 text-right text-xs font-mono">{v.balance != null && v.balance !== 0 ? `$${v.balance.toLocaleString()}` : "-"}</div>
+        <div className="w-14 text-right text-xs">{v.age ?? "-"}</div>
+        <div className="w-24 flex justify-end"><MiniChart data={v.snapshot} /></div>
+      </button>
+    )
+  }
 
   function handleSort(field: SortField) {
     if (sortField === field) {
@@ -126,36 +158,6 @@ export function Vaults() {
       setSortField(field)
       setSortDirection(field === "name" ? "asc" : "desc")
     }
-  }
-
-  // Each Vault Row
-  function renderVaultRow(v: Vault) {
-    return (
-      <button
-        key={v.id}
-        onClick={() => router.push(`/vaults/${v.id}`)}
-        className="w-full flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3 mb-2 hover:bg-purple-800/70 transition-colors cursor-pointer group"
-        type="button"
-        aria-label={`Open vault ${v.name}`}
-      >
-        <div className="flex-1 text-slate-100 text-left">{v.name}</div>
-        <div className="w-20 text-slate-300 text-xs text-center">
-          {v.apr != null ? `${v.apr}%` : "-"}
-        </div>
-        <div className="w-20 text-slate-300 text-xs text-center">
-          {v.points != null ? v.points : "-"}
-        </div>
-        <div className="w-20 text-slate-300 text-xs text-center">
-          {v.balance != null ? `$${v.balance}` : "-"}
-        </div>
-        {/* Deposit placeholder */}
-        <div className="w-28 text-right">
-          <span className="inline-block bg-purple-700/80 text-xs text-white rounded px-3 py-1 opacity-40 group-hover:opacity-90 transition-all cursor-pointer select-none">
-            Deposit/Withdraw
-          </span>
-        </div>
-      </button>
-    )
   }
 
   return (
