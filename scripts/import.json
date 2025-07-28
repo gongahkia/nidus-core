@@ -83,7 +83,15 @@
       "leader": "0x12345...abcd",
       "tvl": 100000,
       "age": 37,
-      "snapshot": [9, 10, 11, 10, 12, 14, 13, 16]
+      "snapshot": [9, 10, 11, 10, 12, 14, 13, 16],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v2": {
       "id": "v2",
@@ -95,7 +103,15 @@
       "leader": "0x23456...bcde",
       "tvl": 95000,
       "age": 41,
-      "snapshot": [7, 8, 12, 15, 14, 15, 14, 17]
+      "snapshot": [7, 8, 12, 15, 14, 15, 14, 17],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v3": {
       "id": "v3",
@@ -107,7 +123,15 @@
       "leader": "0x34567...cdef",
       "tvl": 89000,
       "age": 21,
-      "snapshot": [8, 10, 10, 13, 12, 13, 15, 16]
+      "snapshot": [8, 10, 10, 13, 12, 13, 15, 16],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v4": {
       "id": "v4",
@@ -119,7 +143,15 @@
       "leader": "0x45678...def0",
       "tvl": 61000,
       "age": 5,
-      "snapshot": [5, 7, 8, 9, 11, 12, 12, 13]
+      "snapshot": [5, 7, 8, 9, 11, 12, 12, 13],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v5": {
       "id": "v5",
@@ -131,7 +163,15 @@
       "leader": "0x21345...abcde",
       "tvl": 92000,
       "age": 21,
-      "snapshot": [3, 9, 10, 12, 11, 10, 14, 16]
+      "snapshot": [3, 9, 10, 12, 11, 10, 14, 16],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v6": {
       "id": "v6",
@@ -143,7 +183,15 @@
       "leader": "0x67890...f012",
       "tvl": 82000,
       "age": 53,
-      "snapshot": [10, 8, 9, 12, 13, 14, 13, 14]
+      "snapshot": [10, 8, 9, 12, 13, 14, 13, 14],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     },
     "v7" : {
       "id": "v7",
@@ -155,7 +203,15 @@
       "leader": "0x78901...f123",
       "tvl": 90000,
       "age": 17,
-      "snapshot": [11, 12, 13, 14, 15, 16, 17, 18]
+      "snapshot": [11, 12, 13, 14, 15, 16, 17, 18],
+      "rewards": 380,          
+      "rewardsAvailable": 65, 
+      "strategy": "Dynamic rate lending", 
+      "risk": "Low",             
+      "ltv": 75,       
+      "minCollateral": 1000,        
+      "liquidationPenalty": 12.5, 
+      "borrowRate": 6.2            
     }
   },
 

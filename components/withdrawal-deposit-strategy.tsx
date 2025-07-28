@@ -5,6 +5,8 @@ import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
 import { database } from "./auth-provider"
 import { Overlay } from "@/components/overlay"
+import { Footer } from "@/components/footer"
+import { Badge } from "@/components/ui/badge"
 
 // Modal placeholder - use your actual Modal component!
 function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
@@ -89,7 +91,39 @@ export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
   const getOrDash = (v: any, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
 
   return (
-    <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Header */}
+      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
+              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                v1.0
+              </Badge>
+            </div>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Dashboard
+              </Link>
+              <Link href="/vaults" className="text-white hover:text-purple-300 transition-colors">
+                Vaults
+              </Link>
+              <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Points
+              </Link>
+              {!user && (
+                <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition-colors">
+                  Mission
+                </Link>
+              )}
+              <Link href="/account" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Account
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
       {/* Title and subtitle */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
@@ -252,6 +286,7 @@ export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
           </button>
         </div>
       </Modal>
+      <Footer />
     </div>
   )
 }
