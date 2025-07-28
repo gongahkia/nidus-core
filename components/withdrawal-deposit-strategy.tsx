@@ -31,18 +31,16 @@ interface VaultDetails {
   balance: number;
   points: number;
   leader: string;
-  rewards: number;         // Assume available
-  rewardsAvailable: number;// Assume available
-  strategy: string;        // Assume available
-  risk: string;            // Assume available
-  ltv: number;             // Assume available
-  minCollateral: number;   // Assume available
-  liquidationPenalty: number;// Assume available
-  borrowRate: number;      // Assume available
-  // Add more fields as needed
+  rewards: number;         
+  rewardsAvailable: number;
+  strategy: string;        
+  risk: string;            
+  ltv: number;             
+  minCollateral: number;   
+  liquidationPenalty: number;
+  borrowRate: number;      
 }
 
-// Helper for formatting
 function fmt(val: number, decimals = 2) {
   return val !== undefined && val !== null
     ? val.toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})
@@ -67,6 +65,19 @@ export function WithdrawalDepositComponent({ vaultId }: { vaultId: string }) {
     })
     return () => { off(vaultRef); unsub() }
   }, [vaultId])
+
+  useEffect(() => {
+    if (!vaultId) return;
+    const vaultRef = ref(database, `vaults/${vaultId}`);
+    setLoading(true);
+    const unsub = onValue(vaultRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log("Loaded vault data:", data); 
+      setVault(data || null);
+      setLoading(false);
+    });
+    return () => { off(vaultRef); unsub(); }
+  }, [vaultId]);
 
   // UI skeleton while loading
   if (loading) {
