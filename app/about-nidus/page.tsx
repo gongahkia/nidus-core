@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
 
 export default function AboutNidusPage() {
@@ -12,13 +13,18 @@ export default function AboutNidusPage() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">Mission</h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
+              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                v1.0
+              </Badge>
+            </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Lending
+              <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Vaults
               </Link>
               <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Points

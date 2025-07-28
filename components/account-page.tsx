@@ -14,6 +14,7 @@ import { useAuth } from "./auth-provider"
 import { ref, onValue, set } from 'firebase/database'
 import { database } from './auth-provider'
 import { Footer } from "@/components/footer"
+import { Badge } from "@/components/ui/badge"
 
 interface UserProfile {
   displayName: string
@@ -123,13 +124,18 @@ export function AccountPage() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">Account</h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
+              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                v1.0
+              </Badge>
+            </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Lending
+              <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Vaults
               </Link>
               <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Points
@@ -235,14 +241,17 @@ export function AccountPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">Account</h1>
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
+              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                v1.0
+              </Badge>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Lending
+              <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Vaults
               </Link>
               <Link href="/points" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Points

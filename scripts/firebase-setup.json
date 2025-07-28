@@ -43,6 +43,10 @@
     "poolValueHistory": {
       ".read": true,
       ".write": false
+    },
+    "vaults": {
+      ".read": true,
+      ".write": false
     }
   }
 }
