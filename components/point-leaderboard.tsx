@@ -101,8 +101,8 @@ export default function PointLeaderboard() {
               <Link href="/" className="text-white hover:text-purple-300 transition-colors">
                 Dashboard
               </Link>
-              <Link href="/lending" className="text-slate-300 hover:text-purple-300 transition-colors">
-                Lending
+              <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition-colors">
+                Vaults
               </Link>
               <Link href="/points" className="text-white hover:text-purple-300 transition-colors">
                 Points
@@ -125,7 +125,7 @@ export default function PointLeaderboard() {
           <CardHeader>
             <CardTitle className="flex items-center text-white gap-2">
               <TrendingUp className="text-purple-400 w-6 h-6" />
-              Leaderboard
+              Points leaderboard
             </CardTitle>
           </CardHeader>
           <CardContent>

@@ -104,7 +104,12 @@ export function Vaults() {
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">Vaults</h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-white">NIDUS</h1>
+              <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">
+                v1.0
+              </Badge>
+            </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-slate-300 hover:text-purple-300 transition-colors">
                 Dashboard
