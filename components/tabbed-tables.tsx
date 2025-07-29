@@ -1,7 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { ref, onValue, off } from "firebase/database";
+import { database } from "./auth-provider";
+import { unsubscribe } from "diagnostics_channel";
 
-function TableDepositsWithdrawals({ data }: { data: any[] }) {
+interface User {
+  uid: string
+  email: string | null
+  displayName: string | null
+  photoURL: string | null
+}
+
+interface DepositWithdrawal {
+  time?: string;
+  status?: string;
+  network?: string;
+  action?: string;
+  accountValueChange?: number | string;
+  fee?: number | string;
+}
+
+interface Trade {
+  time?: string;
+  coin?: string;
+  direction?: string;
+  price?: number | string;
+  size?: number | string;
+  tradeValue?: number | string;
+  fee?: number | string;
+  pnl?: number | string;
+}
+
+interface Funding {
+  time?: string;
+  coin?: string;
+  size?: number | string;
+  side?: string;
+  payment?: number | string;
+  rate?: number | string;
+}
+
+interface Position {
+  time?: string;
+  coin?: string;
+  direction?: string;
+  entryPrice?: number | string;
+  size?: number | string;
+  value?: number | string;
+  pnl?: number | string;
+}
+
+function TableDepositsWithdrawals({ data }: { data:DepositWithdrawal[] }) {
   // Columns: Time, Status, Network, Action, Account Value Change, Fee
   return (
     <table className="w-full border-collapse">
@@ -139,12 +188,12 @@ function TablePositions({ data }: { data: any[] }) {
   );
 }
 
-export function TabbedTables({ vaultId, user }: { vaultId: string, user: any }) {
+export function TabbedTables({ vaultId, user }: { vaultId: string, user: User }) {
   const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "funding" | "positions">("deposits");
-  const [deposits, setDeposits] = useState<any[]>([]);
-  const [trades, setTrades] = useState<any[]>([]);
-  const [funding, setFunding] = useState<any[]>([]);
-  const [positions, setPositions] = useState<any[]>([]);
+  const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
+  const [trades, setTrades] = useState<Trade[]>([]);
+  const [funding, setFunding] = useState<Funding[]>([]);
+  const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -169,9 +218,6 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: any }) 
       default:
     }
 
-    const { ref, onValue, off } = require("firebase/database");
-    const { database } = require("./auth-provider");
-
     const tableRef = ref(database, refPath);
     const handle = onValue(tableRef, (snapshot: any) => {
       const data = snapshot.val();
@@ -188,8 +234,12 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: any }) 
       if (activeTab === "funding") setFunding(Object.values(data));
       if (activeTab === "positions") setPositions(Object.values(data));
       setLoading(false);
+
     });
-    return () => off(tableRef);
+    return () => {
+      handle();
+      off(tableRef);
+    }
   }, [activeTab, vaultId, user]);
 
   // Styling helper
