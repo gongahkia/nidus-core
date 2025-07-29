@@ -152,12 +152,11 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
 
       {/* Wider responsive card with two columns */}
       <div className="w-full max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {!user && <Overlay>Please log in to view your vaults</Overlay>}
         <div className="p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 flex flex-col">
 
           {/* Performance Snapshot + Overlay */}
           <div className="mb-6 flex flex-col items-center justify-center">
-            {!user && <Overlay>Please log in to view your vaults</Overlay>}
-
             {vault?.snapshot && vault.snapshot.length > 0 && (
               <div className="w-full h-64 mb-6 md:mb-0">
                 <h3 className="text-white mb-2 font-semibold text-center md:text-left">
