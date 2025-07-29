@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { ref, onValue, off } from "firebase/database";
+import type { DataSnapshot } from "firebase/database";
 import { database } from "./auth-provider";
-import { unsubscribe } from "diagnostics_channel";
 
 interface User {
   uid: string
@@ -83,7 +83,7 @@ function TableDepositsWithdrawals({ data }: { data:DepositWithdrawal[] }) {
   );
 }
 
-function TableTrades({ data }: { data: any[] }) {
+function TableTrades({ data }: { data: Trade[] }) {
   // Columns: Time, Coin, Direction, Price, Size, Trade Value, Fee, PnL
   return (
     <table className="w-full border-collapse">
@@ -120,7 +120,7 @@ function TableTrades({ data }: { data: any[] }) {
   );
 }
 
-function TableFunding({ data }: { data: any[] }) {
+function TableFunding({ data }: { data: Funding[] }) {
   // Columns: Time, Coin, Size, Side, Payment, Rate
   return (
     <table className="w-full border-collapse">
@@ -153,7 +153,7 @@ function TableFunding({ data }: { data: any[] }) {
   );
 }
 
-function TablePositions({ data }: { data: any[] }) {
+function TablePositions({ data }: { data: Position[] }) {
   // Columns: Time, Coin, Direction, Entry Price, Size, Value, PnL
   return (
     <table className="w-full border-collapse">
@@ -219,7 +219,7 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User })
     }
 
     const tableRef = ref(database, refPath);
-    const handle = onValue(tableRef, (snapshot: any) => {
+    const handle = onValue(tableRef, (snapshot: DataSnapshot) => {
       const data = snapshot.val();
       if (!data) {
         setDeposits([]);
