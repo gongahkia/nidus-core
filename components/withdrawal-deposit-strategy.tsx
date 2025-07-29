@@ -9,6 +9,7 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/footer"
 import { Overlay } from "@/components/overlay"
+import { TabbedTables } from "@/components/tabbed-tables"
 
 // Modal placeholder - use your actual Modal component!
 function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
@@ -150,13 +151,13 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       </header>
 
       {/* Wider responsive card with two columns */}
-      <div className="w-full max-w-3xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 relative">
-        <div className="flex flex-col md:flex-row gap-10">
-          {/* Left column: Performance Snapshot Graph */}
-          <div className="md:w-1/2 w-full flex flex-col items-center justify-center">
-          {!user && (
-            <Overlay>Please log in to view your vaults</Overlay>
-          )}
+      <div className="w-full max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-900 rounded-2xl shadow-lg border border-slate-700 flex flex-col">
+
+          {/* Performance Snapshot + Overlay */}
+          <div className="mb-6 flex flex-col items-center justify-center">
+            {!user && <Overlay>Please log in to view your vaults</Overlay>}
+
             {vault?.snapshot && vault.snapshot.length > 0 && (
               <div className="w-full h-64 mb-6 md:mb-0">
                 <h3 className="text-white mb-2 font-semibold text-center md:text-left">
@@ -173,128 +174,136 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
               </div>
             )}
           </div>
+
+          <div className="flex flex-col justify-center">
+
           {/* Right column: Vault details and controls */}
-          <div className="md:w-1/2 w-full flex flex-col justify-center">
-            {/* Title and subtitle */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">{vault?.name ?? "-"}</h2>
-                  <div className="text-xs text-slate-400 mt-1">
-                    Strategy: <span className="font-semibold text-purple-300">{vault?.strategy || "-"}</span>
-                  </div>
-                </div>
-                {showValues && (
-                  <div className="flex flex-col items-end text-right text-slate-400 text-xs">
-                    Leader: <span className="font-mono text-sm text-slate-200">{vault?.leader ?? "-"}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Main Metrics */}
-            <div className="grid grid-cols-2 gap-5 mb-5">
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Your Deposit</div>
-                <div className="font-semibold text-lg text-white">
-                  {getOrDash(vault?.balance, 2)} {showValues && "USD"}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Rewards</div>
-                <div className="font-semibold text-lg text-white">
-                  {getOrDash(vault?.rewardsAvailable, 2)} {showValues && "USD"}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">APR</div>
-                <div className="font-semibold text-lg text-green-400">
-                  {getOrDash(vault?.apr, 2)}%
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">TVL</div>
-                <div className="font-semibold text-lg text-white">
-                  {getOrDash(vault?.tvl, 2)} {showValues && "USD"}
-                </div>
-              </div>
-            </div>
-
-            {/* Strategy + Risk */}
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Strategy</div>
-                <div className="font-semibold text-slate-200">
-                  {showValues ? (vault?.strategy ?? "-") : "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Risk</div>
-                <div className="font-semibold text-slate-200">
-                  {showValues ? (vault?.risk ?? "-") : "-"}
-                </div>
-              </div>
-            </div>
-
-            {/* LTV, Collateral, Penalty, Borrow Rate */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">LTV</div>
-                <div className="font-semibold text-slate-100">
-                  {getOrDash(vault?.ltv, 0)}%
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Min Collateral</div>
-                <div className="font-semibold text-slate-100">
-                  {getOrDash(vault?.minCollateral, 2)}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Penalty</div>
-                <div className="font-semibold text-slate-100">
-                  {getOrDash(vault?.liquidationPenalty, 2)}%
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 mb-0.5">Borrow Rate</div>
-                <div className="font-semibold text-slate-100">
-                  {getOrDash(vault?.borrowRate, 2)}%
-                </div>
-              </div>
-            </div>
-
-            {/* Deposit/Withdraw Buttons or Connect */}
-            <div className="flex items-center justify-center gap-5 mt-6">
-              {!user && (
-                // Not logged in: Show connect-style button
-                <button
-                  className="bg-purple-700 hover:bg-purple-600 text-white rounded-lg px-8 py-3 font-bold transition text-lg"
-                  disabled
-                >
-                  Connect Wallet
-                </button>
-              )}
-
-              {user && (
-                <>
-                  <button
-                    className="bg-gradient-to-br from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white rounded-lg px-8 py-3 font-bold transition text-lg"
-                    onClick={() => setDepositOpen(true)}
-                  >
-                    Deposit
-                  </button>
-                  <button
-                    className="bg-gradient-to-br from-slate-800 to-slate-700 hover:from-purple-700 hover:to-slate-900 text-white rounded-lg px-8 py-3 font-bold transition text-lg border border-purple-400"
-                    onClick={() => setWithdrawOpen(true)}
-                  >
-                    Withdraw
-                  </button>
-                </>
-              )}
+       {/* Title and subtitle */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white">{vault?.name ?? "-"}</h2>
+            <div className="text-xs text-slate-400 mt-1">
+              Strategy: <span className="font-semibold text-purple-300">{vault?.strategy || "-"}</span>
             </div>
           </div>
+          {showValues && (
+            <div className="flex flex-col items-end text-right text-slate-400 text-xs">
+              Leader: <span className="font-mono text-sm text-slate-200">{vault?.leader ?? "-"}</span>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Main Metrics */}
+      <div className="grid grid-cols-2 gap-5 mb-5">
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Your Deposit</div>
+          <div className="font-semibold text-lg text-white">
+            {getOrDash(vault?.balance, 2)} {showValues && "USD"}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Rewards</div>
+          <div className="font-semibold text-lg text-white">
+            {getOrDash(vault?.rewardsAvailable, 2)} {showValues && "USD"}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">APR</div>
+          <div className="font-semibold text-lg text-green-400">
+            {getOrDash(vault?.apr, 2)}%
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">TVL</div>
+          <div className="font-semibold text-lg text-white">
+            {getOrDash(vault?.tvl, 2)} {showValues && "USD"}
+          </div>
+        </div>
+      </div>
+
+      {/* Strategy + Risk */}
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Strategy</div>
+          <div className="font-semibold text-slate-200">
+            {showValues ? (vault?.strategy ?? "-") : "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Risk</div>
+          <div className="font-semibold text-slate-200">
+            {showValues ? (vault?.risk ?? "-") : "-"}
+          </div>
+        </div>
+      </div>
+
+      {/* LTV, Collateral, Penalty, Borrow Rate */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">LTV</div>
+          <div className="font-semibold text-slate-100">
+            {getOrDash(vault?.ltv, 0)}%
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Min Collateral</div>
+          <div className="font-semibold text-slate-100">
+            {getOrDash(vault?.minCollateral, 2)}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Penalty</div>
+          <div className="font-semibold text-slate-100">
+            {getOrDash(vault?.liquidationPenalty, 2)}%
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-slate-400 mb-0.5">Borrow Rate</div>
+          <div className="font-semibold text-slate-100">
+            {getOrDash(vault?.borrowRate, 2)}%
+          </div>
+        </div>
+      </div>
+
+      {/* Deposit/Withdraw Buttons */}
+      <div className="flex items-center justify-center gap-5 mt-6">
+        {!user && (
+          <button
+            className="bg-purple-700 hover:bg-purple-600 text-white rounded-lg px-8 py-3 font-bold transition text-lg"
+            disabled
+          >
+            Connect Wallet
+          </button>
+        )}
+
+        {user && (
+          <>
+            <button
+              className="bg-gradient-to-br from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white rounded-lg px-8 py-3 font-bold transition text-lg"
+              onClick={() => setDepositOpen(true)}
+            >
+              Deposit
+            </button>
+            <button
+              className="bg-gradient-to-br from-slate-800 to-slate-700 hover:from-purple-700 hover:to-slate-900 text-white rounded-lg px-8 py-3 font-bold transition text-lg border border-purple-400"
+              onClick={() => setWithdrawOpen(true)}
+            >
+              Withdraw
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* ===== END existing vault details and controls ===== */}
+
+    </div>
+
+  </div> 
+  <div>
+    <TabbedTables vaultId={vaultId} user={user} />
+  </div>
         {/* Withdraw / Deposit Modal */}
         <Modal open={depositOpen} onClose={() => setDepositOpen(false)}>
           <h3 className="text-lg font-bold mb-2 text-white">Deposit</h3>

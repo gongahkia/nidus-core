@@ -15,17 +15,12 @@
 1. Dashboard screen
 2. Vault screen
 2.5 Specific strategy page
-    * Add the table displaying all values "Balances - Depositors" below the existing infrared cards that are included, can reference this site https://app.hyperliquid.xyz/vaults/0x07fd993f0fa3a185f7207adccd29f7a87404689d
-    * Users should NOT be able to access the withdraw/borrow card when not logged in (gray it out with an overlay and redirect to log in)!!!
 3. Points screen
 4. Accounts screen
 
 ##### Logged in
 
 1. Dashboard screen
-    * Add a filter pop-up
-    * Make the filter functionality actually work for search
-    * Link the Vault cards here so when clicked it goes to the Vaults page
 2. Vault screen
 2.5 Specific strategy page
     * Implement the actual Withdrawal/Deposit functionality that writes to the firebase DB 
