@@ -83,7 +83,7 @@ function TableDepositsWithdrawals({ data }: { data:DepositWithdrawal[] }) {
   );
 }
 
-function TableTrades({ data }: { data: any[] }) {
+function TableTrades({ data }: { data: Trade[] }) {
   // Columns: Time, Coin, Direction, Price, Size, Trade Value, Fee, PnL
   return (
     <table className="w-full border-collapse">
@@ -120,7 +120,7 @@ function TableTrades({ data }: { data: any[] }) {
   );
 }
 
-function TableFunding({ data }: { data: any[] }) {
+function TableFunding({ data }: { data: Funding[] }) {
   // Columns: Time, Coin, Size, Side, Payment, Rate
   return (
     <table className="w-full border-collapse">
@@ -153,7 +153,7 @@ function TableFunding({ data }: { data: any[] }) {
   );
 }
 
-function TablePositions({ data }: { data: any[] }) {
+function TablePositions({ data }: { data: Position[] }) {
   // Columns: Time, Coin, Direction, Entry Price, Size, Value, PnL
   return (
     <table className="w-full border-collapse">
