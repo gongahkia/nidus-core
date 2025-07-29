@@ -89,7 +89,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const onConfirmDeposit = async () => {
     const depositAmount = parseFloat(amount);
     if (isNaN(depositAmount) || depositAmount <= 0) {
-      alert("Please enter a valid deposit amount greater than zero.");
+      console.log("depositAmount", depositAmount)
       return;
     }
     if (!user) return;
@@ -107,7 +107,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       setAmount(""); // reset input
     } catch (error) {
       console.error("Deposit failed:", error);
-      alert("Deposit failed. Please try again later.");
     }
   };
 
@@ -115,14 +114,14 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const onConfirmWithdraw = async () => {
     const withdrawAmount = parseFloat(amount);
     if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
-      alert("Please enter a valid withdrawal amount greater than zero.");
+      console.log("withdrawAmount", withdrawAmount)
       return;
     }
     if (!user) return;
 
     // Prevent withdrawing if balance insufficient
     if (!xsgdBalance || withdrawAmount > xsgdBalance) {
-      alert("Insufficient balance to withdraw that amount.");
+      console.log("withdrawAmount", withdrawAmount)
       return;
     }
 
@@ -138,7 +137,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       setAmount(""); // reset input
     } catch (error) {
       console.error("Withdraw failed:", error);
-      alert("Withdrawal failed. Please try again later.");
     }
   };
 
