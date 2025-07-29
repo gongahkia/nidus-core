@@ -8,6 +8,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/footer"
+import { Overlay } from "@/components/overlay"
 
 // Modal placeholder - use your actual Modal component!
 function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
@@ -153,6 +154,9 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div className="flex flex-col md:flex-row gap-10">
           {/* Left column: Performance Snapshot Graph */}
           <div className="md:w-1/2 w-full flex flex-col items-center justify-center">
+          {!user && (
+            <Overlay>Please log in to view your vaults</Overlay>
+          )}
             {vault?.snapshot && vault.snapshot.length > 0 && (
               <div className="w-full h-64 mb-6 md:mb-0">
                 <h3 className="text-white mb-2 font-semibold text-center md:text-left">
