@@ -126,7 +126,7 @@ export function Vaults() {
 
   function renderVaultRow(v: Vault) {
     // Decide color for APR (red if negative, green if positive)
-    let aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200")
+    const aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200")
     return (
       <button
         key={v.id}
@@ -231,7 +231,6 @@ export function Vaults() {
 // Helper component for sortable column headers
 function HeaderCell({
   label,
-  field,
   active,
   direction,
   onClick,

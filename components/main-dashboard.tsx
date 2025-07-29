@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Search, Filter } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off } from "firebase/database"
@@ -91,7 +90,7 @@ export function MainDashboard() {
   >([]);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
   const [vaults, setVaults] = useState<Vault[]>([])
-  const [searchInput, setSearchInput] = useState("")
+  const [searchInput ] = useState("")
 
   // Dashboard, Pool Value History and Announcements fetch
   useEffect(() => {
@@ -200,12 +199,6 @@ export function MainDashboard() {
   //   }
   // })
 
-  const filteredVaults = vaults.filter(
-    (v) =>
-      !searchInput ||
-      v.name.toLowerCase().includes(searchInput.toLowerCase())
-  )
-
   // Portfolio card content (dynamic)
   const PortfolioCard = (
     <Card className="bg-slate-800/50 border-slate-700 relative min-h-[505px] max-h-[505px] h-[505px]">
@@ -259,12 +252,6 @@ export function MainDashboard() {
       </CardContent>
     </Card>
   )
-
-  const vaultProtocols = Array.from(
-    new Set(
-      (vaults || []).map((v) => v.name) 
-    )
-  );
 
   const NidusCard = (
     <Card className="relative overflow-hidden bg-gradient-to-tr from-purple-700/60 to-slate-800/80 border-none min-w-[220px] max-w-xs mx-auto mb-6 flex-col items-start">
