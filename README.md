@@ -5,6 +5,7 @@
 #### General
 
 * Refactor all relevant code files to make vault strategies viewable globally on the Dahsboard, Vaults and Withdrawal/Deposits page, **only** depositing and transacting in vaults within the Withdrawal/Deposits page should be gatekept behind login status
+* Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Resolve problems with vercel deployment
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
@@ -23,11 +24,8 @@
 1. Dashboard screen
 2. Vault screen
 2.5 Specific strategy page
-    * Implement the actual Withdrawal/Deposit functionality that writes to the firebase DB 
 3. Points screen
 4. Accounts screen
-    * Include the values from the "Portfolio" card 
-    * It should call the firebase DB for the user's account
    
 ## Contributors
 

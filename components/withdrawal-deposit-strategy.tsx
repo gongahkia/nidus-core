@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useAuth } from "./auth-provider"
-import { ref, onValue } from "firebase/database"
+import { ref, onValue, update } from "firebase/database"
 import { database } from "./auth-provider"
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Link from "next/link"
@@ -10,21 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Footer } from "@/components/footer"
 import { Overlay } from "@/components/overlay"
 import { TabbedTables } from "@/components/tabbed-tables"
-
-// Modal placeholder - use your actual Modal component!
-function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70">
-      <div className="relative bg-slate-900 border border-purple-600 rounded-lg shadow-lg px-6 py-6 min-w-[320px] max-w-[90vw]">
-        <button className="absolute top-2 right-3 text-xl text-slate-400" onClick={onClose}>
-          ×
-        </button>
-        {children}
-      </div>
-    </div>
-  )
-}
+import { Modal } from "@/components/modal-component"
 
 interface VaultDetails {
   id: string;
@@ -59,6 +45,9 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const [loading, setLoading] = useState(true)
   const [depositOpen, setDepositOpen] = useState(false)
   const [withdrawOpen, setWithdrawOpen] = useState(false)
+  const [amount, setAmount] = useState("");  
+  const [receiptOpen, setReceiptOpen] = useState(false); 
+  const [txnDetails, setTxnDetails] = useState<{type: "deposit" | "withdraw", amount: number, balance: number} | null>(null);
 
   useEffect(() => {
     if (!vaultId) {
@@ -81,6 +70,77 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     });
     return () => unsub();
   }, [vaultId, user]);  // include user in deps
+
+  const [xsgdBalance, setXsgdBalance] = useState<number | null>(null);
+  useEffect(() => {
+    if (!user) {
+      setXsgdBalance(null);
+      return;
+    }
+    const xsgdRef = ref(database, `users/${user.uid}/portfolio/xsgd`);
+    const unsub = onValue(xsgdRef, (snapshot) => {
+      const balance = snapshot.val();
+      setXsgdBalance(typeof balance === "number" ? balance : 0);
+    });
+    return () => unsub();
+  }, [user]);
+
+  // Confirm Deposit Logic
+  const onConfirmDeposit = async () => {
+    const depositAmount = parseFloat(amount);
+    if (isNaN(depositAmount) || depositAmount <= 0) {
+      alert("Please enter a valid deposit amount greater than zero.");
+      return;
+    }
+    if (!user) return;
+
+    try {
+      // Update xsgd balance atomically: Here a simple update; for atomic transactions you might want runTransaction()
+      const newBalance = (xsgdBalance || 0) + depositAmount;
+      await update(ref(database, `users/${user.uid}/portfolio`), {
+        xsgd: newBalance,
+      });
+      
+      setTxnDetails({ type: "deposit", amount: depositAmount, balance: newBalance });
+      setDepositOpen(false);
+      setReceiptOpen(true);
+      setAmount(""); // reset input
+    } catch (error) {
+      console.error("Deposit failed:", error);
+      alert("Deposit failed. Please try again later.");
+    }
+  };
+
+  // Confirm Withdraw Logic
+  const onConfirmWithdraw = async () => {
+    const withdrawAmount = parseFloat(amount);
+    if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
+      alert("Please enter a valid withdrawal amount greater than zero.");
+      return;
+    }
+    if (!user) return;
+
+    // Prevent withdrawing if balance insufficient
+    if (!xsgdBalance || withdrawAmount > xsgdBalance) {
+      alert("Insufficient balance to withdraw that amount.");
+      return;
+    }
+
+    try {
+      const newBalance = xsgdBalance - withdrawAmount;
+      await update(ref(database, `users/${user.uid}/portfolio`), {
+        xsgd: newBalance,
+      });
+
+      setTxnDetails({ type: "withdraw", amount: withdrawAmount, balance: newBalance });
+      setWithdrawOpen(false);
+      setReceiptOpen(true);
+      setAmount(""); // reset input
+    } catch (error) {
+      console.error("Withdraw failed:", error);
+      alert("Withdrawal failed. Please try again later.");
+    }
+  };
 
   // UI skeleton while loading
   if (loading) {
@@ -303,47 +363,98 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   <div>
     <TabbedTables vaultId={vaultId} user={user} />
   </div>
-        {/* Withdraw / Deposit Modal */}
-        <Modal open={depositOpen} onClose={() => setDepositOpen(false)}>
-          <h3 className="text-lg font-bold mb-2 text-white">Deposit</h3>
-          <div className="mb-3 text-slate-200">
-            Deposit to <span className="font-mono">{vault?.name}</span>
-          </div>
-          <input
-            type="number"
-            min={0}
-            placeholder="Amount"
-            className="w-full mb-3 px-3 py-2 rounded border bg-slate-800 text-white"
-          />
-          <div className="flex justify-end">
+      {/* Deposit Modal */}
+      <Modal open={depositOpen} onClose={() => {setDepositOpen(false); setAmount("")}}>
+        <h3 className="text-lg font-bold mb-2 text-white">Deposit</h3>
+        <div className="mb-3 text-slate-200">
+          Deposit to <span className="font-mono">{vault?.name}</span>
+        </div>
+        <input
+          type="number"
+          min={0}
+          step="any"
+          placeholder="Amount"
+          className="w-full mb-3 px-3 py-2 rounded border bg-slate-800 text-white"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <div className="flex justify-end gap-4">
+          <button
+            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+            onClick={() => { setDepositOpen(false); setAmount(""); }}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
+            onClick={onConfirmDeposit}
+          >
+            Confirm
+          </button>
+        </div>
+      </Modal>
+
+      {/* Withdraw Modal */}
+      <Modal open={withdrawOpen} onClose={() => {setWithdrawOpen(false); setAmount("")}}>
+        <h3 className="text-lg font-bold mb-2 text-white">Withdraw</h3>
+        <div className="mb-3 text-slate-200">
+          Withdraw from <span className="font-mono">{vault?.name}</span>
+        </div>
+        <input
+          type="number"
+          min={0}
+          step="any"
+          placeholder="Amount"
+          className="w-full mb-3 px-3 py-2 rounded border bg-slate-800 text-white"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <div className="flex justify-end gap-4">
+          <button
+            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+            onClick={() => { setWithdrawOpen(false); setAmount(""); }}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
+            onClick={onConfirmWithdraw}
+            disabled={!xsgdBalance || parseFloat(amount) <= 0 || parseFloat(amount) > xsgdBalance}
+            title={(!xsgdBalance || parseFloat(amount) > xsgdBalance) ? "Insufficient balance" : ""}
+          >
+            Confirm
+          </button>
+        </div>
+      </Modal>
+
+      {/* Transaction Receipt Modal */}
+      <Modal open={receiptOpen} onClose={() => setReceiptOpen(false)}>
+        {txnDetails && (
+          <div className="text-white space-y-3">
+            <h3 className="text-lg font-bold">
+              Transaction Receipt
+            </h3>
+            <div>
+              <strong>Type: </strong>
+              {txnDetails.type === "deposit" ? "Deposit" : "Withdraw"}
+            </div>
+            <div>
+              <strong>Amount: </strong>
+              {fmt(txnDetails.amount)} xsgd
+            </div>
+            <div>
+              <strong>New Balance: </strong>
+              {fmt(txnDetails.balance)} xsgd
+            </div>
             <button
-              className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
-              onClick={() => setDepositOpen(false)}
+              className="mt-4 bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
+              onClick={() => setReceiptOpen(false)}
             >
-              Confirm
+              Close
             </button>
           </div>
-        </Modal>
-        <Modal open={withdrawOpen} onClose={() => setWithdrawOpen(false)}>
-          <h3 className="text-lg font-bold mb-2 text-white">Withdraw</h3>
-          <div className="mb-3 text-slate-200">
-            Withdraw from <span className="font-mono">{vault?.name}</span>
-          </div>
-          <input
-            type="number"
-            min={0}
-            placeholder="Amount"
-            className="w-full mb-3 px-3 py-2 rounded border bg-slate-800 text-white"
-          />
-          <div className="flex justify-end">
-            <button
-              className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
-              onClick={() => setWithdrawOpen(false)}
-            >
-              Confirm
-            </button>
-          </div>
-        </Modal>
+        )}
+      </Modal>
       </div>
       <Footer />
     </div>
