@@ -211,10 +211,95 @@
       "ltv": 75,       
       "minCollateral": 1000,        
       "liquidationPenalty": 12.5, 
-      "borrowRate": 6.2            
+      "borrowRate": 6.2,
+      "depositsAndWithdrawals": {
+        "tx1": {
+          "time": "2025-07-29 15:30",
+          "status": "completed",
+          "network": "Ethereum",
+          "action": "deposit",
+          "accountValueChange": 1000,
+          "fee": 5
+        },
+        "tx2": {
+          "time": "2025-07-29 15:30",
+          "status": "completed",
+          "network": "Ethereum",
+          "action": "deposit",
+          "accountValueChange":900,
+          "fee": 4
+        },
+        "tx3": {
+          "time": "2025-07-29 15:30",
+          "status": "completed",
+          "network": "Ethereum",
+          "action": "deposit",
+          "accountValueChange": 1001,
+          "fee": 6
+        }
+      },
+      "tradeHistory": {
+        "trade1": {
+          "time": "2025-07-28 12:00",
+          "coin": "ETH",
+          "direction": "buy",
+          "price": 1800.5,
+          "size": 2,
+          "tradeValue": 3601,
+          "fee": 10,
+          "pnl": 100
+        },
+        "trade2": {
+          "time": "2025-07-28 13:09",
+          "coin": "ETH",
+          "direction": "buy",
+          "price": 1800.5,
+          "size": 3,
+          "tradeValue": 3601,
+          "fee": 12,
+          "pnl": 100
+        }
+      },
+      "fundingHistory": {
+        "fund1": {
+          "time": "2025-07-27 18:45",
+          "coin": "XsGD",
+          "size": 5000,
+          "side": "long",
+          "payment": 15,
+          "rate": 0.05
+        },
+        "fund2": {
+          "time": "2025-07-27 18:48",
+          "coin": "XsGD",
+          "size": 9000,
+          "side": "long",
+          "payment": 15,
+          "rate": 0.08
+        }
+      },
+      "positions": {
+        "pos1": {
+          "time": "2025-07-26 10:00",
+          "coin": "BTC",
+          "direction": "short",
+          "entryPrice": 25000,
+          "size": 1.5,
+          "value": 37500,
+          "pnl": -500
+        },
+        "pos2": {
+          "time": "2025-07-26 10:02",
+          "coin": "BTC",
+          "direction": "short",
+          "entryPrice": 25000,
+          "size": 1.5,
+          "value": 375031,
+          "pnl": -500
+        }
+      }
     }
   },
-
       "preferences": {
         "autoCompound": false,
         "notifications": true
