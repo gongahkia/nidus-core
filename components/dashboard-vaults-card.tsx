@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Filter } from "lucide-react"
+import { Search } from "lucide-react"
 
 interface Vault {
   id: string
@@ -51,12 +51,6 @@ export function VaultsCard({ vaults, user }: VaultsCardProps) {
             />
             <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
           </div>
-          <button
-            className="flex items-center px-3 py-2 rounded-md bg-slate-900/70 border border-slate-700 text-slate-200"
-            disabled
-          >
-            <Filter className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Filter</span>
-          </button>
         </div>
         {/* Dynamic Protocol Filter Bubbles */}
         <div className="flex gap-2 mb-3 flex-wrap">
