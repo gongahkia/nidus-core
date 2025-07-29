@@ -14,36 +14,23 @@
 
 1. Dashboard screen
 2. Vault screen
+2.5 Specific strategy page
+    * Add the table displaying all values "Balances - Depositors" below the existing infrared cards that are included, can reference this site https://app.hyperliquid.xyz/vaults/0x07fd993f0fa3a185f7207adccd29f7a87404689d
+    * Users should NOT be able to access the withdraw/borrow card when not logged in (gray it out with an overlay and redirect to log in)!!!
 3. Points screen
 4. Accounts screen
-
-2. Vault screen
-2.5 Withdrawal/Deposit page 
-     * 2. For this page specifically, also add the table displaying all values "Balances - Depositors" below the existing infrared cards that are included, can reference this site https://app.hyperliquid.xyz/vaults/0x07fd993f0fa3a185f7207adccd29f7a87404689d
-     * Users should NOT be able to access the withdraw/borrow card when not logged in (gray it out with an overlay and redirect to log in)!!!
 
 ##### Logged in
 
 1. Dashboard screen
-2. Vault screen
-3. Points screen
-4. Accounts screen
-
-1. Dashboard screen 
     * Add a filter pop-up
     * Make the filter functionality actually work for search
     * Link the Vault cards here so when clicked it goes to the Vaults page
-
-2. Withdrawal/Deposit page 
-     * 1. For this page specifically, reference https://infrared.finance/'s page after clicking through to a given plan
-          * Include a similar graph display and everything on that page 
-          * Include the details card as well
-     * 2. For this page specifically, also add the table displaying all values "Balances - Depositors" below the existing infrared cards that are included, can reference this site https://app.hyperliquid.xyz/vaults/0x07fd993f0fa3a185f7207adccd29f7a87404689d
-     * Implement the actual Withdrawal/Deposit functionality that writes to the firebase DB 
-     * Name our strategy XSGD-RWA 
-    * Should call the Firebase schema 
-
-3. Account screen
+2. Vault screen
+2.5 Specific strategy page
+    * Implement the actual Withdrawal/Deposit functionality that writes to the firebase DB 
+3. Points screen
+4. Accounts screen
     * Include the values from the "Portfolio" card 
     * It should call the firebase DB for the user's account
    
