@@ -4,7 +4,7 @@
 
 #### General
 
-* Refactor all relevant code files to make vault strategies viewable globally on the Dahsboard and Vaults page, **only** depositing and transacting in vaults should be gatekept behind login status
+* Refactor all relevant code files to make vault strategies viewable globally on the Dahsboard, Vaults and Withdrawal/Deposits page, **only** depositing and transacting in vaults within the Withdrawal/Deposits page should be gatekept behind login status
 * Resolve problems with vercel deployment
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
