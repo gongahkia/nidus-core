@@ -164,7 +164,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   }
 
   const showValues = !!user
-  const getOrDash = (v: any, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
+  const getOrDash = (v: number, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
   const chartData = vault?.snapshot
     ? vault.snapshot.map((value, index) => ({
         name: `Day ${index + 1}`,
