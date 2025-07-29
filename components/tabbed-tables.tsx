@@ -188,7 +188,7 @@ function TablePositions({ data }: { data: Position[] }) {
   );
 }
 
-export function TabbedTables({ vaultId, user }: { vaultId: string, user: User }) {
+export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | null }) {
   const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "funding" | "positions">("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
