@@ -12,6 +12,13 @@ import { Overlay } from "@/components/overlay"
 import { Footer } from "@/components/footer"
 import { VaultsCard } from "@/components/dashboard-vaults-card" 
 
+interface User {
+  uid: string
+  email: string | null
+  displayName: string | null
+  photoURL: string | null
+}
+
 interface Announcement {
   id: string
   title: string
@@ -41,6 +48,11 @@ interface Vault {
   type: string
   balance: number
   points: number
+}
+
+interface VaultsCardProps {
+  vaults: Vault[];
+  user: User | null; // <-- allow null
 }
 
 export function MainDashboard() {

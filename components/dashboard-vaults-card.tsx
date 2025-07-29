@@ -21,7 +21,7 @@ interface User {
 
 interface VaultsCardProps {
   vaults: Vault[]
-  user: User
+  user: User | null;
 }
 
 export function VaultsCard({ vaults, user }: VaultsCardProps) {
