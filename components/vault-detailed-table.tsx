@@ -20,6 +20,10 @@ interface Vault {
   type: string
   balance: number
   points: number
+  leader: string
+  tvl: number
+  age: number
+  snapshot: number[]
 }
 
 type SortField = "name" | "leader" | "apr" | "tvl" | "balance" | "age" | "points"
