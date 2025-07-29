@@ -50,11 +50,6 @@ interface Vault {
   points: number
 }
 
-interface VaultsCardProps {
-  vaults: Vault[];
-  user: User | null; // <-- allow null
-}
-
 export function MainDashboard() {
 
   // const [isWindowTooSmall, setIsWindowTooSmall] = useState(false)
