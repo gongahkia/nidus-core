@@ -11,6 +11,7 @@ import { database } from "./auth-provider"
 import { ValueChart } from "@/components/value-chart"
 import { Overlay } from "@/components/overlay"
 import { Footer } from "@/components/footer"
+import { VaultsCard } from "@/components/dashboard-vaults-card" 
 
 interface Announcement {
   id: string
@@ -160,13 +161,11 @@ export function MainDashboard() {
     }
   }, [user])
 
-  // Vaults fetch
   useEffect(() => {
     if (!user) {
       setVaults([])
       return
     }
-    // Assumed DB schema: users/{uid}/vaults/{vaultId}
     const vaultsRef = ref(database, `users/${user.uid}/vaults`)
     const unsubVaults = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
@@ -176,8 +175,11 @@ export function MainDashboard() {
           ...data[id]
         }))
         setVaults(vaultsArr)
+      } else {
+        setVaults([])
       }
     })
+
     return () => {
       off(vaultsRef)
       unsubVaults()
@@ -264,77 +266,6 @@ export function MainDashboard() {
     )
   );
 
-  // Vaults card content (dynamic)
-  const VaultsCard = (
-  // <Card className="bg-slate-800/50 border-slate-700 relative h-full flex flex-col">
-  <Card className="bg-slate-800/50 border-slate-700 relative min-h-[505px] max-h-[505px] h-[505px]">
-    <CardHeader className="pb-3">
-      <CardTitle className="flex items-center justify-between text-white mb-2">
-        Vaults
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="flex flex-col flex-1">
-      {/* Search + Filter Row */}
-      <div className="flex gap-2 mb-3">
-        <div className="relative flex-1">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={e => setSearchInput(e.target.value)}
-            className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
-            placeholder="Search by token, address, or protocol"
-            disabled={!user}
-          />
-          <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
-        </div>
-        <button
-          className="flex items-center px-3 py-2 rounded-md bg-slate-900/70 border border-slate-700 text-slate-200"
-          disabled
-        >
-          <Filter className="w-4 h-4 mr-1" /> <span className="hidden md:inline">Filter</span>
-        </button>
-      </div>
-      {/* Dynamic Protocol Filter Bubbles */}
-      <div className="flex gap-2 mb-3 flex-wrap">
-        {vaultProtocols.map((protocol) => (
-          <button
-            key={protocol}
-            className="bg-slate-700 px-3 py-1 rounded-full text-xs text-purple-200 cursor-not-allowed"
-            disabled
-          >
-            {protocol}
-          </button>
-        ))}
-      </div>
-      {/* Vaults List - fixed height, scrollable */}
-      <div className="flex-1 min-h-[305px] max-h-[305px] overflow-y-auto"> 
-        {user
-          ? filteredVaults.length > 0
-            ? filteredVaults.map(v => (
-                <div
-                  key={v.id}
-                  className="flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3 mb-2"
-                >
-                  <div className="flex-1 text-slate-100">{v.name}</div>
-                  <div className="flex gap-6 items-center text-slate-300 text-xs">
-                    <span>APR: {v.apr ? `${v.apr}%` : "-"} </span>
-                    <span>Points: {v.points ?? "-"}</span>
-                    <span>Balance: {v.balance ? `$${v.balance}` : "-"}</span>
-                  </div>
-                </div>
-              ))
-            : (
-              <div className="text-center text-slate-500 py-4">No vaults found</div>
-            )
-          : (
-            <div className="text-center text-slate-500 py-4">Connect your wallet to see your vaults.</div>
-          )
-        }
-      </div>
-    </CardContent>
-  </Card>
-  )
-
   const NidusCard = (
     <Card className="relative overflow-hidden bg-gradient-to-tr from-purple-700/60 to-slate-800/80 border-none min-w-[220px] max-w-xs mx-auto mb-6 flex-col items-start">
       <CardHeader className="pb-2 flex flex-row items-center gap-3">
@@ -410,7 +341,7 @@ export function MainDashboard() {
 
           {/* Vaults Card */}
           <div className="relative">
-            {VaultsCard}
+            <VaultsCard vaults={vaults} user={user} />
             {!user && <Overlay>Please log in to view your vaults</Overlay>}
           </div>
         </div>
