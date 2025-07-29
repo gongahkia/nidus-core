@@ -12,9 +12,16 @@ interface Vault {
   points: number
 }
 
+interface User {
+  uid: string
+  email: string | null
+  displayName: string | null
+  photoURL: string | null
+}
+
 interface VaultsCardProps {
   vaults: Vault[]
-  user: any // replace with your user type if available
+  user: User
 }
 
 export function VaultsCard({ vaults, user }: VaultsCardProps) {
