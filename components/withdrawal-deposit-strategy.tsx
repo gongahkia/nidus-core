@@ -89,14 +89,18 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const onConfirmDeposit = async () => {
     const depositAmount = parseFloat(amount);
     if (isNaN(depositAmount) || depositAmount <= 0) {
-      console.log("depositAmount", depositAmount)
+      console.log("depositAmount can't be zero or negative", depositAmount)
       return;
     }
     if (!user) return;
 
+    if (!xsgdBalance || depositAmount > xsgdBalance) {
+      console.log("depositAmount can't be greater than user's xsgdBalance", depositAmount, xsgdBalance)
+      return;
+    }
+
     try {
-      // Update xsgd balance atomically: Here a simple update; for atomic transactions you might want runTransaction()
-      const newBalance = (xsgdBalance || 0) + depositAmount;
+      const newBalance = (xsgdBalance || 0) - depositAmount;
       await update(ref(database, `users/${user.uid}/portfolio`), {
         xsgd: newBalance,
       });
@@ -104,37 +108,32 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       setTxnDetails({ type: "deposit", amount: depositAmount, balance: newBalance });
       setDepositOpen(false);
       setReceiptOpen(true);
-      setAmount(""); // reset input
+      setAmount(""); 
     } catch (error) {
       console.error("Deposit failed:", error);
     }
   };
 
-  // Confirm Withdraw Logic
   const onConfirmWithdraw = async () => {
     const withdrawAmount = parseFloat(amount);
     if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
-      console.log("withdrawAmount", withdrawAmount)
+      console.log("withdrawAmount can't be zero or negative", withdrawAmount)
       return;
     }
     if (!user) return;
-
-    // Prevent withdrawing if balance insufficient
-    if (!xsgdBalance || withdrawAmount > xsgdBalance) {
-      console.log("withdrawAmount", withdrawAmount)
+    if (!xsgdBalance) {
+      console.log("xsgdBalance is null")
       return;
     }
-
     try {
-      const newBalance = xsgdBalance - withdrawAmount;
+      const newBalance = xsgdBalance + withdrawAmount;
       await update(ref(database, `users/${user.uid}/portfolio`), {
         xsgd: newBalance,
       });
-
       setTxnDetails({ type: "withdraw", amount: withdrawAmount, balance: newBalance });
       setWithdrawOpen(false);
       setReceiptOpen(true);
-      setAmount(""); // reset input
+      setAmount(""); 
     } catch (error) {
       console.error("Withdraw failed:", error);
     }

@@ -296,7 +296,6 @@ export function AccountPage() {
                   <p className="text-2xl font-bold text-white">
                     $
                     {(
-                      (userProfile?.portfolio.lp || 0) +
                       (userProfile?.portfolio.xsgd || 0)
                     ).toLocaleString()}
                   </p>
@@ -404,13 +403,7 @@ export function AccountPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-4 bg-yellow-600/20 rounded-lg">
-                        <p className="text-sm text-yellow-300">LP</p>
-                        <p className="text-2xl font-bold text-white">
-                          ${userProfile?.portfolio.lp.toLocaleString()}
-                        </p>
-                      </div>
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="p-4 bg-green-600/20 rounded-lg">
                         <p className="text-sm text-green-300">XsGD</p>
                         <p className="text-2xl font-bold text-white">
