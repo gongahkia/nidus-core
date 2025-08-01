@@ -8,25 +8,13 @@
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Debug error modal and notifications for the Withdrawal/Deposits page so users can't withdraw/deposit 0, can't withdraw more than they already have, add a hardcoded deposit limit
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
+- Strategy, Risk, LTV, Penalty, Min Collateral, Borrow Rate  removed from strategy-specific page
+- Remove ENTIRE funding table from strategy specific page
+- Hide THE positions table from strategy specific page
+- Modify it to XSGD and USD and SGD in Accounts page (6% exchange rate for XSGD-RWA) on accounts page 
+- Include a list of all user's varied assets that contribute to a single Portfolio asset value on accounts page 
+- Make richard's screenshots for 6 months and 1 year to be triggered under Deposit workflow after clicking the Deposit button and before the Transaction receipt on
 
-#### Specific
-
-##### Un-logged in
-
-1. Dashboard screen
-2. Vault screen
-2.5 Specific strategy page
-3. Points screen
-4. Accounts screen
-
-##### Logged in
-
-1. Dashboard screen
-2. Vault screen
-2.5 Specific strategy page
-3. Points screen
-4. Accounts screen
-   
 ## Contributors
 
 <table>
