@@ -21,7 +21,7 @@ interface User {
 
 interface VaultsCardProps {
   vaults: Vault[]
-  user: User | null;
+  user: User | null
 }
 
 export function VaultsCard({ vaults, user }: VaultsCardProps) {
@@ -54,7 +54,6 @@ export function VaultsCard({ vaults, user }: VaultsCardProps) {
               onChange={e => setSearchInput(e.target.value)}
               className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
               placeholder="Search by token, address, or protocol"
-              disabled={!user}
             />
             <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
           </div>
@@ -72,31 +71,28 @@ export function VaultsCard({ vaults, user }: VaultsCardProps) {
           ))}
         </div>
         {/* Vaults List - fixed height, scrollable */}
-        <div className="flex-1 min-h-[305px] max-h-[305px] overflow-y-auto"> 
-          {user
-            ? filteredVaults.length > 0
-              ? filteredVaults.map(v => (
-                  <Link
-                    key={v.id}
-                    href={`/vaults/${v.id}`}
-                    className="flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3 mb-2 hover:bg-purple-700/50 transition-colors cursor-pointer"
-                    aria-label={`Go to vault ${v.name}`}
-                  >
-                      <div className="flex-1 text-slate-100">{v.name}</div>
-                      <div className="flex gap-6 items-center text-slate-300 text-xs">
-                        <span>APR: {v.apr ? `${v.apr}%` : "-"}</span>
-                        <span>Points: {v.points ?? "-"}</span>
-                        <span>Balance: {v.balance ? `$${v.balance}` : "-"}</span>
-                      </div>
-                  </Link>
-                ))
-              : (
-                <div className="text-center text-slate-500 py-4">No vaults found</div>
-              )
-            : (
-              <div className="text-center text-slate-500 py-4">Connect your wallet to see your vaults.</div>
-            )
-          }
+        <div className="flex-1 min-h-[305px] max-h-[305px] overflow-y-auto">
+          {filteredVaults.length > 0 ? (
+            filteredVaults.map(v => (
+              <Link
+                key={v.id}
+                href={`/vaults/${v.id}`}
+                className="flex items-center justify-between bg-slate-900/80 rounded-lg px-4 py-3 mb-2 hover:bg-purple-700/50 transition-colors cursor-pointer"
+                aria-label={`Go to vault ${v.name}`}
+              >
+                <div className="flex-1 text-slate-100">{v.name}</div>
+                <div className="flex gap-6 items-center text-slate-300 text-xs">
+                  <span>APR: {v.apr !== undefined && v.apr !== null ? `${v.apr}%` : "-"}</span>
+                  <span>Points: {v.points ?? "-"}</span>
+                  <span>
+                    Balance: {user && v.balance !== undefined && v.balance !== null ? `$${v.balance}` : "-"}
+                  </span>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="text-center text-slate-500 py-4">No vaults found</div>
+          )}
         </div>
       </CardContent>
     </Card>

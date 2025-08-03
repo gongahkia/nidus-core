@@ -160,11 +160,7 @@ export function MainDashboard() {
   }, [user])
 
   useEffect(() => {
-    if (!user) {
-      setVaults([])
-      return
-    }
-    const vaultsRef = ref(database, `users/${user.uid}/vaults`)
+    const vaultsRef = ref(database, `allVaults`)
     const unsubVaults = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
@@ -182,7 +178,7 @@ export function MainDashboard() {
       off(vaultsRef)
       unsubVaults()
     }
-  }, [user])
+  }, [])
 
   // useEffect(() => {
   //   if (!user) {
@@ -328,7 +324,6 @@ export function MainDashboard() {
           {/* Vaults Card */}
           <div className="relative">
             <VaultsCard vaults={vaults} user={user} />
-            {!user && <Overlay>Please log in to view your vaults</Overlay>}
           </div>
         </div>
 
