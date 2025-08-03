@@ -111,6 +111,7 @@ function TableTrades({ data }: { data: Trade[] }) {
   );
 }
 
+/*
 function TablePositions({ data }: { data: Position[] }) {
   // Columns: Time, Coin, Direction, Entry Price, Size, Value, PnL
   return (
@@ -145,12 +146,13 @@ function TablePositions({ data }: { data: Position[] }) {
     </table>
   );
 }
+  */
 
 export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | null }) {
   const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [positions, setPositions] = useState<Position[]>([]);
+  // const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
