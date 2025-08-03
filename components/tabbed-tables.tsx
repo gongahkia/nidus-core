@@ -166,9 +166,11 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       case "trades":
         refPath = `users/${user.uid}/vaults/${vaultId}/tradeHistory`;
         break;
-      case "positions":
-        refPath = `users/${user.uid}/vaults/${vaultId}/positions`;
-        break;
+
+      // case "positions":
+      //   refPath = `users/${user.uid}/vaults/${vaultId}/positions`;
+      //   break;
+
       default:
     }
 
@@ -178,13 +180,17 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       if (!data) {
         setDeposits([]);
         setTrades([]);
-        setPositions([]);
+
+        // setPositions([]);
+
         setLoading(false);
         return;
       }
       if (activeTab === "deposits") setDeposits(Object.values(data));
       if (activeTab === "trades") setTrades(Object.values(data));
-      if (activeTab === "positions") setPositions(Object.values(data));
+
+      // if (activeTab === "positions") setPositions(Object.values(data));
+
       setLoading(false);
 
     });
@@ -217,10 +223,12 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
             className={`${tabButton} ${activeTab === "trades" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
             onClick={() => setActiveTab("trades")}
           >Trade History</button>
-          <button
+
+          {/* <button
             className={`${tabButton} ${activeTab === "positions" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
             onClick={() => setActiveTab("positions")}
-          >Positions</button>
+          >Positions</button> */}
+
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-y-auto text-xs text-slate-100 mt-2">
@@ -233,9 +241,11 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
         {!loading && activeTab === "trades" && (
           <TableTrades data={trades} />
         )}
-        {!loading && activeTab === "positions" && (
+
+        {/* {!loading && activeTab === "positions" && (
           <TablePositions data={positions} />
-        )}
+        )} */}
+
       </CardContent>
     </Card>
   );
