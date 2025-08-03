@@ -72,6 +72,12 @@
         "points": 2400
       },
 
+      "assets": [
+          "Ethereum (ETH) - 5.2 ETH",
+          "Bitcoin (BTC) - 0.5 BTC",
+          "XSGD (Tokenized SGD) - 6,000 XSGD"
+      ],
+
   "vaults": {
     "v1": {
       "id": "v1",
@@ -319,6 +325,11 @@
         "outstandingRewards": 0,
         "points": 0
       },
+      "assets": [
+          "Ethereum (ETH) - 5.2 ETH",
+          "Bitcoin (BTC) - 0.5 BTC",
+          "XSGD (Tokenized SGD) - 6,000 XSGD"
+      ],
       "vaults": {},
       "preferences": {
         "autoCompound": false,

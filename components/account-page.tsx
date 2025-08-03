@@ -31,6 +31,7 @@ interface UserProfile {
     xsgd: number,
     lp: number
   }
+  assets?: string[]  
 }
 
 type CurrencyCode = 'SGD' | 'USD' | 'EUR' | 'GBP' | 'JPY' | 'AUD' | 'CAD' | 'CHF' | 'CNY'
@@ -101,7 +102,8 @@ export function AccountPage() {
             endowment: data.portfolio?.endowment ?? 0,
             xsgd: data.portfolio?.xsgd ?? 0,
             lp: data.portfolio?.lp ?? 0
-          }
+          },
+          assets: data.assets || []  
         })
       }
     })
@@ -476,6 +478,22 @@ export function AccountPage() {
                       })}
                     </div>
 
+                  </CardContent>
+                </Card>
+                <Card className="bg-slate-800/50 border-slate-700 mt-6">
+                  <CardHeader>
+                    <CardTitle className="text-white">Your Assets</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {userProfile?.assets && userProfile.assets.length > 0 ? (
+                      <ul className="list-disc list-inside text-slate-300">
+                        {userProfile.assets.map((asset, index) => (
+                          <li key={index}>{asset}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-slate-400 italic">No assets found.</p>
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
