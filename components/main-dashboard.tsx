@@ -212,7 +212,7 @@ export function MainDashboard() {
           <div>
             <div className="text-xs text-slate-400 mb-1">Balance</div>
             <div className="font-semibold text-lg text-white">
-              {userPortfolio ? `$${userPortfolio.xsgd.toLocaleString()}` : "$0"}
+              {userPortfolio ? `S$${userPortfolio.xsgd.toLocaleString()}` : "$0"}
             </div>
           </div>
           <div>
