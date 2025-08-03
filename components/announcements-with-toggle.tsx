@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
 
 export function AnnouncementsWithToggle({ dashboardData }: { dashboardData: { announcements: Announcement[] } }) {
   const [isListView, setIsListView] = useState(false);

@@ -55,7 +55,6 @@ export function MainDashboard() {
   >([])
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio | null>(null)
   const [vaults, setVaults] = useState<Vault[]>([])
-  const [isListView, setIsListView] = useState(false)
 
   // Dashboard, Pool Value History and Announcements fetch
   useEffect(() => {
