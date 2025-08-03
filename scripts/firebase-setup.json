@@ -47,6 +47,10 @@
     "vaults": {
       ".read": true,
       ".write": false
+    },
+    "allVaults": {
+      ".read": true,
+      ".write": false
     }
   }
 }

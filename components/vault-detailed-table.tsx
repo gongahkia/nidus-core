@@ -38,7 +38,7 @@ export function Vaults() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
   useEffect(() => {
-    const vaultsRef = ref(database, `vaults`)
+    const vaultsRef = ref(database, `allVaults`)
     const unsub = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
@@ -124,8 +124,7 @@ export function Vaults() {
   }
 
   function renderVaultRow(v: Vault) {
-    // Decide color for APR (red if negative, green if positive)
-    const aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200")
+    const aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200");
     return (
       <button
         key={v.id}
@@ -136,13 +135,17 @@ export function Vaults() {
       >
         <div className="flex-1 min-w-[110px] text-left truncate text-slate-100">{v.name}</div>
         <div className="w-24 text-slate-300 text-xs text-center font-mono">{maskAddress(v.leader)}</div>
-        <div className={`w-16 text-right text-xs font-mono ${aprColor}`}>{v.apr != null ? `${v.apr > 0 ? "+" : ""}${v.apr.toFixed(2)}%` : "-"}</div>
+        <div className={`w-16 text-right text-xs font-mono ${aprColor}`}>
+          {v.apr != null ? `${v.apr > 0 ? "+" : ""}${v.apr.toFixed(2)}%` : "-"}
+        </div>
         <div className="w-28 text-right text-xs font-mono">{v.tvl != null ? `$${v.tvl.toLocaleString()}` : "-"}</div>
-        <div className="w-28 text-right text-xs font-mono">{v.balance != null && v.balance !== 0 ? `$${v.balance.toLocaleString()}` : "-"}</div>
+        <div className="w-28 text-right text-xs font-mono">
+          {user && v.balance != null && v.balance !== 0 ? `$${v.balance.toLocaleString()}` : "-"}
+        </div>
         <div className="w-14 text-right text-xs">{v.age ?? "-"}</div>
         <div className="w-24 flex justify-end"><MiniChart data={v.snapshot} /></div>
       </button>
-    )
+    );
   }
 
   function handleSort(field: SortField) {
@@ -155,6 +158,7 @@ export function Vaults() {
   }
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
@@ -189,6 +193,12 @@ export function Vaults() {
         </div>
       </header>
 
+      {!user && (
+        <div className="max-w-4xl mx-auto mt-4 px-4 py-2 bg-yellow-500 bg-opacity-80 text-yellow-900 font-semibold rounded-md text-center text-sm">
+          "Your Deposit" values are hidden — <a href="/account">Log in</a> to see your personal deposits.
+        </div>
+      )}
+
       <div className="relative max-w-4xl mx-auto">
         <Card className="bg-slate-800/50 border-slate-700 flex flex-col min-h-[600px] mt-8">
           <CardHeader className="pb-3">
@@ -218,9 +228,6 @@ export function Vaults() {
             {user && sortedVaults.length > 0 && sortedVaults.map(renderVaultRow)}
           </CardContent>
         </Card>
-        {!user && (
-          <Overlay>Please log in to view your vaults.</Overlay>
-        )}
       </div>
       <Footer/>
     </div>
