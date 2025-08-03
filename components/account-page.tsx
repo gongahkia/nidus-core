@@ -34,8 +34,17 @@ interface UserProfile {
 }
 
 type CurrencyCode = 'SGD' | 'USD' | 'EUR' | 'GBP' | 'JPY' | 'AUD' | 'CAD' | 'CHF' | 'CNY'
+  | 'HKD' // Hong Kong Dollar
+  | 'NZD' // New Zealand Dollar
+  | 'SEK' // Swedish Krona
+  | 'KRW' // South Korean Won
+  | 'INR' // Indian Rupee
+  | 'MXN' // Mexican Peso
+  | 'TWD' // Taiwan Dollar
+  | 'THB' // Thai Baht
+  | 'MYR' // Malaysian Ringgit
+  | 'IDR' // Indonesian Rupiah
 
-// Hardcoded fixed exchange rates relative to SGD (for demo)
 const exchangeRates: Record<CurrencyCode, number> = {
   SGD: 1,
   USD: 0.74,
@@ -45,7 +54,17 @@ const exchangeRates: Record<CurrencyCode, number> = {
   AUD: 1.03,
   CAD: 0.96,
   CHF: 0.69,
-  CNY: 5.08
+  CNY: 5.08,
+  HKD: 5.75,
+  NZD: 1.19,
+  SEK: 7.07,
+  KRW: 989,
+  INR: 61.59,
+  MXN: 12.69,
+  TWD: 23.5,
+  THB: 27.01,
+  MYR: 3.50,
+  IDR: 11.668
 }
 
 export function AccountPage() {
@@ -562,7 +581,7 @@ export function AccountPage() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p className="text-sm text-slate-400 mb-4">Toggle currencies to display their portfolio values.</p>
-                    {(['EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY'] as CurrencyCode[]).map(currency => (
+                    {(['EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'HKD', 'NZD', 'SEK', 'KRW', 'INR', 'MXN', 'TWD', 'THB', 'MYR', 'IDR'] as CurrencyCode[]).map(currency => (
                       <div key={currency} className="flex items-center justify-between py-1">
                         <span className="text-white font-medium capitalize">{currency}</span>
                         <Switch
