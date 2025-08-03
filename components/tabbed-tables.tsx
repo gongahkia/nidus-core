@@ -152,7 +152,7 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
   const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [positions, setPositions] = useState<Position[]>([]);
+  // const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
