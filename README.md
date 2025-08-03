@@ -13,8 +13,6 @@
 * Debug error modal and notifications for the Withdrawal/Deposits page so users can't withdraw/deposit 0, can't withdraw more than they already have, add a hardcoded deposit limit
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
-* Modify it to XSGD and USD and SGD in Accounts page (6% exchange rate for XSGD-RWA) on accounts page 
-* Include a list of all user's varied assets that contribute to a single Portfolio asset value on accounts page 
 * Make richard's screenshots for 6 months and 1 year to be triggered under Deposit workflow after clicking the Deposit button and before the Transaction receipt on
 
 ## Contributors
