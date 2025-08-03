@@ -405,7 +405,7 @@ export function AccountPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                       <div className="p-4 bg-green-600/20 rounded-lg">
-                        <p className="text-sm text-green-300">XsGD</p>
+                        <p className="text-sm text-green-300">XSGD</p>
                         <p className="text-2xl font-bold text-white">
                           ${userProfile?.portfolio.xsgd.toLocaleString()}
                         </p>

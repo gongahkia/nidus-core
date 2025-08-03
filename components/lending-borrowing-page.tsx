@@ -287,8 +287,8 @@ export function LendingBorrowingPage() {
           <>
           <div className="flex flex-col md:flex-row gap-4 mb-8 items-center">
             <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
-              <span className="text-slate-400 text-sm">Your XsGD Balance</span>
-              <span className="text-2xl font-bold text-white">{portfolio.xsgd.toLocaleString()} XsGD</span>
+              <span className="text-slate-400 text-sm">Your XSGD Balance</span>
+              <span className="text-2xl font-bold text-white">{portfolio.xsgd.toLocaleString()} XSGD</span>
             </div>
             <div className="bg-slate-800/70 border border-slate-700 rounded-lg p-4 flex-1 flex flex-col items-center">
               <span className="text-slate-400 text-sm">Your LP Balance</span>
@@ -303,7 +303,7 @@ export function LendingBorrowingPage() {
                 <CardTitle className="text-white">Deposit XsGD</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-400 mb-2">Enter the amount of XsGD to deposit:</p>
+                <p className="text-slate-400 mb-2">Enter the amount of XSGD to deposit:</p>
                 <input
                   type="number"
                   placeholder="0.00"
@@ -321,11 +321,11 @@ export function LendingBorrowingPage() {
             <div className="relative">
               <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Convert XsGD to LP (LEND)</CardTitle>
+                  <CardTitle className="text-white">Convert XSGD to LP (LEND)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400 mb-2">
-                    Convert your XsGD to LP tokens and contribute to the lending pool.
+                    Convert your XSGD to LP tokens and contribute to the lending pool.
                   </p>
                   <input
                     type="number"
@@ -339,7 +339,7 @@ export function LendingBorrowingPage() {
                     Convert to LP
                   </Button>
                   <div className="mt-4 text-slate-400 text-sm">
-                    For every 1 XsGD you lend, you receive 1 LP token.
+                    For every 1 XSGD you lend, you receive 1 LP token.
                   </div>
                   <div className="mt-4">
                     <div className="bg-slate-700/30 rounded-lg p-4 text-slate-300">
@@ -350,7 +350,7 @@ export function LendingBorrowingPage() {
                 </CardContent>
               </Card>
               {(portfolio.xsgd === 0 && portfolio.lp === 0) && (
-                <Overlay>You must hold XsGD and LP first</Overlay>
+                <Overlay>You must hold XSGD and LP first</Overlay>
               )}
             </div>
 
@@ -358,11 +358,11 @@ export function LendingBorrowingPage() {
             <div className="relative">
               <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Withdraw (LP → XsGD)</CardTitle>
+                  <CardTitle className="text-white">Withdraw (LP → XSGD)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400 mb-2">
-                    Withdraw XsGD by redeeming your LP tokens. Withdrawal fee: {withdrawalFee}%.
+                    Withdraw XSGD by redeeming your LP tokens. Withdrawal fee: {withdrawalFee}%.
                   </p>
                   <input
                     type="number"
@@ -384,7 +384,7 @@ export function LendingBorrowingPage() {
                 <Overlay>You must convert to LP first</Overlay>
               )}
               {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
-                <Overlay>You must hold XsGD and LP first</Overlay>
+                <Overlay>You must hold XSGD and LP first</Overlay>
               )}
             </div>
 
@@ -392,11 +392,11 @@ export function LendingBorrowingPage() {
             <div className="relative">
               <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Borrow XsGD (using LP as collateral)</CardTitle>
+                  <CardTitle className="text-white">Borrow XSGD (using LP as collateral)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400 mb-2">
-                    Borrow XsGD using your LP tokens as collateral. Interest rate: {borrowAPY}% APY.
+                    Borrow XSGD using your LP tokens as collateral. Interest rate: {borrowAPY}% APY.
                   </p>
                   <input
                     type="number"
@@ -418,7 +418,7 @@ export function LendingBorrowingPage() {
                 <Overlay>You must convert to LP first</Overlay>
               )}
               {(portfolio.lp === 0 && portfolio.xsgd === 0) && (
-                <Overlay>You must hold XsGD and LP first</Overlay>
+                <Overlay>You must hold XSGD and LP first</Overlay>
               )}
             </div>
           </div>
