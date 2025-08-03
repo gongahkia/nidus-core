@@ -38,17 +38,13 @@ export function Vaults() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
   useEffect(() => {
-    if (!user) {
-      setVaults([])
-      return
-    }
-    const vaultsRef = ref(database, `users/${user.uid}/vaults`)
+    const vaultsRef = ref(database, `vaults`)
     const unsub = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
-        const vaultsArr = Object.keys(data).map((id) => ({
+        const vaultsArr = Object.keys(data).map(id => ({
           id,
-          ...data[id],
+          ...data[id]
         }))
         setVaults(vaultsArr)
       } else {
@@ -57,10 +53,9 @@ export function Vaults() {
     })
 
     return () => {
-      off(vaultsRef)
       unsub()
     }
-  }, [user])
+  }, [])  // no user dependency now
 
   // Filter vaults by search
   const filteredVaults = vaults.filter((v) =>
