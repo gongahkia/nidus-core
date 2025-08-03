@@ -279,50 +279,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         </div>
       </div>
 
-      {/* Strategy + Risk */}
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">Strategy</div>
-          <div className="font-semibold text-slate-200">
-            {showValues ? (vault?.strategy ?? "-") : "-"}
-          </div>
-        </div>
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">Risk</div>
-          <div className="font-semibold text-slate-200">
-            {showValues ? (vault?.risk ?? "-") : "-"}
-          </div>
-        </div>
-      </div>
-
-      {/* LTV, Collateral, Penalty, Borrow Rate */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">LTV</div>
-          <div className="font-semibold text-slate-100">
-            {getOrDash(vault?.ltv, 0)}%
-          </div>
-        </div>
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">Min Collateral</div>
-          <div className="font-semibold text-slate-100">
-            {getOrDash(vault?.minCollateral, 2)}
-          </div>
-        </div>
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">Penalty</div>
-          <div className="font-semibold text-slate-100">
-            {getOrDash(vault?.liquidationPenalty, 2)}%
-          </div>
-        </div>
-        <div>
-          <div className="text-xs text-slate-400 mb-0.5">Borrow Rate</div>
-          <div className="font-semibold text-slate-100">
-            {getOrDash(vault?.borrowRate, 2)}%
-          </div>
-        </div>
-      </div>
-
       {/* Deposit/Withdraw Buttons */}
       <div className="flex items-center justify-center gap-5 mt-6">
         {!user && (

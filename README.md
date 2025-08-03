@@ -4,10 +4,15 @@
 
 #### General
 
-* Refactor all relevant code files to make vault strategies viewable globally on the Dahsboard, Vaults and Withdrawal/Deposits page, **only** depositing and transacting in vaults within the Withdrawal/Deposits page should be gatekept behind login status
+* Refactor all relevant code files to make vault strategies viewable globally on the
+    * Dashboard screen
+    * Vaults screen
+    * Withdrawal/Deposits screen
+        * **Only** depositing and transacting in vaults within the Withdrawal/Deposits page should be gatekept behind login status
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Debug error modal and notifications for the Withdrawal/Deposits page so users can't withdraw/deposit 0, can't withdraw more than they already have, add a hardcoded deposit limit
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
+
 * Strategy, Risk, LTV, Penalty, Min Collateral, Borrow Rate  removed from strategy-specific page
 * Remove ENTIRE funding table from strategy specific page
 * Hide THE positions table from strategy specific page
