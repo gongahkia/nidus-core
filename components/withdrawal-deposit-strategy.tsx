@@ -54,13 +54,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       console.error("vaultId is required");
       return;
     }
-    if (!user) {
-      console.warn("User not logged in. Cannot fetch vault data.");
-      setVault(null);
-      setLoading(false);
-      return;
-    }
-    const vaultRef = ref(database, `users/${user.uid}/vaults/${vaultId}`);
+    const vaultRef = ref(database, `allVaults/${vaultId}`);
     setLoading(true);
     const unsub = onValue(vaultRef, (snapshot) => {
       const data = snapshot.val();
@@ -69,7 +63,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       console.log(`Loaded vault data for ${vaultId}:`, data);
     });
     return () => unsub();
-  }, [vaultId, user]);  // include user in deps
+  }, [vaultId]);
 
   const [xsgdBalance, setXsgdBalance] = useState<number | null>(null);
   useEffect(() => {
@@ -164,7 +158,8 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   }
 
   const showValues = !!user
-  const getOrDash = (v: number | undefined, decimals = 2) => showValues && (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
+  const getOrDash = (v: number | undefined, decimals = 2) => 
+    (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
   const chartData = vault?.snapshot
     ? vault.snapshot.map((value, index) => ({
         name: `Day ${index + 1}`,
@@ -206,6 +201,17 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
           </div>
         </div>
       </header>
+
+      {!user && (
+        <div className="max-w-5xl mx-auto mt-5 px-4 py-3 bg-yellow-500 bg-opacity-80 text-yellow-900 font-semibold rounded-md text-center text-sm">
+          Your personal deposit data is hidden. Please{" "}
+          <Link href="/account" className="underline font-bold text-yellow-900 hover:text-yellow-700">
+            log in
+          </Link>{" "}
+          to see your deposits.
+        </div>
+      )}
+
 
       {/* Wider responsive card with two columns */}
       <div className="w-full max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -255,7 +261,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div>
           <div className="text-xs text-slate-400 mb-0.5">Your Deposit</div>
           <div className="font-semibold text-lg text-white">
-            {getOrDash(vault?.balance, 2)} {showValues && "USD"}
+            {user && vault?.balance != null ? fmt(vault.balance) : "-"} {user && "USD"}
           </div>
         </div>
         <div>
@@ -280,10 +286,11 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
 
 <div className="flex items-center justify-center gap-5 mt-6">
   {!user ? (
-    <Link href="/account" passHref>
-      <a className="block text-center bg-purple-700 hover:bg-purple-600 text-white rounded-lg px-8 py-3 font-bold transition text-lg">
-        Connect Wallet
-      </a>
+    <Link
+      href="/account"
+      className="block text-center bg-purple-700 hover:bg-purple-600 text-white rounded-lg px-8 py-3 font-bold transition text-lg"
+    >
+      Connect Wallet
     </Link>
   ) : (
     <>

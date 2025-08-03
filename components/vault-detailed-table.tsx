@@ -41,11 +41,13 @@ export function Vaults() {
     const vaultsRef = ref(database, `allVaults`)
     const unsub = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
+      console.log("Fetched vault data:", data)  
       if (data) {
         const vaultsArr = Object.keys(data).map(id => ({
           id,
           ...data[id]
         }))
+        console.log("Processed vaults for rendering:", vaultsArr)
         setVaults(vaultsArr)
       } else {
         setVaults([])
@@ -194,8 +196,12 @@ export function Vaults() {
       </header>
 
       {!user && (
-        <div className="max-w-4xl mx-auto mt-4 px-4 py-2 bg-yellow-500 bg-opacity-80 text-yellow-900 font-semibold rounded-md text-center text-sm">
-          "Your Deposit" values are hidden — <a href="/account">Log in</a> to see your personal deposits.
+        <div className="max-w-5xl mx-auto mt-5 px-4 py-3 bg-yellow-500 bg-opacity-80 text-yellow-900 font-semibold rounded-md text-center text-sm">
+          Your personal deposit data is hidden. Please{" "}
+          <Link href="/account" className="underline font-bold text-yellow-900 hover:text-yellow-700">
+            log in
+          </Link>{" "}
+          to see your deposits.
         </div>
       )}
 
@@ -212,7 +218,6 @@ export function Vaults() {
                 onChange={e => setSearchInput(e.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
                 placeholder="Search by token, address, or protocol"
-                disabled={!user}
               />
               <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
             </div>
@@ -222,10 +227,12 @@ export function Vaults() {
             {/* Table Headers */}
             {renderHeader}
 
-            {user && sortedVaults.length === 0 && (
+            {sortedVaults.length === 0 ? (
               <div className="text-center text-slate-500 py-20">No vaults found.</div>
+            ) : (
+              sortedVaults.map(renderVaultRow)
             )}
-            {user && sortedVaults.length > 0 && sortedVaults.map(renderVaultRow)}
+
           </CardContent>
         </Card>
       </div>

@@ -78,7 +78,7 @@
           "XSGD (Tokenized SGD) - 6,000 XSGD"
       ],
 
-  "yourVaults": {
+  "vaults": {
     "v1": {
       "id": "v1",
       "name": "iBGT",
@@ -423,7 +423,7 @@
       "lastUpdated": 1752157947000
     }
   },
-    "vaults": {
+    "allVaults": {
     "v1": {
       "id": "v1",
       "name": "iBGT",

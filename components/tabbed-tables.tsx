@@ -154,17 +154,18 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user || !vaultId) return;
+    // if (!user || !vaultId) return;
+    if (!vaultId) return;
     setLoading(true);
 
 
     let refPath = "";
     switch (activeTab) {
       case "deposits":
-        refPath = `users/${user.uid}/vaults/${vaultId}/depositsAndWithdrawals`;
+        refPath = `allVaults/${vaultId}/depositsAndWithdrawals`;
         break;
       case "trades":
-        refPath = `users/${user.uid}/vaults/${vaultId}/tradeHistory`;
+        refPath = `allVaults/${vaultId}/tradeHistory`;
         break;
 
       // case "positions":
