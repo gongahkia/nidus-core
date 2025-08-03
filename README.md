@@ -13,8 +13,6 @@
 * Debug error modal and notifications for the Withdrawal/Deposits page so users can't withdraw/deposit 0, can't withdraw more than they already have, add a hardcoded deposit limit
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
-* Strategy, Risk, LTV, Penalty, Min Collateral, Borrow Rate  removed from strategy-specific page
-* Remove ENTIRE funding table from strategy specific page
 * Hide THE positions table from strategy specific page
 * Modify it to XSGD and USD and SGD in Accounts page (6% exchange rate for XSGD-RWA) on accounts page 
 * Include a list of all user's varied assets that contribute to a single Portfolio asset value on accounts page 

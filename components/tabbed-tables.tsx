@@ -31,15 +31,6 @@ interface Trade {
   pnl?: number | string;
 }
 
-interface Funding {
-  time?: string;
-  coin?: string;
-  size?: number | string;
-  side?: string;
-  payment?: number | string;
-  rate?: number | string;
-}
-
 interface Position {
   time?: string;
   coin?: string;
@@ -120,39 +111,6 @@ function TableTrades({ data }: { data: Trade[] }) {
   );
 }
 
-function TableFunding({ data }: { data: Funding[] }) {
-  // Columns: Time, Coin, Size, Side, Payment, Rate
-  return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="text-slate-400 border-b border-slate-700">
-          <th className="py-2 px-2 text-left">Time</th>
-          <th className="py-2 px-2 text-left">Coin</th>
-          <th className="py-2 px-2 text-right">Size</th>
-          <th className="py-2 px-2 text-left">Side</th>
-          <th className="py-2 px-2 text-right">Payment</th>
-          <th className="py-2 px-2 text-right">Rate</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.length === 0 && (
-          <tr><td colSpan={6} className="py-8 text-slate-500 text-center">No records found</td></tr>
-        )}
-        {data.map((row, i) => (
-          <tr key={i} className="border-b border-slate-800 hover:bg-slate-900/40">
-            <td className="py-2 px-2">{row.time || "-"}</td>
-            <td className="py-2 px-2">{row.coin || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.size || "-"}</td>
-            <td className="py-2 px-2">{row.side || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.payment || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.rate || "-"}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
 function TablePositions({ data }: { data: Position[] }) {
   // Columns: Time, Coin, Direction, Entry Price, Size, Value, PnL
   return (
@@ -189,10 +147,9 @@ function TablePositions({ data }: { data: Position[] }) {
 }
 
 export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | null }) {
-  const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "funding" | "positions">("deposits");
+  const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [funding, setFunding] = useState<Funding[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -209,9 +166,6 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       case "trades":
         refPath = `users/${user.uid}/vaults/${vaultId}/tradeHistory`;
         break;
-      case "funding":
-        refPath = `users/${user.uid}/vaults/${vaultId}/fundingHistory`;
-        break;
       case "positions":
         refPath = `users/${user.uid}/vaults/${vaultId}/positions`;
         break;
@@ -224,14 +178,12 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       if (!data) {
         setDeposits([]);
         setTrades([]);
-        setFunding([]);
         setPositions([]);
         setLoading(false);
         return;
       }
       if (activeTab === "deposits") setDeposits(Object.values(data));
       if (activeTab === "trades") setTrades(Object.values(data));
-      if (activeTab === "funding") setFunding(Object.values(data));
       if (activeTab === "positions") setPositions(Object.values(data));
       setLoading(false);
 
@@ -266,10 +218,6 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
             onClick={() => setActiveTab("trades")}
           >Trade History</button>
           <button
-            className={`${tabButton} ${activeTab === "funding" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
-            onClick={() => setActiveTab("funding")}
-          >Funding</button>
-          <button
             className={`${tabButton} ${activeTab === "positions" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
             onClick={() => setActiveTab("positions")}
           >Positions</button>
@@ -284,9 +232,6 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
         )}
         {!loading && activeTab === "trades" && (
           <TableTrades data={trades} />
-        )}
-        {!loading && activeTab === "funding" && (
-          <TableFunding data={funding} />
         )}
         {!loading && activeTab === "positions" && (
           <TablePositions data={positions} />
