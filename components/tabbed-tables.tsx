@@ -31,15 +31,15 @@ interface Trade {
   pnl?: number | string;
 }
 
-interface Position {
-  time?: string;
-  coin?: string;
-  direction?: string;
-  entryPrice?: number | string;
-  size?: number | string;
-  value?: number | string;
-  pnl?: number | string;
-}
+// interface Position {
+//   time?: string;
+//   coin?: string;
+//   direction?: string;
+//   entryPrice?: number | string;
+//   size?: number | string;
+//   value?: number | string;
+//   pnl?: number | string;
+// }
 
 function TableDepositsWithdrawals({ data }: { data:DepositWithdrawal[] }) {
   // Columns: Time, Status, Network, Action, Account Value Change, Fee
@@ -149,7 +149,8 @@ function TablePositions({ data }: { data: Position[] }) {
   */
 
 export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | null }) {
-  const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
+  // const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
+  const [activeTab, setActiveTab] = useState<"deposits" | "trades" >("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
   // const [positions, setPositions] = useState<Position[]>([]);

@@ -3,6 +3,14 @@
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  timestamp: number;
+  type: "info" | "warning" | "success";
+}
+
 export function AnnouncementsWithToggle({ dashboardData }: { dashboardData: { announcements: Announcement[] } }) {
   const [isListView, setIsListView] = useState(false);
 
