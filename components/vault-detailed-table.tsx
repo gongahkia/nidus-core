@@ -38,18 +38,16 @@ export function Vaults() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
   useEffect(() => {
-    if (!user) {
-      setVaults([])
-      return
-    }
-    const vaultsRef = ref(database, `users/${user.uid}/vaults`)
+    const vaultsRef = ref(database, `allVaults`)
     const unsub = onValue(vaultsRef, (snapshot) => {
       const data = snapshot.val()
+      console.log("Fetched vault data:", data)  
       if (data) {
-        const vaultsArr = Object.keys(data).map((id) => ({
+        const vaultsArr = Object.keys(data).map(id => ({
           id,
-          ...data[id],
+          ...data[id]
         }))
+        console.log("Processed vaults for rendering:", vaultsArr)
         setVaults(vaultsArr)
       } else {
         setVaults([])
@@ -57,10 +55,9 @@ export function Vaults() {
     })
 
     return () => {
-      off(vaultsRef)
       unsub()
     }
-  }, [user])
+  }, [])  // no user dependency now
 
   // Filter vaults by search
   const filteredVaults = vaults.filter((v) =>
@@ -129,8 +126,7 @@ export function Vaults() {
   }
 
   function renderVaultRow(v: Vault) {
-    // Decide color for APR (red if negative, green if positive)
-    const aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200")
+    const aprColor = v.apr < 0 ? "text-red-400" : (v.apr > 0 ? "text-green-400" : "text-slate-200");
     return (
       <button
         key={v.id}
@@ -141,13 +137,17 @@ export function Vaults() {
       >
         <div className="flex-1 min-w-[110px] text-left truncate text-slate-100">{v.name}</div>
         <div className="w-24 text-slate-300 text-xs text-center font-mono">{maskAddress(v.leader)}</div>
-        <div className={`w-16 text-right text-xs font-mono ${aprColor}`}>{v.apr != null ? `${v.apr > 0 ? "+" : ""}${v.apr.toFixed(2)}%` : "-"}</div>
+        <div className={`w-16 text-right text-xs font-mono ${aprColor}`}>
+          {v.apr != null ? `${v.apr > 0 ? "+" : ""}${v.apr.toFixed(2)}%` : "-"}
+        </div>
         <div className="w-28 text-right text-xs font-mono">{v.tvl != null ? `$${v.tvl.toLocaleString()}` : "-"}</div>
-        <div className="w-28 text-right text-xs font-mono">{v.balance != null && v.balance !== 0 ? `$${v.balance.toLocaleString()}` : "-"}</div>
+        <div className="w-28 text-right text-xs font-mono">
+          {user && v.balance != null && v.balance !== 0 ? `$${v.balance.toLocaleString()}` : "-"}
+        </div>
         <div className="w-14 text-right text-xs">{v.age ?? "-"}</div>
         <div className="w-24 flex justify-end"><MiniChart data={v.snapshot} /></div>
       </button>
-    )
+    );
   }
 
   function handleSort(field: SortField) {
@@ -160,6 +160,7 @@ export function Vaults() {
   }
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
@@ -194,6 +195,16 @@ export function Vaults() {
         </div>
       </header>
 
+      {!user && (
+        <div className="max-w-5xl mx-auto mt-5 px-4 py-3 bg-yellow-500 bg-opacity-80 text-yellow-900 font-semibold rounded-md text-center text-sm">
+          Your personal deposit data is hidden. Please{" "}
+          <Link href="/account" className="underline font-bold text-yellow-900 hover:text-yellow-700">
+            log in
+          </Link>{" "}
+          to see your deposits.
+        </div>
+      )}
+
       <div className="relative max-w-4xl mx-auto">
         <Card className="bg-slate-800/50 border-slate-700 flex flex-col min-h-[600px] mt-8">
           <CardHeader className="pb-3">
@@ -207,7 +218,6 @@ export function Vaults() {
                 onChange={e => setSearchInput(e.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-900/70 text-slate-200 placeholder:text-slate-400 border border-slate-700 focus:ring-2 focus:ring-purple-400 transition"
                 placeholder="Search by token, address, or protocol"
-                disabled={!user}
               />
               <Search className="absolute right-2 top-2 w-4 h-4 text-slate-400" />
             </div>
@@ -217,15 +227,14 @@ export function Vaults() {
             {/* Table Headers */}
             {renderHeader}
 
-            {user && sortedVaults.length === 0 && (
+            {sortedVaults.length === 0 ? (
               <div className="text-center text-slate-500 py-20">No vaults found.</div>
+            ) : (
+              sortedVaults.map(renderVaultRow)
             )}
-            {user && sortedVaults.length > 0 && sortedVaults.map(renderVaultRow)}
+
           </CardContent>
         </Card>
-        {!user && (
-          <Overlay>Please log in to view your vaults.</Overlay>
-        )}
       </div>
       <Footer/>
     </div>
