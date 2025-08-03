@@ -248,6 +248,84 @@ export function MainDashboard() {
     </Card>
   )
 
+  const AnnouncementsScroll = (
+    <Card className="bg-slate-800/50 border-slate-700 h-[400px] flex flex-col overflow-hidden">
+      <CardHeader>
+        <CardTitle className="flex items-center text-white">
+          Announcements {dashboardData.announcements.length > 0 && `(${dashboardData.announcements.length})`}
+        </CardTitle>
+      </CardHeader>
+
+      <div className="flex overflow-hidden relative flex-nowrap" style={{ direction: 'ltr' }}>
+        <div 
+          className="flex space-x-4 whitespace-nowrap animate-scrollAnnounce"
+          style={{ willChange: 'transform' }}
+        >
+          {dashboardData.announcements.map((announcement) => (
+            <div
+              key={announcement.id}
+              className="flex-shrink-0 bg-slate-700 rounded-lg p-4 m-2 w-48 h-48 flex flex-col justify-between cursor-pointer select-none"
+              title={announcement.title}
+            >
+              <div>
+                <h4 className="font-medium text-white text-lg mb-2 truncate" title={announcement.title}>
+                  {announcement.title}
+                </h4>
+                <p className="text-xs text-slate-300 line-clamp-4">
+                  {announcement.content}
+                </p>
+              </div>
+              <div className="flex justify-between items-center text-xs text-slate-400 mt-3">
+                <span className="capitalize">{announcement.type}</span>
+                <span>{new Date(announcement.timestamp).toLocaleDateString()}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div 
+          className="flex space-x-4 whitespace-nowrap animate-scrollAnnounce"
+          style={{ willChange: 'transform' }}
+        >
+          {dashboardData.announcements.map((announcement) => (
+            <div
+              key={"dup_" + announcement.id}
+              className="flex-shrink-0 bg-slate-700 rounded-lg p-4 m-2 w-48 h-48 flex flex-col justify-between cursor-pointer select-none"
+              title={announcement.title}
+            >
+              <div>
+                <h4 className="font-medium text-white text-lg mb-2 truncate" title={announcement.title}>
+                  {announcement.title}
+                </h4>
+                <p className="text-xs text-slate-300 line-clamp-4">
+                  {announcement.content}
+                </p>
+              </div>
+              <div className="flex justify-between items-center text-xs text-slate-400 mt-3">
+                <span className="capitalize">{announcement.type}</span>
+                <span>{new Date(announcement.timestamp).toLocaleDateString()}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes scrollAnnounce {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-scrollAnnounce {
+          animation: scrollAnnounce 40s linear infinite;
+        }
+      `}</style>
+    </Card>
+  );
+
   const NidusCard = (
     <Card className="relative overflow-hidden bg-gradient-to-tr from-purple-700/60 to-slate-800/80 border-none min-w-[220px] max-w-xs mx-auto mb-6 flex-col items-start">
       <CardHeader className="pb-2 flex flex-row items-center gap-3">
@@ -331,40 +409,13 @@ export function MainDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Announcements Card spans 2/3 */}
           <div className="md:col-span-2">
-            <Card className="bg-slate-800/50 border-slate-700 h-[400px] flex flex-col">
-              <CardHeader>
-                <CardTitle className="flex items-center text-white">
-                  Announcements {dashboardData.announcements.length > 0 && `(${dashboardData.announcements.length})`}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 overflow-y-auto space-y-4">
-                {dashboardData.announcements.length === 0 && (
-                  <div className="text-slate-400 text-center">No announcements</div>
-                )}
-                {dashboardData.announcements.map((announcement) => (
-                  <div key={announcement.id} className="p-3 bg-slate-700/30 rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-white text-sm">{announcement.title}</h4>
-                      <Badge
-                        variant={announcement.type === "success" ? "default" : "secondary"}
-                        className="text-xs"
-                      >
-                        {announcement.type}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-slate-400 mb-2">{announcement.content}</p>
-                    <p className="text-xs text-slate-500">
-                      {new Date(announcement.timestamp).toLocaleDateString()}
-                    </p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            {AnnouncementsScroll}
           </div>
 
-          <div className="relative">
+          {/* <div className="relative">
             {NidusCard}
-          </div>
+          </div> */}
+          
         </div>
 
       </main>
