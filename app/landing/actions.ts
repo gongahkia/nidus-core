@@ -1,7 +1,7 @@
 "use server"
 
-import { db } from "@/lib/firebase"
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { database } from "@/lib/firebase" // Import 'database' (Realtime Database)
+import { ref, push, set } from "firebase/database" // Import Realtime Database functions
 
 export async function submitInterest(prevState: any, formData: FormData) {
   const email = formData.get("email") as string
@@ -12,10 +12,11 @@ export async function submitInterest(prevState: any, formData: FormData) {
   }
 
   try {
-    await addDoc(collection(db, "interest_submissions"), {
+    // Use Realtime Database to push new data
+    await set(push(ref(database, "interest_submissions")), {
       email,
       bitcoinWallet,
-      timestamp: serverTimestamp(),
+      timestamp: Date.now(), // Use Date.now() for Realtime Database timestamp
     })
     return { success: true, message: "Your interest has been successfully recorded!" }
   } catch (error) {

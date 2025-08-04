@@ -1,7 +1,8 @@
 "use client"
 
-import { useActionState, useState } from "react"
-import { submitInterest } from "@/app/landing/actions"
+import type React from "react"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,25 +16,64 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-export function JoinForm() {
-  const [state, formAction, isPending] = useActionState(submitInterest, null)
-  const [showDialog, setShowDialog] = useState(false)
+// Import Realtime Database specific functions and the database instance
+import { ref, push, set } from "firebase/database"
+import { database } from "@/lib/firebase" // Assuming database is exported from lib/firebase.ts
 
-  // Effect to show dialog when submission is successful
-  useState(() => {
-    if (state?.success) {
+export function JoinForm() {
+  const [isPending, setIsPending] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogMessage, setDialogMessage] = useState("")
+  const [dialogTitle, setDialogTitle] = useState("")
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsPending(true)
+
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get("email") as string
+    const bitcoinWallet = formData.get("bitcoinWallet") as string
+
+    if (!email || !bitcoinWallet) {
+      setDialogTitle("Submission Failed")
+      setDialogMessage("Email and Bitcoin Wallet are required.")
+      setIsSuccess(false)
       setShowDialog(true)
+      setIsPending(false)
+      return
     }
-  }, [state])
+
+    try {
+      // Use Realtime Database to push new data
+      await set(push(ref(database, "interest_submissions")), {
+        email,
+        bitcoinWallet,
+        timestamp: Date.now(), // Use Date.now() for Realtime Database timestamp
+      })
+      setDialogTitle("Interest Confirmed!")
+      setDialogMessage("Your interest has been successfully recorded!")
+      setIsSuccess(true)
+      setShowDialog(true)
+      event.currentTarget.reset() // Reset the form after successful submission
+    } catch (error) {
+      console.error("Error submitting interest:", error)
+      setDialogTitle("Submission Failed")
+      setDialogMessage("Failed to record interest. Please try again.")
+      setIsSuccess(false)
+      setShowDialog(true)
+    } finally {
+      setIsPending(false)
+    }
+  }
 
   const handleDialogClose = () => {
     setShowDialog(false)
-    // Optionally reset the form here if needed
   }
 
   return (
     <>
-      <form action={formAction} className="space-y-6 max-w-md mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
         <div>
           <Label htmlFor="email" className="text-lg">
             Email Address
@@ -69,16 +109,13 @@ export function JoinForm() {
         >
           {isPending ? "Submitting..." : "Indicate Interest"}
         </Button>
-        {state && !state.success && <p className="text-red-500 text-center mt-4">{state.message}</p>}
       </form>
 
       <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
         <AlertDialogContent className="bg-gray-800 text-white border-gray-700">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-green-400">Interest Confirmed!</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-300">
-              {state?.message || "Thank you for your interest. We will be in touch soon!"}
-            </AlertDialogDescription>
+            <AlertDialogTitle className={isSuccess ? "text-green-400" : "text-red-400"}>{dialogTitle}</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-300">{dialogMessage}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={handleDialogClose} className="bg-purple-600 hover:bg-purple-700 text-white">

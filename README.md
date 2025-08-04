@@ -8,6 +8,7 @@
     * Should include everything from canva pitch deck
     * Should include everything from the current web app Team and missions section
     * Add a collect email and bitcoin wallet address (string) and write to the same firebase under "responses" that prompts us
+* Make small visual and aesthetic modifications to /landing/page.tsx
 * Then redirect so the current mission page on the main dashboard screen redirects to /landing
 * Make display look better for mobile 
 * See whether its possible to deploy to Electron and Mobile similar to Proquaere and Caselist

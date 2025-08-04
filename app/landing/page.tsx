@@ -310,7 +310,7 @@ export default function LandingPage() {
 
             {/* Key Competitive Advantages Sub-section */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
-              <div className="relative h-96 w-full flex items-center justify-center">
+              <div className="relative h-96 w-full">
                 <Image
                   src="/placeholder.svg?height=400&width=400"
                   alt="Person raising fist in victory"
