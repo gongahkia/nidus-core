@@ -4,7 +4,9 @@
 
 #### General
 
-* Debug the current /landing page issue with perplexity
+* Debug the current occasional auth error i encounter when accessing /landing page issue with perplexity, check if its a filepath issue
+* Ensure form submission to firebase for interest_submission is working
+* After resolving that, ensure all original functionality of the core ./ app is also working
 * Then debug vercel deployment
 * Make small visual and aesthetic modifications to /landing/page.tsx
 * Then redirect so the current mission page on the main dashboard screen redirects to /landing
