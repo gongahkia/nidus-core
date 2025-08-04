@@ -52,5 +52,9 @@
       ".read": true,
       ".write": false
     }
+  },
+  "interest_submissions": {
+    ".read": true,
+    ".write": true
   }
 }

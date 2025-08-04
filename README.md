@@ -4,10 +4,9 @@
 
 #### General
 
-* Create a seperate/same vercel deployment landing page that is linked to this repo and has the following requirements
-    * Should include everything from canva pitch deck
-    * Should include everything from the current web app Team and missions section
-    * Add a collect email and bitcoin wallet address (string) and write to the same firebase under "responses" that prompts us
+* Debug the current /landing page issue with perplexity
+* Make small visual and aesthetic modifications to /landing/page.tsx
+* Then redirect so the current mission page on the main dashboard screen redirects to /landing
 * Make display look better for mobile 
 * See whether its possible to deploy to Electron and Mobile similar to Proquaere and Caselist
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
