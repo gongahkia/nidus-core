@@ -46,7 +46,43 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const [withdrawOpen, setWithdrawOpen] = useState(false)
   const [amount, setAmount] = useState("");  
   const [receiptOpen, setReceiptOpen] = useState(false); 
-  const [txnDetails, setTxnDetails] = useState<{type: "deposit" | "withdraw", amount: number, balance: number} | null>(null);
+  const [txnDetails, setTxnDetails] = useState<{
+    type: "deposit" | "withdraw",
+    amount: number,
+    balance: number,
+    depositTerm?: "6M" | "1Y",             // NEW optional
+    estimatedReward?: number                // NEW optional
+  } | null>(null);
+
+
+  const [depositTerm, setDepositTerm] = useState<"6M" | "1Y">("6M")  // NEW: selected deposit term
+
+  const depositRates = {
+    "6M": 0.035, // 3.5% p.a. for 6 months, you can adjust
+    "1Y": 0.05,  // 5.0% p.a. for 1 year
+  }
+
+  const depositTermDisplay = {
+    "6M": "6 Months",
+    "1Y": "1 Year",
+  }
+
+  function calcTermEnd(term: "6M" | "1Y") {
+    const now = new Date()
+    if (term === "6M") now.setMonth(now.getMonth() + 6)
+    else if (term === "1Y") now.setFullYear(now.getFullYear() + 1)
+    return now.toLocaleDateString("en-GB", {year: "numeric", month: "short", day: "2-digit"})
+  }
+
+  function calcEstimatedReward(amountStr: string, term: "6M" | "1Y") {
+    const rate = depositRates[term]
+    const amt = parseFloat(amountStr || "0")
+    if (isNaN(amt) || amt <= 0) return 0
+    const periodYears = term === "6M" ? 0.5 : 1
+    return amt * rate * periodYears
+  }
+
+  const estReward = calcEstimatedReward(amount, depositTerm)
 
   useEffect(() => {
     if (!vaultId) {
@@ -98,7 +134,13 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         xsgd: newBalance,
       });
       
-      setTxnDetails({ type: "deposit", amount: depositAmount, balance: newBalance });
+      setTxnDetails({ 
+        type: "deposit", 
+        amount: depositAmount, 
+        balance: newBalance,
+        depositTerm: depositTerm,              // NEW: save selected term
+        estimatedReward: calcEstimatedReward(amount, depositTerm), // NEW: save reward
+      });
       setDepositOpen(false);
       setReceiptOpen(true);
       setAmount(""); 
@@ -323,6 +365,32 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div className="mb-3 text-slate-200">
           Deposit to <span className="font-mono">{vault?.name}</span>
         </div>
+        {/* === NEW: Term selection buttons === */}
+        <div className="mb-3 flex gap-3">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded-lg font-bold text-white ${depositTerm === "6M" ? "bg-purple-600" : "bg-slate-700"}`}
+            onClick={() => setDepositTerm("6M")}
+          >
+            6 Months
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded-lg font-bold text-white ${depositTerm === "1Y" ? "bg-purple-600" : "bg-slate-700"}`}
+            onClick={() => setDepositTerm("1Y")}
+          >
+            1 Year
+          </button>
+        </div>
+
+        {/* === NEW: Reward info display === */}
+        <div className="mb-4 p-3 rounded bg-slate-800 text-slate-200 text-sm space-y-1">
+          <div><strong>Reward Rate</strong>: {(depositRates[depositTerm] * 100).toFixed(2)}% p.a.</div>
+          <div><strong>Term Ends</strong>: {calcTermEnd(depositTerm)}</div>
+          <div><strong>Reward Token</strong>: XSGD</div>
+          <div><strong>Est. Reward</strong>: {fmt(estReward)} XSGD</div>
+        </div>
+
         <input
           type="number"
           min={0}
@@ -346,7 +414,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
             Confirm
           </button>
         </div>
-      </Modal>
+      </Modal> 
 
       {/* Withdraw Modal */}
       <Modal open={withdrawOpen} onClose={() => {setWithdrawOpen(false); setAmount("")}}>
@@ -396,6 +464,21 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
               <strong>Amount: </strong>
               {fmt(txnDetails.amount)} xsgd
             </div>
+
+            {/* NEW: show term and estimated reward for deposit */}
+            {txnDetails.type === "deposit" && txnDetails.depositTerm && (
+              <>
+                <div>
+                  <strong>Term: </strong>
+                  {depositTermDisplay[txnDetails.depositTerm]}
+                </div>
+                <div>
+                  <strong>Estimated Reward: </strong>
+                  {fmt(txnDetails.estimatedReward || 0)} xsgd
+                </div>
+              </>
+            )}
+
             <div>
               <strong>New Balance: </strong>
               {fmt(txnDetails.balance)} xsgd
@@ -409,6 +492,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
           </div>
         )}
       </Modal>
+
       </div>
       <Footer />
     </div>
