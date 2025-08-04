@@ -8,6 +8,7 @@
     * Should include everything from canva pitch deck
     * Should include everything from the current web app Team and missions section
     * Add a collect email and bitcoin wallet address (string) and write to the same firebase under "responses" that prompts us
+* Make display look better for mobile 
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
@@ -16,14 +17,23 @@
 <table>
 	<tbody>
         <tr>
-	    <td align="center">
+            <td align="center">
+                <a href="https://github.com/richardleii58">
+                    <img src="https://avatars.githubusercontent.com/u/174111738?v=4" width="100;" alt="richardleii58"/>
+                    <br/>
+                    <sub><b>Richard Lei</b></sub>
+                    <br/>
+                </a>
+                <sub><i>Business, Marketing</i><br><b>CEO</b></sub>
+            </td>
+            <td align="center">
                 <a href="https://github.com/gongahkia">
                     <img src="https://avatars.githubusercontent.com/u/117062305?v=4" width="100;" alt="gongahkia"/>
                     <br/>
                     <sub><b>Gabriel Ong</b></sub>
                     <br/>
                 </a>
-                <sub><i>Full Stack</i></sub>
+                <sub><i>Frontend, Backend, DevOps</i><br><b>CTO</b></sub>
             </td>
         </tr>
 	<tbody>
