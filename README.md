@@ -5,6 +5,7 @@
 #### General
 
 * Debug the current /landing page issue with perplexity
+* Then debug vercel deployment
 * Make small visual and aesthetic modifications to /landing/page.tsx
 * Then redirect so the current mission page on the main dashboard screen redirects to /landing
 * Make display look better for mobile 
