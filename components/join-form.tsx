@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useState } from "react"
-import { submitInterest } from "@/app/actions"
+import { submitInterest } from "@/app/landing/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
