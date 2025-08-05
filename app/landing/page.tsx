@@ -143,7 +143,7 @@ export default function LandingPage() {
                 <ul className="space-y-6 text-lg text-gray-300">
                   <li>
                     <p>
-                      <span className="font-semibold text-white">Trapped Liquidity ≠ Singapore's FinTech Vision.</span>{" "}
+                      <span className="font-semibold text-white">Trapped Liquidity ≠ Singapore&apos;s FinTech Vision.</span>{" "}
                       Unlocking even 5% of the resale-endowment market releases S$42M for productive use.
                     </p>
                   </li>
@@ -233,14 +233,14 @@ export default function LandingPage() {
                   <li>No existing platform with XSGD yields</li>
                   <li>Traditional players (REPS/TES) focus purely on policy resale without lending features</li>
                   <li>Global protocols lack RWA integration and Singapore regulatory compliance</li>
-                  <li>Insurance companies don't offer digital lending against policy portfolios</li>
+                  <li>Insurance companies don&apos;t offer digital lending against policy portfolios</li>
                 </ul>
               </div>
 
               <div className="text-center">
                 <h5 className="text-2xl font-semibold mb-4">Blue Ocean Opportunity:</h5>
                 <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                  We're creating an entirely new category - XSGD yields - rather than competing in existing segments.
+                  We&apos;re creating an entirely new category - XSGD yields - rather than competing in existing segments.
                 </p>
               </div>
             </div>
@@ -408,7 +408,7 @@ export default function LandingPage() {
               <div>
                 <h4 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">FINANCIAL PROJECTIONS</h4>
                 <p className="text-lg text-gray-300 mb-6">
-                  The XSGD lending protocol's financial projections highlight a strong growth trajectory, with revenue
+                  The XSGD lending protocol&apos;s financial projections highlight a strong growth trajectory, with revenue
                   and profitability scaling rapidly as assets under management expand.
                 </p>
                 <ul className="space-y-4 text-lg text-gray-300">
@@ -462,7 +462,7 @@ export default function LandingPage() {
                   <h4 className="text-2xl font-semibold">RICHARD LEI</h4>
                   <p className="text-gray-300 mb-4">Chief Executive Officer</p>
                   <p className="text-sm text-gray-400 mb-4">
-                    Richard is NIDUS' visionary leader with extensive experience in fintech and blockchain, driving NIDUS's
+                    Richard is NIDUS&apos; visionary leader with extensive experience in fintech and blockchain, driving NIDUS&apos;s
                     strategic direction and market adoption.
                   </p>
                   <div className="flex space-x-4 text-gray-300">
@@ -487,7 +487,7 @@ export default function LandingPage() {
                   <h4 className="text-2xl font-semibold">GABRIEL ONG</h4>
                   <p className="text-gray-300 mb-4">Chief Technology Officer</p>
                   <p className="text-sm text-gray-400 mb-4">
-                    Gabriel is NIDUS' head of software development and smart contracts, responsible for building the robust and
+                    Gabriel is NIDUS&apos; head of software development and smart contracts, responsible for building the robust and
                     secure NIDUS protocol infrastructure.
                   </p>
                   <div className="flex space-x-4 text-gray-300">
