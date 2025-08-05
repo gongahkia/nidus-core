@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
+import { Button } from "@/components/ui/button"; 
+import { useRouter } from "next/navigation"; 
 
 export default function AboutNidusPage() {
+  const router = useRouter(); 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -60,6 +63,15 @@ export default function AboutNidusPage() {
               <p className="text-slate-400">
                 Empower users to manage and protect their digital wealth with confidence and ease.
               </p>
+            </div>
+            <div className="mt-6 flex justify-center">
+              <Button
+                onClick={() => router.push('/landing')}
+                variant="secondary"
+                className="bg-gradient-to-r from-purple-700 via-purple-800 to-purple-900 shadow-md shadow-purple-900/50 text-white font-semibold rounded-lg hover:from-purple-600 hover:via-purple-700 hover:to-purple-800 transition-colors duration-300"
+              >
+                Learn more about Nidus
+              </Button>
             </div>
           </CardContent>
         </Card>

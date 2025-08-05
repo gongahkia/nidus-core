@@ -43,7 +43,7 @@ export default function LandingPage() {
               NIDUS
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-              Unlocking predictable, real-world yield from Singaporean insurance policies, bridging traditional finance
+              The Platform for unlocking predictable, real-world yield from Singaporean insurance policies, bridging traditional finance
               with DeFi.
             </p>
             <Link href="#about">
@@ -56,7 +56,7 @@ export default function LandingPage() {
             </Link>
             <div className="mt-16 md:mt-24">
               <Image
-                src="/images/demo/nidus-demonstration.gif"
+                src="/demo/nidus-demonstration.gif"
                 alt="NIDUS Dashboard Demo"
                 width={1200}
                 height={700}
