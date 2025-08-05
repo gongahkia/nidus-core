@@ -4,9 +4,7 @@
 
 #### General
 
-* Debug the current occasional auth error i encounter when accessing /landing page issue with perplexity, check if its a filepath issue
 * Ensure form submission to firebase for interest_submission is working
-* After resolving that, ensure all original functionality of the core ./ app is also working
 * Then debug vercel deployment
 * Make small visual and aesthetic modifications to /landing/page.tsx
 * Make Nidus landing page adhere to the black and blue colorscheme and add Nidus PNG logo that richard sent
