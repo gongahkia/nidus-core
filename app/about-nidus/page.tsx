@@ -68,9 +68,9 @@ export default function AboutNidusPage() {
               <Button
                 onClick={() => router.push('/landing')}
                 variant="secondary"
-                className="bg-gradient-to-r from-purple-700 via-purple-800 to-purple-900 shadow-md shadow-purple-900/50 text-white font-semibold rounded-lg hover:from-purple-600 hover:via-purple-700 hover:to-purple-800 transition-colors duration-300"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-full"
               >
-                Learn more about Nidus
+                Learn more
               </Button>
             </div>
           </CardContent>
@@ -82,11 +82,11 @@ export default function AboutNidusPage() {
             <CardTitle className="text-white text-xl">Meet the Team</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-8">
               {/* Richard Lei */}
               <div className="flex flex-col items-center text-center flex-1">
                 <Image
-                  src="https://media.licdn.com/dms/image/v2/D5603AQGo_xyOewTB7g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1695662262332?e=1757548800&v=beta&t=5p4MBBme3K6j8Gn74XZ6J94D9qPa_PZBYLVAtQEl0jA"
+                  src="/profile/richard.jpg"
                   alt="Richard Lei"
                   width={96}
                   height={96}
@@ -95,24 +95,48 @@ export default function AboutNidusPage() {
                 <div className="text-white font-semibold text-lg">Richard Lei</div>
                 <div className="text-slate-400 text-sm mb-2">Chief Executive Officer</div>
                 <p className="text-slate-400 text-xs">
-                  Richard leads NIDUS with a vision for transparent, secure, and innovative DeFi lending solutions.
+                  Richard leads NIDUS business and marketing with a vision for transparent, secure, and innovative DeFi lending solutions.
                 </p>
+              <div className="flex space-x-4 text-gray-300 mt-2">
+                <Link href="https://www.linkedin.com/in/richard-lei-01a77118b/" className="hover:text-white" aria-label="LinkedIn">
+                  {/* LinkedIn icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v8h-4v-8a2 2 0 00-4 0v8h-4v-8a6 6 0 016-6zM2 9h4v12H2zM4 3a2 2 0 110 4 2 2 0 010-4z"/></svg>
+                </Link>
+                <Link href="https://github.com/richardleii58" className="hover:text-white" aria-label="GitHub">
+                  {/* GitHub icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.49v-1.79c-2.78.6-3.37-1.34-3.37-1.34-.45-1.13-1.11-1.43-1.11-1.43-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.08 2.94.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.02A9.58 9.58 0 0112 7a9.5 9.5 0 012.5.35c1.9-1.29 2.74-1.02 2.74-1.02.55 1.41.2 2.45.1 2.71.64.7 1.03 1.6 1.03 2.68 0 3.86-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .28.18.59.69.49A10 10 0 0012 2z"/></svg>
+                </Link>
+              </div>
               </div>
               {/* Gabriel Ong */}
               <div className="flex flex-col items-center text-center flex-1">
-                <Image
-                  src="https://media.licdn.com/dms/image/v2/D5603AQFwwQ70upxVLQ/profile-displayphoto-shrink_400_400/B56ZN9ThfrGwAg-/0/1732974090931?e=1757548800&v=beta&t=DlPQfVhmtwpxN2GBPX57teX77GTOtzyW7d-4nkUPbTk"
-                  alt="Gabriel Ong"
-                  width={96}
-                  height={96}
-                  className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
-                />
-                <div className="text-white font-semibold text-lg">Gabriel Ong</div>
-                <div className="text-slate-400 text-sm mb-2">Chief Technology Officer</div>
-                <p className="text-slate-400 text-xs">
-                  Gabriel leads the technical development and engineering at NIDUS, ensuring robust, scalable, and user-focused DeFi infrastructure.
-                </p>
+              <Image
+                src="/profile/gabriel.jpg"
+                alt="Gabriel Ong"
+                width={96}
+                height={96}
+                className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-purple-600 shadow-lg"
+              />
+              <div className="text-white font-semibold text-lg">Gabriel Ong</div>
+              <div className="text-slate-400 text-sm mb-2">Chief Technology Officer</div>
+              <p className="text-slate-400 text-xs">
+                Gabriel leads the technical development and engineering at NIDUS, ensuring robust, scalable, and user-focused DeFi infrastructure.
+              </p>
+              <div className="flex space-x-4 text-gray-300 mt-2">
+                <Link href="https://www.linkedin.com/in/gabriel-zmong/" className="hover:text-white" aria-label="LinkedIn">
+                  {/* LinkedIn icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v8h-4v-8a2 2 0 00-4 0v8h-4v-8a6 6 0 016-6zM2 9h4v12H2zM4 3a2 2 0 110 4 2 2 0 010-4z"/></svg>
+                </Link>
+                <Link href="https://github.com/gongahkia" className="hover:text-white" aria-label="GitHub">
+                  {/* GitHub icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.49v-1.79c-2.78.6-3.37-1.34-3.37-1.34-.45-1.13-1.11-1.43-1.11-1.43-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.08 2.94.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.02A9.58 9.58 0 0112 7a9.5 9.5 0 012.5.35c1.9-1.29 2.74-1.02 2.74-1.02.55 1.41.2 2.45.1 2.71.64.7 1.03 1.6 1.03 2.68 0 3.86-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .28.18.59.69.49A10 10 0 0012 2z"/></svg>
+                </Link>
+                <Link href="https://www.gabrielongzm.com" className="hover:text-white" aria-label="Website">
+                  {/* Globe icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </Link>
               </div>
+            </div> 
             </div>
           </CardContent>
         </Card>
