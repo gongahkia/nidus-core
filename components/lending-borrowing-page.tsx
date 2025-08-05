@@ -9,7 +9,7 @@ import { TrendingUp, TrendingDown } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, off, set, update, push } from "firebase/database"
-import { database } from "./auth-provider"
+import { database } from '@/lib/firebase'
 import { Overlay } from "@/components/overlay"
 import { Footer } from "@/components/footer"
 

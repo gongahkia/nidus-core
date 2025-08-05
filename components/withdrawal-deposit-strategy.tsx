@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, update } from "firebase/database"
-import { database } from "./auth-provider"
+import { database } from "@/lib/firebase"
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"

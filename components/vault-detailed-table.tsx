@@ -7,7 +7,7 @@ import { Search } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue } from "firebase/database"
-import { database } from "./auth-provider"
+import { database } from "@/lib/firebase"
 import { Footer } from "@/components/footer"
 import { Badge } from "@/components/ui/badge"
 import { Sparklines, SparklinesLine } from 'react-sparklines'

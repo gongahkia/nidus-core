@@ -12,7 +12,7 @@ import { User, Settings, HelpCircle, Shield, Bell, ExternalLink } from "lucide-r
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { ref, onValue, set } from 'firebase/database'
-import { database } from './auth-provider'
+import { database } from '@/lib/firebase'
 import { Footer } from "@/components/footer"
 import { Badge } from "@/components/ui/badge"
 

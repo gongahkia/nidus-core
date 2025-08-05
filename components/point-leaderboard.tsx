@@ -6,7 +6,7 @@ import { TrendingUp, User, Medal } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { ref, query, orderByChild, limitToLast, onValue, off } from "firebase/database";
-import { database } from "./auth-provider";
+import { database } from '@/lib/firebase'
 import { useAuth } from "./auth-provider"
 
 interface LeaderboardEntry {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { ref, onValue, off } from "firebase/database";
 import type { DataSnapshot } from "firebase/database";
-import { database } from "./auth-provider";
+import { database } from "@/lib/firebase";
 
 interface User {
   uid: string
