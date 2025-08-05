@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { JoinForm } from "@/components/join-form"
+import { Footer } from "@/components/footer"
 
 export default function LandingPage() {
   return (
@@ -24,13 +25,12 @@ export default function LandingPage() {
             <Link href="#team" className="text-sm font-medium text-gray-300 hover:text-white">
               Team
             </Link>
-            <Link href="#join" className="text-sm font-medium text-gray-300 hover:text-white">
-              Join
-            </Link>
           </nav>
-          <Button variant="secondary" className="hidden md:block">
-            Connect Wallet
-          </Button>
+          <Link href="#join" className="hidden md:block">
+            <Button variant="secondary">
+              Join
+            </Button>
+          </Link>
           {/* Mobile menu button would go here */}
         </div>
       </header>
@@ -542,20 +542,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-12 bg-gray-950 border-t border-gray-800">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
-          <h4 className="text-2xl font-bold tracking-tight text-white mb-4">Verus Co</h4>
-          <p className="text-lg mb-2">THANK YOU for your time and attention</p>
-          <p className="mb-1">Presented by Richard Lei</p>
-          <p className="mb-1">
-            <Link href="https://www.veritas.com" className="underline hover:text-white">
-              www.veritas.com
-            </Link>
-          </p>
-          <p className="mb-1">leirichard58@gmail.com</p>
-          <p>+65 96476459</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
