@@ -3,7 +3,6 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import {
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
