@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,17 +44,27 @@ export function JoinForm() {
     }
 
     try {
-      // Use Realtime Database to push new data
-      await set(push(ref(database, "interest_submissions")), {
+      console.log("Submitting interest:", { email, bitcoinWallet });
+      // Use Realtime Database to push new data step-by-step for better debugging
+      const submissionsRef = ref(database, "interest_submissions")
+      const newSubmissionRef = push(submissionsRef)
+      console.log("Firebase push ref key:", newSubmissionRef.key)
+      await set(newSubmissionRef, {
         email,
         bitcoinWallet,
         timestamp: Date.now(), // Use Date.now() for Realtime Database timestamp
       })
+      console.log("Write succeeded.")
       setDialogTitle("Interest Confirmed!")
       setDialogMessage("Your interest has been successfully recorded!")
       setIsSuccess(true)
       setShowDialog(true)
-      event.currentTarget.reset() // Reset the form after successful submission
+      try {
+        event.currentTarget.reset()
+        console.log("Form reset succeeded.")
+      } catch (resetError) {
+        console.warn("Form reset error:", resetError)
+      }
     } catch (error) {
       console.error("Error submitting interest:", error)
       setDialogTitle("Submission Failed")

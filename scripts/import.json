@@ -688,6 +688,10 @@
     }
   },
   "interest_submissions": {
-
+    "<generated_push_id_1>": {
+      "bitcoinWallet": "bc1qxyz",
+      "email": "user1@example.com",
+      "timestamp": 1691155200000
+    }
   }
 }
