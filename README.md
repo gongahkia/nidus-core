@@ -1,5 +1,10 @@
 # MVP for NIDUS Core
 
+## Access
+
+* [veritas-core.vercel.app](https://veritas-core.vercel.app/)
+* [veritas-core.vercel.app/landing](https://veritas-core.vercel.app/landing)
+
 ### To do (deadline ...)
 
 #### General
