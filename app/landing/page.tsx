@@ -56,8 +56,8 @@ export default function LandingPage() {
             </Link>
             <div className="mt-16 md:mt-24">
               <Image
-                src="/images/nidus-dashboard.png"
-                alt="NIDUS Dashboard Screenshot"
+                src="/images/demo/nidus-demonstration.gif"
+                alt="NIDUS Dashboard Demo"
                 width={1200}
                 height={700}
                 className="rounded-xl shadow-2xl border border-gray-800 mx-auto"

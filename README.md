@@ -8,11 +8,12 @@
 * Then debug vercel deployment
 * Make small visual and aesthetic modifications to /landing/page.tsx
 * Make Nidus landing page adhere to the black and blue colorscheme and add Nidus PNG logo that richard sent
-* Add Nidus logo to the current web app site at ./ and make everything adhere to the black and blue colorscheme
 * See if there's any way to refactor the codebase to make switching color palettes a bit easier
 * Then redirect so the current mission page on the main dashboard screen redirects to /landing
 * Make display look better for mobile 
 * See whether its possible to deploy to Electron and Mobile similar to Proquaere and Caselist
+* Add Nidus logo to the current web app site at ./ and make everything adhere to the black and blue colorscheme
+
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
