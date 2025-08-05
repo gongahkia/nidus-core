@@ -1,4 +1,4 @@
-"use client" // Added this line
+"use client" 
 
 import Image from "next/image"
 import Link from "next/link"
@@ -40,18 +40,20 @@ export default function LandingPage() {
         <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6">
-              NIDUS PROTOCOL
+              NIDUS
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
               Unlocking predictable, real-world yield from Singaporean insurance policies, bridging traditional finance
               with DeFi.
             </p>
-            <Button
-              size="lg"
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-full"
-            >
-              Get Started
-            </Button>
+            <Link href="#about">
+              <Button
+                size="lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-full"
+              >
+                Get Started
+              </Button>
+            </Link>
             <div className="mt-16 md:mt-24">
               <Image
                 src="/images/nidus-dashboard.png"
@@ -61,26 +63,6 @@ export default function LandingPage() {
                 className="rounded-xl shadow-2xl border border-gray-800 mx-auto"
               />
             </div>
-            <div className="mt-16 text-sm text-gray-400">
-              <p>Presented by Richard Lei</p>
-              <p>
-                Verus Co |{" "}
-                <Link href="https://www.veritas.com" className="underline hover:text-white">
-                  www.veritas.com
-                </Link>
-              </p>
-              <p>leirichard58@gmail.com | +65 96476459</p>
-            </div>
-          </div>
-          {/* Abstract background elements */}
-          <div className="absolute inset-0 z-0 opacity-20">
-            <Image
-              src="/placeholder.svg?height=800&width=1600"
-              alt="Abstract background"
-              layout="fill"
-              objectFit="cover"
-              className="pointer-events-none"
-            />
           </div>
         </section>
 
@@ -471,7 +453,7 @@ export default function LandingPage() {
               <Card className="bg-gray-800 border-gray-700 text-white p-6">
                 <div className="flex flex-col items-center">
                   <Image
-                    src="/placeholder.svg?height=200&width=200"
+                    src="/profile/richard.jpg"
                     alt="Richard Lei"
                     width={200}
                     height={200}
@@ -480,18 +462,15 @@ export default function LandingPage() {
                   <h4 className="text-2xl font-semibold">RICHARD LEI</h4>
                   <p className="text-gray-300 mb-4">Chief Executive Officer</p>
                   <p className="text-sm text-gray-400 mb-4">
-                    Richard is a visionary leader with extensive experience in fintech and blockchain, driving NIDUS's
+                    Richard is NIDUS' visionary leader with extensive experience in fintech and blockchain, driving NIDUS's
                     strategic direction and market adoption.
                   </p>
                   <div className="flex space-x-4 text-gray-300">
-                    <Link href="#" className="hover:text-white">
+                    <Link href="https://www.linkedin.com/in/richard-lei-02a77118b/" className="hover:text-white">
                       LinkedIn
                     </Link>
-                    <Link href="#" className="hover:text-white">
+                    <Link href="https://github.com/richardleii58" className="hover:text-white">
                       GitHub
-                    </Link>
-                    <Link href="#" className="hover:text-white">
-                      Website
                     </Link>
                   </div>
                 </div>
@@ -499,7 +478,7 @@ export default function LandingPage() {
               <Card className="bg-gray-800 border-gray-700 text-white p-6">
                 <div className="flex flex-col items-center">
                   <Image
-                    src="/placeholder.svg?height=200&width=200"
+                    src="/profile/gabriel.jpg"
                     alt="Gabriel Ong"
                     width={200}
                     height={200}
@@ -508,24 +487,23 @@ export default function LandingPage() {
                   <h4 className="text-2xl font-semibold">GABRIEL ONG</h4>
                   <p className="text-gray-300 mb-4">Chief Technology Officer</p>
                   <p className="text-sm text-gray-400 mb-4">
-                    Gabriel is a blockchain architect and smart contract expert, responsible for building the robust and
+                    Gabriel is NIDUS' head of software development and smart contracts, responsible for building the robust and
                     secure NIDUS protocol infrastructure.
                   </p>
                   <div className="flex space-x-4 text-gray-300">
-                    <Link href="#" className="hover:text-white">
+                    <Link href="https://www.linkedin.com/in/gabriel-zmong/" className="hover:text-white">
                       LinkedIn
                     </Link>
-                    <Link href="#" className="hover:text-white">
+                    <Link href="https://github.com/gongahkia" className="hover:text-white">
                       GitHub
                     </Link>
-                    <Link href="#" className="hover:text-white">
+                    <Link href="https://gabrielongzm.com/" className="hover:text-white">
                       Website
                     </Link>
                   </div>
                 </div>
               </Card>
             </div>
-            <p className="mt-16 text-lg text-gray-300">Thank you for your time! Reach out to us for questions.</p>
           </div>
         </section>
 
