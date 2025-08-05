@@ -208,7 +208,7 @@ export function MainDashboard() {
             <Link href="/" className="text-white hover:text-purple-300 transition">Dashboard</Link>
             <Link href="/vaults" className="text-slate-300 hover:text-purple-300 transition">Vaults</Link>
             <Link href="/points" className="text-slate-300 hover:text-purple-300 transition">Points</Link>
-            {!user && <Link href="/about" className="text-slate-300 hover:text-purple-300 transition">Mission</Link>}
+            {!user && <Link href="/about-nidus" className="text-slate-300 hover:text-purple-300 transition">Mission</Link>}
             <Link href="/account" className="text-slate-300 hover:text-purple-300 transition">Account</Link>
           </nav>
         </div>
