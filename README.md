@@ -22,6 +22,7 @@
 * Help and support page, remove "Getting started with lending and borrowing" and "Understanding NFT insurance assets"
 * Firebase schema, Remove every other vault strategy aside from XSGD-RWA from the firebase schema in terms of content
 * Help and support page, Link the Troubleshooting common issues and How to use your dashboard and manage your portfolio
+* Change the graph on main dashboard to XSGD not XsGD 
 
 #### General
 
