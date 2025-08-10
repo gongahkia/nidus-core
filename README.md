@@ -7,8 +7,6 @@
 
 ### To do (deadline ...)
 
-* For each Vault-specific plan page, the Strategy: XXX should instead become Tokenised Singapore Insurance Secondary Market Yields
-* For each Vault-specific plan page, remove the words "performance snapshot" and move the strategy name above the graph display
 * For each Vault-specific plan page, modify the performance snapshot graph so that when hovered over with the mouse it should show APR or TVL instead of value
 * For each Vault-specific plan page, modify the performance snapshot X-axis so that Day 1 2 3 becomes exact dates in 3-day intervals
 * Modify performance snapshot to include 2 graphs per the below screenshot for APR and TVL, modify the firebase schema accordingly

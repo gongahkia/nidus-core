@@ -262,9 +262,9 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
           <div className="mb-6 flex flex-col items-center justify-center">
             {vault?.snapshot && vault.snapshot.length > 0 && (
               <div className="w-full h-64 mb-6 md:mb-0">
-                <h3 className="text-white mb-2 font-semibold text-center md:text-left">
-                  Performance Snapshot
-                </h3>
+                <h2 className="text-white text-2xl mb-2 font-semibold text-center md:text-left">
+                  {vault?.name ?? "-"}
+                </h2>
                 <ResponsiveContainer width="100%" height="90%">
                   <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                     <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
@@ -284,7 +284,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">{vault?.name ?? "-"}</h2>
             <div className="text-xs text-slate-400 mt-1">
               Strategy: <span className="font-semibold text-purple-300">{vault?.strategy || "-"}</span>
             </div>
