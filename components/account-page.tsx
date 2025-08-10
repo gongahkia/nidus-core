@@ -157,17 +157,17 @@ export function AccountPage() {
   }
 
   // Handle toggling a currency on/off for display
-  const toggleCurrencyVisibility = (currency: CurrencyCode) => {
-    setVisibleCurrencies(prev => {
-      if (prev.includes(currency)) {
-        // remove
-        return prev.filter(c => c !== currency)
-      } else {
-        // add
-        return [...prev, currency]
-      }
-    })
-  }
+  // const toggleCurrencyVisibility = (currency: CurrencyCode) => {
+  //   setVisibleCurrencies(prev => {
+  //     if (prev.includes(currency)) {
+  //       // remove
+  //       return prev.filter(c => c !== currency)
+  //     } else {
+  //       // add
+  //       return [...prev, currency]
+  //     }
+  //   })
+  // }
 
   if (!user) {
     return (
