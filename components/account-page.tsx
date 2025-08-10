@@ -569,6 +569,7 @@ export function AccountPage() {
                       />
                     </Switch>
                     </div>
+                    {/* 
                     <Separator className="bg-slate-700" />
                     <div className="flex items-center justify-between">
                       <div>
@@ -589,11 +590,12 @@ export function AccountPage() {
                       />
                     </Switch>
                     </div>
+                    */}
                   </CardContent>
                 </Card>
 
                 {/* New: Currency Management */}
-                <Card className="bg-slate-800/50 border-slate-700">
+                {/* <Card className="bg-slate-800/50 border-slate-700">
                   <CardHeader>
                     <CardTitle className="text-white">Manage Currencies</CardTitle>
                   </CardHeader>
@@ -618,7 +620,7 @@ export function AccountPage() {
                       </div>
                     ))}
                   </CardContent>
-                </Card>
+                </Card> */}
               </TabsContent>
             </Tabs>
           </div>
