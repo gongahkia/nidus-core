@@ -20,16 +20,16 @@ interface DepositWithdrawal {
   fee?: number | string;
 }
 
-interface Trade {
-  time?: string;
-  coin?: string;
-  direction?: string;
-  price?: number | string;
-  size?: number | string;
-  tradeValue?: number | string;
-  fee?: number | string;
-  pnl?: number | string;
-}
+// interface Trade {
+//   time?: string;
+//   coin?: string;
+//   direction?: string;
+//   price?: number | string;
+//   size?: number | string;
+//   tradeValue?: number | string;
+//   fee?: number | string;
+//   pnl?: number | string;
+// }
 
 // interface Position {
 //   time?: string;
