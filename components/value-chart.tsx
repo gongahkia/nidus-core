@@ -99,7 +99,7 @@ export function ValueChart({ data, onClick }: ValueChartProps) {
           labels: data.poolValueHistory.map((d) => new Date(d.timestamp)),
           datasets: [
             {
-              label: "Pool Value (XsGD)",
+              label: "Pool Value (XSGD)",
               data: data.poolValueHistory.map((d) => d.value),
               borderColor: "#a78bfa",
               backgroundColor: "rgba(167,139,250,0.2)",

@@ -300,7 +300,7 @@ export function LendingBorrowingPage() {
             {/* Card 1: Deposit XsGD */}
             <Card className="bg-slate-800/50 border-slate-700 relative">
               <CardHeader>
-                <CardTitle className="text-white">Deposit XsGD</CardTitle>
+                <CardTitle className="text-white">Deposit XSGD</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-400 mb-2">Enter the amount of XSGD to deposit:</p>
