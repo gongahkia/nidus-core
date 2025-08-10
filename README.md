@@ -15,18 +15,17 @@
 
 <img width="937" height="400" alt="image" src="https://github.com/user-attachments/assets/302b40ec-f60d-4ec6-bd93-6574b03553fa" />
 
-* Account page settings, make the assets card properly stylised like the portfolio card currently instead of just raw text
-* Firebase schema, Remove every other vault strategy aside from XSGD-RWA from the firebase schema in terms of content
-* Help and support page, Link the Troubleshooting common issues and How to use your dashboard and manage your portfolio
 
 #### General
 
 * Make display look better for mobile 
 * See whether its possible to deploy to Electron and Mobile similar to Proquaere and Caselist
+* Account page settings, make the assets card properly stylised like the portfolio card currently instead of just raw text
 * Make small visual and aesthetic modifications to ./app/landing/page.tsx and add images accordingly
 * Make Nidus landing page adhere to the black and blue colorscheme and add Nidus PNG logo that richard sent
 * Add Nidus logo to the current landing page at ./app/landing AND the web app site at ./app/ and tweak the background UI colors to make everything adhere to the new colorscheme
 * See if there's any way to refactor the codebase to make switching and testing out UI/UX color palettes a bit easier
+* Help and support page, Link the Troubleshooting common issues and How to use your dashboard and manage your portfolio to other pages
 * Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
 * Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
 
