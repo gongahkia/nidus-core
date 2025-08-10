@@ -74,42 +74,42 @@ function TableDepositsWithdrawals({ data }: { data:DepositWithdrawal[] }) {
   );
 }
 
-function TableTrades({ data }: { data: Trade[] }) {
-  // Columns: Time, Coin, Direction, Price, Size, Trade Value, Fee, PnL
-  return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="text-slate-400 border-b border-slate-700">
-          <th className="py-2 px-2 text-left">Time</th>
-          <th className="py-2 px-2 text-left">Coin</th>
-          <th className="py-2 px-2 text-left">Direction</th>
-          <th className="py-2 px-2 text-right">Price</th>
-          <th className="py-2 px-2 text-right">Size</th>
-          <th className="py-2 px-2 text-right">Trade Value</th>
-          <th className="py-2 px-2 text-right">Fee</th>
-          <th className="py-2 px-2 text-right">PnL</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.length === 0 && (
-          <tr><td colSpan={8} className="py-8 text-slate-500 text-center">No records found</td></tr>
-        )}
-        {data.map((row, i) => (
-          <tr key={i} className="border-b border-slate-800 hover:bg-slate-900/40">
-            <td className="py-2 px-2">{row.time || "-"}</td>
-            <td className="py-2 px-2">{row.coin || "-"}</td>
-            <td className="py-2 px-2">{row.direction || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.price || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.size || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.tradeValue || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.fee || "-"}</td>
-            <td className="py-2 px-2 text-right">{row.pnl || "-"}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
+// function TableTrades({ data }: { data: Trade[] }) {
+//   // Columns: Time, Coin, Direction, Price, Size, Trade Value, Fee, PnL
+//   return (
+//     <table className="w-full border-collapse">
+//       <thead>
+//         <tr className="text-slate-400 border-b border-slate-700">
+//           <th className="py-2 px-2 text-left">Time</th>
+//           <th className="py-2 px-2 text-left">Coin</th>
+//           <th className="py-2 px-2 text-left">Direction</th>
+//           <th className="py-2 px-2 text-right">Price</th>
+//           <th className="py-2 px-2 text-right">Size</th>
+//           <th className="py-2 px-2 text-right">Trade Value</th>
+//           <th className="py-2 px-2 text-right">Fee</th>
+//           <th className="py-2 px-2 text-right">PnL</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {data.length === 0 && (
+//           <tr><td colSpan={8} className="py-8 text-slate-500 text-center">No records found</td></tr>
+//         )}
+//         {data.map((row, i) => (
+//           <tr key={i} className="border-b border-slate-800 hover:bg-slate-900/40">
+//             <td className="py-2 px-2">{row.time || "-"}</td>
+//             <td className="py-2 px-2">{row.coin || "-"}</td>
+//             <td className="py-2 px-2">{row.direction || "-"}</td>
+//             <td className="py-2 px-2 text-right">{row.price || "-"}</td>
+//             <td className="py-2 px-2 text-right">{row.size || "-"}</td>
+//             <td className="py-2 px-2 text-right">{row.tradeValue || "-"}</td>
+//             <td className="py-2 px-2 text-right">{row.fee || "-"}</td>
+//             <td className="py-2 px-2 text-right">{row.pnl || "-"}</td>
+//           </tr>
+//         ))}
+//       </tbody>
+//     </table>
+//   );
+// }
 
 /*
 function TablePositions({ data }: { data: Position[] }) {
@@ -223,10 +223,11 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
             className={`${tabButton} ${activeTab === "deposits" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
             onClick={() => setActiveTab("deposits")}
           >Deposits & Withdrawals</button>
-          <button
+
+          {/* <button
             className={`${tabButton} ${activeTab === "trades" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
             onClick={() => setActiveTab("trades")}
-          >Trade History</button>
+          >Trade History</button> */}
 
           {/* <button
             className={`${tabButton} ${activeTab === "positions" ? tabButtonActive : "text-slate-300 hover:text-purple-300"}`}
@@ -242,9 +243,9 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
         {!loading && activeTab === "deposits" && (
           <TableDepositsWithdrawals data={deposits} />
         )}
-        {!loading && activeTab === "trades" && (
+        {/* {!loading && activeTab === "trades" && (
           <TableTrades data={trades} />
-        )}
+        )} */}
 
         {/* {!loading && activeTab === "positions" && (
           <TablePositions data={positions} />
