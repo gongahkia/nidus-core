@@ -49,8 +49,6 @@ export default function HelpSupportPage() {
             </p>
             <ul className="list-disc ml-5 text-slate-400">
               <li>How to use your dashboard and manage your portfolio</li>
-              <li>Getting started with lending and borrowing</li>
-              <li>Understanding NFT insurance assets</li>
               <li>Troubleshooting common issues</li>
             </ul>
             <div className="mt-6">
