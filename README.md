@@ -3,7 +3,7 @@
 ## Access
 
 * [veritas-core.vercel.app](https://veritas-core.vercel.app/)
-* [veritas-core.vercel.app/landing](https://veritas-core.vercel.app/landing)
+* [veritas-core.vercel.app/landing](https://veritas-core.vercel.app/landing) *(deprecated for now)*
 
 ### To do (deadline ...)
 
