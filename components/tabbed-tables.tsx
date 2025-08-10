@@ -150,9 +150,9 @@ function TablePositions({ data }: { data: Position[] }) {
 
 export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | null }) {
   // const [activeTab, setActiveTab] = useState<"deposits" | "trades" | "positions">("deposits");
-  const [activeTab, setActiveTab] = useState<"deposits" | "trades" >("deposits");
+  const [activeTab, setActiveTab] = useState<"deposits" >("deposits");
   const [deposits, setDeposits] = useState<DepositWithdrawal[]>([]);
-  const [trades, setTrades] = useState<Trade[]>([]);
+  // const [trades, setTrades] = useState<Trade[]>([]);
   // const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -167,9 +167,9 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       case "deposits":
         refPath = `allVaults/${vaultId}/depositsAndWithdrawals`;
         break;
-      case "trades":
-        refPath = `allVaults/${vaultId}/tradeHistory`;
-        break;
+      // case "trades":
+      //   refPath = `allVaults/${vaultId}/tradeHistory`;
+      //   break;
 
       // case "positions":
       //   refPath = `users/${user.uid}/vaults/${vaultId}/positions`;
@@ -183,7 +183,7 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
       const data = snapshot.val();
       if (!data) {
         setDeposits([]);
-        setTrades([]);
+        // setTrades([]);
 
         // setPositions([]);
 
@@ -191,7 +191,7 @@ export function TabbedTables({ vaultId, user }: { vaultId: string, user: User | 
         return;
       }
       if (activeTab === "deposits") setDeposits(Object.values(data));
-      if (activeTab === "trades") setTrades(Object.values(data));
+      // if (activeTab === "trades") setTrades(Object.values(data));
 
       // if (activeTab === "positions") setPositions(Object.values(data));
 
