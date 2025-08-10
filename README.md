@@ -15,7 +15,6 @@
 
 <img width="937" height="400" alt="image" src="https://github.com/user-attachments/assets/302b40ec-f60d-4ec6-bd93-6574b03553fa" />
 
-* Account page settings, remove the Auto-Compound Rewards and remove currency conversion
 * Account page settings, make the assets card properly stylised like the portfolio card currently instead of just raw text
 * Help and support page, remove "Getting started with lending and borrowing" and "Understanding NFT insurance assets"
 * Firebase schema, Remove every other vault strategy aside from XSGD-RWA from the firebase schema in terms of content
