@@ -38,8 +38,18 @@ export default function LandingPage() {
       <main>
         {/* Hero Section */}
         <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-black/40"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6">
+            <div className="mb-8">
+              <Image
+                src="/logo/nidus_logo_1.png"
+                alt="Nidus Logo"
+                width={120}
+                height={120}
+                className="mx-auto mb-6 rounded-2xl shadow-2xl"
+              />
+            </div>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 text-white">
               NIDUS
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">

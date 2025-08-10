@@ -37,6 +37,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        nidus: {
+          primary: '#1e40af',    // Blue-600
+          secondary: '#1e293b',  // Slate-800
+          accent: '#3b82f6',     // Blue-500
+          dark: '#0f172a',       // Slate-900
+          light: '#64748b',      // Slate-500
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

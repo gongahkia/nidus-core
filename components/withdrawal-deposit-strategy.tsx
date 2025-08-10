@@ -201,9 +201,29 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const showValues = !!user
   const getOrDash = (v: number | undefined, decimals = 2) => 
     (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
+  const chartType = "apr"; // Placeholder for chart type
+
+  // Generate date labels for chart
+  const generateDateLabels = (dataLength: number) => {
+    const dates = [];
+    const today = new Date();
+    
+    for (let i = dataLength - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - (i * 3));
+      dates.unshift(date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric' 
+      }));
+    }
+    
+    return dates;
+  };
+
+  // Update chart data preparation
   const chartData = vault?.snapshot
     ? vault.snapshot.map((value, index) => ({
-        name: `Day ${index + 1}`,
+        name: generateDateLabels(vault.snapshot.length)[index],
         value,
       }))
     : [];
@@ -269,7 +289,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
                   <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                     <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
                     <YAxis tick={{ fill: '#94a3b8' }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderRadius: '6px' }} />
+                    <Tooltip content={<CustomTooltip chartType={chartType} />} />
                     <Line type="monotone" dataKey="value" stroke="#a78bfa" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -497,3 +517,23 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     </div>
   )
 }
+
+// Custom tooltip component for APR/TVL display
+const CustomTooltip = ({ active, payload, label, chartType }: any) => {
+  if (active && payload && payload.length) {
+    const value = payload[0].value;
+    const formattedValue = chartType === 'apr' 
+      ? `${value.toFixed(2)}%` 
+      : `$${value.toLocaleString()}`;
+    
+    return (
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-lg">
+        <p className="text-slate-300 text-sm">{label}</p>
+        <p className="text-white font-semibold">
+          {chartType === 'apr' ? 'APR' : 'TVL'}: {formattedValue}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
