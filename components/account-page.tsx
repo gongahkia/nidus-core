@@ -78,7 +78,7 @@ export function AccountPage() {
   const [authError, setAuthError] = useState<string | null>(null)
 
   // State to track which extra currencies user has toggled on for display (beside SGD and USD)
-  const [visibleCurrencies, setVisibleCurrencies] = useState<CurrencyCode[]>(['SGD', 'USD'])
+  // const [visibleCurrencies, setVisibleCurrencies] = useState<CurrencyCode[]>(['SGD', 'USD'])
 
   useEffect(() => {
     if (!user) return
@@ -452,8 +452,8 @@ export function AccountPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
 
+{/* 
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                      {/* Show each visible currency's converted value */}
                       {visibleCurrencies.map(currency => {
                         // handle safe null userProfile
                         const baseValue = userProfile?.portfolio.xsgd || 0
@@ -476,7 +476,8 @@ export function AccountPage() {
                           </div>
                         )
                       })}
-                    </div>
+                    </div> 
+*/}
 
                   </CardContent>
                 </Card>
