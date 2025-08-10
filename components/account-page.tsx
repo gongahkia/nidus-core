@@ -34,39 +34,39 @@ interface UserProfile {
   assets?: string[]  
 }
 
-type CurrencyCode = 'SGD' | 'USD' | 'EUR' | 'GBP' | 'JPY' | 'AUD' | 'CAD' | 'CHF' | 'CNY'
-  | 'HKD' // Hong Kong Dollar
-  | 'NZD' // New Zealand Dollar
-  | 'SEK' // Swedish Krona
-  | 'KRW' // South Korean Won
-  | 'INR' // Indian Rupee
-  | 'MXN' // Mexican Peso
-  | 'TWD' // Taiwan Dollar
-  | 'THB' // Thai Baht
-  | 'MYR' // Malaysian Ringgit
-  | 'IDR' // Indonesian Rupiah
+// type CurrencyCode = 'SGD' | 'USD' | 'EUR' | 'GBP' | 'JPY' | 'AUD' | 'CAD' | 'CHF' | 'CNY'
+//   | 'HKD' // Hong Kong Dollar
+//   | 'NZD' // New Zealand Dollar
+//   | 'SEK' // Swedish Krona
+//   | 'KRW' // South Korean Won
+//   | 'INR' // Indian Rupee
+//   | 'MXN' // Mexican Peso
+//   | 'TWD' // Taiwan Dollar
+//   | 'THB' // Thai Baht
+//   | 'MYR' // Malaysian Ringgit
+//   | 'IDR' // Indonesian Rupiah
 
-const exchangeRates: Record<CurrencyCode, number> = {
-  SGD: 1,
-  USD: 0.74,
-  EUR: 0.68,
-  GBP: 0.59,
-  JPY: 81,
-  AUD: 1.03,
-  CAD: 0.96,
-  CHF: 0.69,
-  CNY: 5.08,
-  HKD: 5.75,
-  NZD: 1.19,
-  SEK: 7.07,
-  KRW: 989,
-  INR: 61.59,
-  MXN: 12.69,
-  TWD: 23.5,
-  THB: 27.01,
-  MYR: 3.50,
-  IDR: 11.668
-}
+// const exchangeRates: Record<CurrencyCode, number> = {
+//   SGD: 1,
+//   USD: 0.74,
+//   EUR: 0.68,
+//   GBP: 0.59,
+//   JPY: 81,
+//   AUD: 1.03,
+//   CAD: 0.96,
+//   CHF: 0.69,
+//   CNY: 5.08,
+//   HKD: 5.75,
+//   NZD: 1.19,
+//   SEK: 7.07,
+//   KRW: 989,
+//   INR: 61.59,
+//   MXN: 12.69,
+//   TWD: 23.5,
+//   THB: 27.01,
+//   MYR: 3.50,
+//   IDR: 11.668
+// }
 
 export function AccountPage() {
   const { user, signIn, signUp, signOut } = useAuth()
