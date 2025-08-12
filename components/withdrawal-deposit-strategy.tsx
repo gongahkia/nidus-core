@@ -289,10 +289,10 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     
     const dataPoints = Math.min(dataLength, Math.ceil(totalDays / interval));
     
-    for (let i = dataPoints - 1; i >= 0; i--) {
+    for (let i = 0; i < dataPoints; i++) {
       const date = new Date(today);
-      date.setDate(date.getDate() - (i * interval));
-      dates.unshift(date.toLocaleDateString('en-US', { 
+      date.setDate(date.getDate() - (dataPoints - 1 - i) * interval);
+      dates.push(date.toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric' 
       }));
