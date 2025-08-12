@@ -27,7 +27,9 @@ interface VaultDetails {
   minCollateral: number;   // Assume available
   liquidationPenalty: number;// Assume available
   borrowRate: number;      // Assume available
-  snapshot?: number[];     // Make sure snapshot is optional
+  snapshot?: number[];     // Legacy: single snapshot array
+  aprSnapshot?: number[];  // NEW: APR data over time
+  tvlSnapshot?: number[];  // NEW: TVL data over time
   // Add more fields as needed
 }
 
@@ -51,11 +53,15 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     amount: number,
     balance: number,
     depositTerm?: "6M" | "1Y",             // NEW optional
-    estimatedReward?: number                // NEW optional
+    estimatedReward?: number,               // NEW optional
+    strategy?: string                       // NEW: selected strategy
   } | null>(null);
 
 
   const [depositTerm, setDepositTerm] = useState<"6M" | "1Y">("6M")  // NEW: selected deposit term
+
+  // NEW: Timeframe selection for charts
+  const [selectedTimeframe, setSelectedTimeframe] = useState<"1W" | "1M" | "3M" | "6M" | "1Y">("1M")
 
   const depositRates = {
     "6M": 0.035, // 3.5% p.a. for 6 months, you can adjust
@@ -65,6 +71,15 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const depositTermDisplay = {
     "6M": "6 Months",
     "1Y": "1 Year",
+  }
+
+  // NEW: Timeframe display mapping
+  const timeframeDisplay = {
+    "1W": "Last Week",
+    "1M": "Last Month", 
+    "3M": "Last 3 Months",
+    "6M": "Last 6 Months",
+    "1Y": "Last Year"
   }
 
   function calcTermEnd(term: "6M" | "1Y") {
@@ -101,17 +116,45 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   }, [vaultId]);
 
   const [xsgdBalance, setXsgdBalance] = useState<number | null>(null);
+  
+  // NEW: Dynamic strategy support
+  const [selectedStrategy, setSelectedStrategy] = useState<string>("xsgd");
+  const [strategyBalances, setStrategyBalances] = useState<Record<string, number>>({});
+  
   useEffect(() => {
     if (!user) {
       setXsgdBalance(null);
+      setStrategyBalances({});
       return;
     }
+    
+    // Fetch XSGD balance (legacy support)
     const xsgdRef = ref(database, `users/${user.uid}/portfolio/xsgd`);
-    const unsub = onValue(xsgdRef, (snapshot) => {
+    const unsubXsgd = onValue(xsgdRef, (snapshot) => {
       const balance = snapshot.val();
       setXsgdBalance(typeof balance === "number" ? balance : 0);
+      setStrategyBalances(prev => ({ ...prev, xsgd: typeof balance === "number" ? balance : 0 }));
     });
-    return () => unsub();
+    
+    // NEW: Fetch all strategy balances
+    const portfolioRef = ref(database, `users/${user.uid}/portfolio`);
+    const unsubPortfolio = onValue(portfolioRef, (snapshot) => {
+      const portfolio = snapshot.val();
+      if (portfolio) {
+        const balances: Record<string, number> = {};
+        Object.entries(portfolio).forEach(([strategy, balance]) => {
+          if (typeof balance === "number") {
+            balances[strategy] = balance;
+          }
+        });
+        setStrategyBalances(balances);
+      }
+    });
+    
+    return () => {
+      unsubXsgd();
+      unsubPortfolio();
+    };
   }, [user]);
 
   // Confirm Deposit Logic
@@ -123,15 +166,16 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     }
     if (!user) return;
 
-    if (!xsgdBalance || depositAmount > xsgdBalance) {
-      console.log("depositAmount can't be greater than user's xsgdBalance", depositAmount, xsgdBalance)
+    const currentBalance = strategyBalances[selectedStrategy] || 0;
+    if (depositAmount > currentBalance) {
+      console.log("depositAmount can't be greater than user's strategy balance", depositAmount, currentBalance)
       return;
     }
 
     try {
-      const newBalance = (xsgdBalance || 0) - depositAmount;
+      const newBalance = currentBalance - depositAmount;
       await update(ref(database, `users/${user.uid}/portfolio`), {
-        xsgd: newBalance,
+        [selectedStrategy]: newBalance,
       });
       
       setTxnDetails({ 
@@ -140,6 +184,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         balance: newBalance,
         depositTerm: depositTerm,              // NEW: save selected term
         estimatedReward: calcEstimatedReward(amount, depositTerm), // NEW: save reward
+        strategy: selectedStrategy,            // NEW: save selected strategy
       });
       setDepositOpen(false);
       setReceiptOpen(true);
@@ -156,16 +201,24 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
       return;
     }
     if (!user) return;
-    if (!xsgdBalance) {
-      console.log("xsgdBalance is null")
+    
+    const currentBalance = strategyBalances[selectedStrategy] || 0;
+    if (withdrawAmount > currentBalance) {
+      console.log("withdrawAmount can't be greater than user's strategy balance", withdrawAmount, currentBalance)
       return;
     }
+    
     try {
-      const newBalance = xsgdBalance + withdrawAmount;
+      const newBalance = currentBalance + withdrawAmount;
       await update(ref(database, `users/${user.uid}/portfolio`), {
-        xsgd: newBalance,
+        [selectedStrategy]: newBalance,
       });
-      setTxnDetails({ type: "withdraw", amount: withdrawAmount, balance: newBalance });
+      setTxnDetails({ 
+        type: "withdraw", 
+        amount: withdrawAmount, 
+        balance: newBalance,
+        strategy: selectedStrategy,            // NEW: save selected strategy
+      });
       setWithdrawOpen(false);
       setReceiptOpen(true);
       setAmount(""); 
@@ -201,16 +254,44 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   const showValues = !!user
   const getOrDash = (v: number | undefined, decimals = 2) => 
     (v !== undefined && v !== null) ? fmt(v, decimals) : "-"
-  const chartType = "apr"; // Placeholder for chart type
-
-  // Generate date labels for chart
-  const generateDateLabels = (dataLength: number) => {
+  
+  // NEW: Enhanced date generation with timeframe support
+  const generateDateLabels = (dataLength: number, timeframe: "1W" | "1M" | "3M" | "6M" | "1Y") => {
     const dates = [];
     const today = new Date();
     
-    for (let i = dataLength - 1; i >= 0; i--) {
+    // Calculate interval based on timeframe
+    let interval = 1; // days
+    let totalDays = 7; // default to 1 week
+    
+    switch (timeframe) {
+      case "1W":
+        totalDays = 7;
+        interval = 1;
+        break;
+      case "1M":
+        totalDays = 30;
+        interval = 2;
+        break;
+      case "3M":
+        totalDays = 90;
+        interval = 3;
+        break;
+      case "6M":
+        totalDays = 180;
+        interval = 7;
+        break;
+      case "1Y":
+        totalDays = 365;
+        interval = 14;
+        break;
+    }
+    
+    const dataPoints = Math.min(dataLength, Math.ceil(totalDays / interval));
+    
+    for (let i = dataPoints - 1; i >= 0; i--) {
       const date = new Date(today);
-      date.setDate(date.getDate() - (i * 3));
+      date.setDate(date.getDate() - (i * interval));
       dates.unshift(date.toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric' 
@@ -220,13 +301,46 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     return dates;
   };
 
-  // Update chart data preparation
+  // NEW: Generate chart data for APR
+  const generateAprChartData = () => {
+    const data = vault?.aprSnapshot || vault?.snapshot || [];
+    if (!data.length) return [];
+    
+    const dateLabels = generateDateLabels(data.length, selectedTimeframe);
+    return data.slice(-dateLabels.length).map((value, index) => ({
+      name: dateLabels[index] || `Day ${index + 1}`,
+      apr: value,
+    }));
+  };
+
+  // NEW: Generate chart data for TVL
+  const generateTvlChartData = () => {
+    const data = vault?.tvlSnapshot || vault?.snapshot || [];
+    if (!data.length) return [];
+    
+    const dateLabels = generateDateLabels(data.length, selectedTimeframe);
+    return data.slice(-dateLabels.length).map((value, index) => ({
+      name: dateLabels[index] || `Day ${index + 1}`,
+      tvl: value,
+    }));
+  };
+
+  // Legacy: Keep for backward compatibility
   const chartData = vault?.snapshot
-    ? vault.snapshot.map((value, index) => ({
-        name: generateDateLabels(vault.snapshot.length)[index],
-        value,
-      }))
+    ? vault.snapshot.map((value, index) => {
+        const dateLabels = generateDateLabels(vault.snapshot!.length, selectedTimeframe);
+        return {
+          name: dateLabels[index] || `Day ${index + 1}`,
+          value,
+        };
+      })
     : [];
+
+  // NEW: Get current chart data based on available snapshots
+  const aprChartData = generateAprChartData();
+  const tvlChartData = generateTvlChartData();
+  const hasAprData = aprChartData.length > 0;
+  const hasTvlData = tvlChartData.length > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -280,21 +394,74 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
 
           {/* Performance Snapshot + Overlay */}
           <div className="mb-6 flex flex-col items-center justify-center">
-            {vault?.snapshot && vault.snapshot.length > 0 && (
-              <div className="w-full h-64 mb-6 md:mb-0">
-                <h2 className="text-white text-2xl mb-2 font-semibold text-center md:text-left">
-                  {vault?.name ?? "-"}
-                </h2>
-                <ResponsiveContainer width="100%" height="90%">
-                  <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                    <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
-                    <YAxis tick={{ fill: '#94a3b8' }} />
-                    <Tooltip content={<CustomTooltip chartType={chartType} />} />
-                    <Line type="monotone" dataKey="value" stroke="#a78bfa" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            )}
+            {/* NEW: Timeframe Selection Dropdown */}
+            <div className="w-full mb-4 flex justify-center">
+              <select
+                value={selectedTimeframe}
+                onChange={(e) => setSelectedTimeframe(e.target.value as "1W" | "1M" | "3M" | "6M" | "1Y")}
+                className="px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="1W">Last Week</option>
+                <option value="1M">Last Month</option>
+                <option value="3M">Last 3 Months</option>
+                <option value="6M">Last 6 Months</option>
+                <option value="1Y">Last Year</option>
+              </select>
+            </div>
+
+            {/* NEW: Dual Graph Layout */}
+            <div className="w-full space-y-6">
+              {/* APR Chart */}
+              {hasAprData && (
+                <div className="w-full h-48">
+                  <h3 className="text-white text-lg mb-2 font-semibold text-center">
+                    APR Performance
+                  </h3>
+                  <ResponsiveContainer width="100%" height="90%">
+                    <LineChart data={aprChartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                      <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
+                      <YAxis tick={{ fill: '#94a3b8' }} />
+                      <Tooltip content={<CustomTooltip chartType="apr" />} />
+                      <Line type="monotone" dataKey="apr" stroke="#10b981" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              {/* TVL Chart */}
+              {hasTvlData && (
+                <div className="w-full h-48">
+                  <h3 className="text-white text-lg mb-2 font-semibold text-center">
+                    TVL Performance
+                  </h3>
+                  <ResponsiveContainer width="100%" height="90%">
+                    <LineChart data={tvlChartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                      <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
+                      <YAxis tick={{ fill: '#94a3b8' }} />
+                      <Tooltip content={<CustomTooltip chartType="tvl" />} />
+                      <Line type="monotone" dataKey="tvl" stroke="#3b82f6" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              {/* Fallback: Legacy single chart if no dual data available */}
+              {!hasAprData && !hasTvlData && vault?.snapshot && vault.snapshot.length > 0 && (
+                <div className="w-full h-48">
+                  <h3 className="text-white text-lg mb-2 font-semibold text-center">
+                    {vault?.name ?? "Performance"} - Legacy View
+                  </h3>
+                  <ResponsiveContainer width="100%" height="90%">
+                    <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                      <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
+                      <YAxis tick={{ fill: '#94a3b8' }} />
+                      <Tooltip content={<CustomTooltip chartType="value" />} />
+                      <Line type="monotone" dataKey="value" stroke="#a78bfa" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col justify-center">
@@ -384,6 +551,23 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div className="mb-3 text-slate-200">
           Deposit to <span className="font-mono">{vault?.name}</span>
         </div>
+        
+        {/* NEW: Strategy Selection */}
+        <div className="mb-3">
+          <label className="block text-sm text-slate-300 mb-2">Select Strategy:</label>
+          <select
+            value={selectedStrategy}
+            onChange={(e) => setSelectedStrategy(e.target.value)}
+            className="w-full px-3 py-2 rounded border bg-slate-800 text-white border-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          >
+            {Object.keys(strategyBalances).map(strategy => (
+              <option key={strategy} value={strategy}>
+                {strategy.toUpperCase()} - Balance: {fmt(strategyBalances[strategy] || 0)}
+              </option>
+            ))}
+          </select>
+        </div>
+        
         {/* === NEW: Term selection buttons === */}
         <div className="mb-3 flex gap-3">
           <button
@@ -406,8 +590,8 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div className="mb-4 p-3 rounded bg-slate-800 text-slate-200 text-sm space-y-1">
           <div><strong>Reward Rate</strong>: {(depositRates[depositTerm] * 100).toFixed(2)}% p.a.</div>
           <div><strong>Term Ends</strong>: {calcTermEnd(depositTerm)}</div>
-          <div><strong>Reward Token</strong>: XSGD</div>
-          <div><strong>Est. Reward</strong>: {fmt(estReward)} XSGD</div>
+          <div><strong>Reward Token</strong>: {selectedStrategy.toUpperCase()}</div>
+          <div><strong>Est. Reward</strong>: {fmt(calcEstimatedReward(amount, depositTerm))} {selectedStrategy.toUpperCase()}</div>
         </div>
 
         <input
@@ -433,7 +617,7 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
             Confirm
           </button>
         </div>
-      </Modal> 
+      </Modal>
 
       {/* Withdraw Modal */}
       <Modal open={withdrawOpen} onClose={() => {setWithdrawOpen(false); setAmount("")}}>
@@ -441,6 +625,23 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
         <div className="mb-3 text-slate-200">
           Withdraw from <span className="font-mono">{vault?.name}</span>
         </div>
+        
+        {/* NEW: Strategy Selection */}
+        <div className="mb-3">
+          <label className="block text-sm text-slate-300 mb-2">Select Strategy:</label>
+          <select
+            value={selectedStrategy}
+            onChange={(e) => setSelectedStrategy(e.target.value)}
+            className="w-full px-3 py-2 rounded border bg-slate-800 text-white border-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          >
+            {Object.keys(strategyBalances).map(strategy => (
+              <option key={strategy} value={strategy}>
+                {strategy.toUpperCase()} - Balance: {fmt(strategyBalances[strategy] || 0)}
+              </option>
+            ))}
+          </select>
+        </div>
+        
         <input
           type="number"
           min={0}
@@ -460,8 +661,8 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
           <button
             className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
             onClick={onConfirmWithdraw}
-            disabled={!xsgdBalance || parseFloat(amount) <= 0 || parseFloat(amount) > xsgdBalance}
-            title={(!xsgdBalance || parseFloat(amount) > xsgdBalance) ? "Insufficient balance" : ""}
+            disabled={!strategyBalances[selectedStrategy] || parseFloat(amount) <= 0 || parseFloat(amount) > strategyBalances[selectedStrategy]}
+            title={(!strategyBalances[selectedStrategy] || parseFloat(amount) > strategyBalances[selectedStrategy]) ? "Insufficient balance" : ""}
           >
             Confirm
           </button>
@@ -480,8 +681,12 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
               {txnDetails.type === "deposit" ? "Deposit" : "Withdraw"}
             </div>
             <div>
+              <strong>Strategy: </strong>
+              {txnDetails.strategy?.toUpperCase() || "XSGD"}
+            </div>
+            <div>
               <strong>Amount: </strong>
-              {fmt(txnDetails.amount)} xsgd
+              {fmt(txnDetails.amount)} {txnDetails.strategy?.toUpperCase() || "XSGD"}
             </div>
 
             {/* NEW: show term and estimated reward for deposit */}
@@ -493,14 +698,14 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
                 </div>
                 <div>
                   <strong>Estimated Reward: </strong>
-                  {fmt(txnDetails.estimatedReward || 0)} xsgd
+                  {fmt(txnDetails.estimatedReward || 0)} {txnDetails.strategy?.toUpperCase() || "XSGD"}
                 </div>
               </>
             )}
 
             <div>
               <strong>New Balance: </strong>
-              {fmt(txnDetails.balance)} xsgd
+              {fmt(txnDetails.balance)} {txnDetails.strategy?.toUpperCase() || "XSGD"}
             </div>
             <button
               className="mt-4 bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800"
@@ -519,18 +724,38 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
 }
 
 // Custom tooltip component for APR/TVL display
-const CustomTooltip = ({ active, payload, label, chartType }: any) => {
+const CustomTooltip = ({ active, payload, label, chartType }: {
+  active?: boolean;
+  payload?: Array<{ value: number }>;
+  label?: string;
+  chartType?: "apr" | "tvl" | "value";
+}) => {
   if (active && payload && payload.length) {
     const value = payload[0].value;
-    const formattedValue = chartType === 'apr' 
-      ? `${value.toFixed(2)}%` 
-      : `$${value.toLocaleString()}`;
+    let formattedValue = "";
+    let labelText = "";
+    
+    switch (chartType) {
+      case 'apr':
+        formattedValue = `${value.toFixed(2)}%`;
+        labelText = "APR";
+        break;
+      case 'tvl':
+        formattedValue = `$${value.toLocaleString()}`;
+        labelText = "TVL";
+        break;
+      case 'value':
+      default:
+        formattedValue = `${value.toFixed(2)}`;
+        labelText = "Value";
+        break;
+    }
     
     return (
       <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-lg">
         <p className="text-slate-300 text-sm">{label}</p>
         <p className="text-white font-semibold">
-          {chartType === 'apr' ? 'APR' : 'TVL'}: {formattedValue}
+          {labelText}: {formattedValue}
         </p>
       </div>
     );
