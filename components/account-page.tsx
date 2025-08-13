@@ -486,14 +486,85 @@ export function AccountPage() {
                     <CardTitle className="text-white">Your Assets</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {userProfile?.assets && userProfile.assets.length > 0 ? (
-                      <ul className="list-disc list-inside text-slate-300">
-                        {userProfile.assets.map((asset, index) => (
-                          <li key={index}>{asset}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-slate-400 italic">No assets found.</p>
+                    {/* NEW: Redesigned Assets Card to match Portfolio styling */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* XSGD Asset */}
+                      <div className="p-4 rounded-lg bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green-500/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-green-300 font-medium">XSGD</p>
+                          <span className="text-xs text-green-400 bg-green-900/30 px-2 py-1 rounded-full">
+                            Stable
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-white">
+                          S${(userProfile?.portfolio.xsgd || 0).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-green-400 mt-1">
+                          Singapore Dollar Stablecoin
+                        </p>
+                      </div>
+
+                      {/* LP Asset */}
+                      <div className="p-4 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-blue-300 font-medium">LP</p>
+                          <span className="text-xs text-blue-400 bg-blue-900/30 px-2 py-1 rounded-full">
+                            Yield
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-white">
+                          S${(userProfile?.portfolio.lp || 0).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-blue-400 mt-1">
+                          Liquidity Provider Tokens
+                        </p>
+                      </div>
+
+                      {/* Annuity Asset */}
+                      <div className="p-4 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-purple-300 font-medium">Annuity</p>
+                          <span className="text-xs text-purple-400 bg-purple-900/30 px-2 py-1 rounded-full">
+                            Long-term
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-white">
+                          S${(userProfile?.portfolio.annuity || 0).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-purple-400 mt-1">
+                          Insurance Annuity Products
+                        </p>
+                      </div>
+
+                      {/* Endowment Asset */}
+                      <div className="p-4 rounded-lg bg-gradient-to-br from-orange-600/20 to-orange-800/20 border border-orange-500/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-orange-300 font-medium">Endowment</p>
+                          <span className="text-xs text-orange-400 bg-orange-900/30 px-2 py-1 rounded-full">
+                            Growth
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-white">
+                          S${(userProfile?.portfolio.endowment || 0).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-orange-400 mt-1">
+                          Endowment Insurance Plans
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Fallback for custom assets */}
+                    {userProfile?.assets && userProfile.assets.length > 0 && (
+                      <div className="mt-6 pt-6 border-t border-slate-700">
+                        <h4 className="text-white font-medium mb-3">Additional Assets</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {userProfile.assets.map((asset, index) => (
+                            <div key={index} className="p-3 rounded-lg bg-slate-700/50 border border-slate-600">
+                              <p className="text-white font-medium">{asset}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     )}
                   </CardContent>
                 </Card>
