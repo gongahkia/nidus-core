@@ -3,30 +3,7 @@
 ## Access
 
 * [veritas-core.vercel.app](https://veritas-core.vercel.app/)
-* [veritas-core.vercel.app/landing](https://veritas-core.vercel.app/landing) *(deprecated for now)*
-
-### To do (deadline ...)
-
-* For each Vault-specific plan page, modify the performance snapshot graph so that when hovered over with the mouse it should show APR or TVL instead of value
-* For each Vault-specific plan page, modify the performance snapshot X-axis so that Day 1 2 3 becomes exact dates in 3-day intervals
-* Modify performance snapshot to include 2 graphs per the below screenshot for APR and TVL, modify the firebase schema accordingly
-* Each graph should have a dropdown list of variable timeframes (last week, last month, last 3 months, last 6 months, last year)
-* For each Vault-specific plan page, comment out the "Trade History" table for now so its just showing a single table 
-
-<img width="937" height="400" alt="image" src="https://github.com/user-attachments/assets/302b40ec-f60d-4ec6-bd93-6574b03553fa" />
-
-#### General
-
-* Make display look better for mobile 
-* See whether its possible to deploy to Electron and Mobile similar to Proquaere and Caselist
-* Account page settings, make the assets card properly stylised like the portfolio card currently instead of just raw text
-* Make small visual and aesthetic modifications to ./app/landing/page.tsx and add images accordingly
-* Make Nidus landing page adhere to the black and blue colorscheme and add Nidus PNG logo that richard sent
-* Add Nidus logo to the current landing page at ./app/landing AND the web app site at ./app/ and tweak the background UI colors to make everything adhere to the new colorscheme
-* See if there's any way to refactor the codebase to make switching and testing out UI/UX color palettes a bit easier
-* Help and support page, Link the Troubleshooting common issues and How to use your dashboard and manage your portfolio to other pages
-* Sync up the withdrawal, deposit and receipt modals so that it can dynamically withdraw and deposit from any of the user's strategies, **currently** just hardcoded to XSGD since that's the MVP requirement
-* Once the entire UI is approved, make new project and deploy on vercel under new name, purpose is for URL to be changed
+* [veritas-core.vercel.app/landing](https://veritas-core.vercel.app/landing)
 
 ## Contributors
 
@@ -40,7 +17,7 @@
                     <sub><b>Richard Lei</b></sub>
                     <br/>
                 </a>
-                <sub><i>Business, Marketing</i><br><b>CEO</b></sub>
+                <sub><i>Frontend, Business</i><br><b>CEO</b></sub>
             </td>
             <td align="center">
                 <a href="https://github.com/gongahkia">
