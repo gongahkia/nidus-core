@@ -147,7 +147,7 @@ export default function LandingPage() {
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-gray-300">
-                    Built on Singapore's robust regulatory framework with institutional-grade security
+                    Built on Singapore&apos;s robust regulatory framework with institutional-grade security
                   </p>
                 </CardContent>
               </Card>
@@ -201,7 +201,7 @@ export default function LandingPage() {
                     <div>
                       <h5 className="text-2xl font-semibold mb-2 text-white">Low Yield Environment</h5>
                       <p className="text-gray-300 leading-relaxed">
-                        Traditional savings and investment products offer minimal returns in today's low-interest rate environment
+                        Traditional savings and investment products offer minimal returns in today&apos;s low-interest rate environment
                       </p>
                     </div>
                   </li>
@@ -311,7 +311,7 @@ export default function LandingPage() {
                 <CardContent className="text-center">
                   <p className="text-gray-300 leading-relaxed">
                     Business and marketing expert with deep knowledge of the Singaporean insurance market. 
-                    Leading NIDUS's strategic vision and market expansion.
+                    Leading NIDUS&apos;s strategic vision and market expansion.
                   </p>
                 </CardContent>
               </Card>
@@ -334,7 +334,7 @@ export default function LandingPage() {
                 <CardContent className="text-center">
                   <p className="text-gray-300 leading-relaxed">
                     Full-stack developer and DevOps specialist with expertise in blockchain technology. 
-                    Architecting NIDUS's technical infrastructure and DeFi protocols.
+                    Architecting NIDUS&apos;s technical infrastructure and DeFi protocols.
                   </p>
                 </CardContent>
               </Card>
