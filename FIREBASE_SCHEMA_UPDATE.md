@@ -16,7 +16,7 @@ This document outlines the Firebase schema changes required to support dual perf
   }
 }
 ```
-
+   
 ## New Schema
 ```json
 {
