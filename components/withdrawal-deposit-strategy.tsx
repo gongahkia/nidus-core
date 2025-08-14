@@ -73,15 +73,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     "1Y": "1 Year",
   }
 
-  // NEW: Timeframe display mapping
-  const timeframeDisplay = {
-    "1W": "Last Week",
-    "1M": "Last Month", 
-    "3M": "Last 3 Months",
-    "6M": "Last 6 Months",
-    "1Y": "Last Year"
-  }
-
   function calcTermEnd(term: "6M" | "1Y") {
     const now = new Date()
     if (term === "6M") now.setMonth(now.getMonth() + 6)
@@ -96,8 +87,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     const periodYears = term === "6M" ? 0.5 : 1
     return amt * rate * periodYears
   }
-
-  const estReward = calcEstimatedReward(amount, depositTerm)
 
   useEffect(() => {
     if (!vaultId) {
@@ -114,8 +103,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     });
     return () => unsub();
   }, [vaultId]);
-
-  const [xsgdBalance, setXsgdBalance] = useState<number | null>(null);
   
   // NEW: Dynamic strategy support
   const [selectedStrategy, setSelectedStrategy] = useState<string>("xsgd");
@@ -123,7 +110,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
   
   useEffect(() => {
     if (!user) {
-      setXsgdBalance(null);
       setStrategyBalances({});
       return;
     }
@@ -132,7 +118,6 @@ export function WithdrawalDepositStrategy({ vaultId }: { vaultId: string }) {
     const xsgdRef = ref(database, `users/${user.uid}/portfolio/xsgd`);
     const unsubXsgd = onValue(xsgdRef, (snapshot) => {
       const balance = snapshot.val();
-      setXsgdBalance(typeof balance === "number" ? balance : 0);
       setStrategyBalances(prev => ({ ...prev, xsgd: typeof balance === "number" ? balance : 0 }));
     });
     
